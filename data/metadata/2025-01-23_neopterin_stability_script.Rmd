@@ -1,0 +1,39 @@
+---
+title: "2025-01-23 neopterin stability script"
+author: "Lucore"
+date: "2025-01-23"
+output: html_document
+---
+
+
+notes: in this script we look at the difference betwee neopterin over different day time periods. First, we do an inner_join to match the samples for each individual and then we filter for time difference between 1 and 14 days. We then plot the neopterin difference over the different days and see that there is very littling variation in neopterin over a 14 day period. 
+
+```{r}
+
+n <- read_csv("data/metadata/2024-07-25_compiled_neopterin.csv") %>%
+  select(sample, datetime1, ID, neo_nmol_SG) %>%
+  rename(date = datetime1,
+         neo = neo_nmol_SG)
+
+intervals <- n %>%
+  inner_join(n, by = "ID", suffix = c("_start", "_end")) %>%
+  filter(date_start < date_end) %>%
+  mutate(time_diff = round(difftime(date_end, date_start, units = "days"), 0),
+         neo_diff = round((neo_end - neo_start),4)) %>%
+  arrange(ID, date_start, time_diff) %>%
+  filter(time_diff <= 14) %>%
+  mutate(time_diff = as.factor(time_diff))
+
+ggplot(intervals, aes(x = time_diff, y = neo_diff)) +
+  geom_boxplot() +
+  geom_hline(yintercept = 0, color = "grey60") +
+  labs(x = "days between samples",
+    y = "neopterin difference between samples") +
+  theme_minimal() +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_blank())
+
+```
+

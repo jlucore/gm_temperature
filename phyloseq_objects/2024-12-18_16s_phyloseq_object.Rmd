@@ -1,0 +1,54 @@
+---
+title: "2024-12-18_16s_phyloseq_object"
+author: "Lucore"
+date: "2024-12-18"
+output: html_document
+---
+
+# 1. load environment
+
+```{r}
+library(tidyverse)
+library(phyloseq)
+library(qiime2R)
+
+m <- as.data.frame(read_csv("data/metadata/2024-09-16_16s_compiled_metadata.csv"))
+
+seqs <- read_qza("data/tables_16s/final_table.qza")$data
+
+tax <- read_qza("data/tables_16s/taxonomy.qza")
+
+tree <- read_qza("data/tables_16s/sepp_inserted_tree.qza")$data
+
+```
+
+# 2. create phyloseq object
+
+```{r}
+
+# parse taxa
+tax_parse <-parse_taxonomy(tax$data)
+
+# Metadata, make row names sample names to make phyloseq object
+rownames(m) = m$sample
+
+#transform to phylo format
+phylo_table = otu_table(seqs, taxa_are_rows = T) #asv table
+
+phylo_tax = tax_table(as.matrix(tax_parse)) #taxonomy
+
+phylo_meta = sample_data(m) #metadata
+
+physeq = phyloseq(phylo_table, phylo_meta, phylo_tax, tree) # make phyloseq object
+physeq #26770 ASVs, 796 samples
+
+```
+
+# 3. export phyloseq object
+
+```{r}
+
+saveRDS(physeq, file = "phyloseq_objects/2024-12-18_phyloseq_16s.rds")
+
+```
+

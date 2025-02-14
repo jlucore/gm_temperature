@@ -1,0 +1,1321 @@
+Order,Name,ID,Group,Sex,Event,Date,First date,Last date,Estimated?,Estimated by,Estimation notes,Mom,Inf ID,Notes
+1,Beli,BEL,Palmas B,?,DOB,08-Jun-2024,08-Jun-2024,08-Jun-2024,N,JCO,observed by JCO/EM/MP noted as 3 days old,PIX,,
+2,Beli,BEL,Palmas B,?,START,11-Jun-2024,11-Jun-2024,11-Jun-2024,N,JCO/EM/MP,,PIX,,
+100,Beli,BEL,Palmas B,?,END,NOT YET,,,,,,PIX,,
+1,Beto,BET,Palmas B,?,DOB,07-Jun-2024,07-Jun-2024,07-Jun-2024,N,JCO,EpiCollect notes say 4 days old at time of observation,PUR,,
+2,Beto,BET,Palmas B,?,START,11-Jun-2024,11-Jun-2024,11-Jun-2024,N,JCO/EM/MP,,PUR,,
+100,Beto,BET,Palmas B,?,END,NOT YET,,,,,,PUR,,
+1,East (was Ester),EAS,Escameka,F,DOB,1-Jul-2011,,,Y,Alex/JCO,,,,
+2,East (was Ester),EAS,Escameka,F,START,6-Apr-2019,6-Apr-2019,6-Apr-2019,N,,,,,
+3,East (was Ester),EAS,Escameka,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,East (was Ester),EAS,Escameka,F,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+5,East (was Ester),EAS,Escameka,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+6,East (was Ester),EAS,Escameka,F,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,East (was Ester),EAS,Escameka,F,END,NOT YET,,,,,,,,
+1,Ecuador,ECU,Escameka,M,DOB,1-Jul-2014,,,Y,Alex/JCO,,,,
+2,Ecuador,ECU,Escameka,M,START,13-Feb-2020,13-Feb-2020,13-Feb-2020,N,,,,,
+3,Ecuador,ECU,?,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,Team does not know where they are (21-Feb-2024)
+100,Ecuador,ECU,?,M,END,29-May-2023,29-May-2023,29-May-2023,Y,JCO/AF/FK,This is known last date that Ecu not in group.,,,"He could've left before the fission event. We have no data to prove it. Not in census, AO, nor daily general"
+1,Edna,EDN,Escameka,F,DOB,1-Jul-2009,,,Y,Alex/JCO,,,,
+2,Edna,EDN,Escameka,F,START,13-Feb-2020,13-Feb-2020,13-Feb-2020,N,,,,,
+3,Edna,EDN,?,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,Team does not know where they are (21-Feb-2024)
+4,Edna,EDN,?,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+100,Edna,EDN,?,F,END,29-May-2023,29-May-2023,29-May-2023,Y,JCO/AF/FK,This is known last date that Edn not in group.,,,
+1,Egg,EGG,Escameka,M,DOB,1-Jul-1995,,,Y,Alex/JCO,,,,
+2,Egg,EGG,Escameka,M,START,13-Feb-2020,13-Feb-2020,13-Feb-2020,N,,,,,
+3,Egg,EGG,?,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,Team does not know where they are (21-Feb-2024)
+4,Egg,EGG,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+100,Egg,EGG,?,M,END,29-May-2023,29-May-2023,29-May-2023,Y,JCO/AF/FK,This is known last date that Edn not in group.,,,
+1,Elber,ELB,Escameka,M,DOB,1-Jul-2015,,,Y,Alex/JCO,,,,
+2,Elber,ELB,Escameka,M,START,26-Feb-2021,26-Feb-2021,26-Feb-2021,N,,,,,
+3,Elber,ELB,?,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,Team does not know where they are (21-Feb-2024)
+4,Elber,ELB,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+100,Elber,ELB,?,M,END,29-May-2023,29-May-2023,29-May-2023,Y,JCO/AF/FK,This is known last date that Edn not in group.,,,
+1,Eleonor,ELE,Escameka,F,DOB,UNK,,,,,,,,
+2,Eleonor,ELE,Escameka,F,START,4-Jan-2022,4-Jan-2022,4-Jan-2022,N,,,,,
+3,Eleonor,ELE,?,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,Team does not know where they are (21-Feb-2024). Does not remember her face either
+4,Eleonor,ELE,?,F,END,4-Jan-2022,,,,,,,,
+1,Eloy,ELO,Escameka,M,DOB,1-Jul-2000,,,Y,Alex/JCO,,,,
+2,Eloy,ELO,Escameka,M,START,8-Jan-2018,8-Jan-2018,8-Jan-2018,N,,,,,
+3,Eloy,ELO,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Eloy,ELO,Escameka,M,Overthrown,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Eloy,ELO,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+100,Eloy,ELO,?,M,END,07-Aug-2023,,,Y,Alex/JCO,,,,
+1,Elsa,ELS,Escameka,F,DOB,1-Jul-2006,,,Y,Alex/JCO,,,,
+2,Elsa,ELS,Escameka,F,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Elsa,ELS,Escameka,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Elsa,ELS,Escameka,F,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+5,Elsa,ELS,Escameka,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+6,Elsa,ELS,Escameka,F,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Elsa,ELS,Escameka,F,END,NOT YET,,,,,,,,
+1,Elvis,ELV,Escameka,M,DOB,13-Feb-2011,,,Y,Alex/JCO,,,,
+2,Elvis,ELV,Escameka,M,START,13-Feb-2020,13-Feb-2020,13-Feb-2020,N,,,,,
+3,Elvis,ELV,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Elvis,ELV,Escameka,M,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+5,Elvis,ELV,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+6,Elvis,ELV,?,M,Absence,11-Aug-2023,11-Aug-2023,11-Aug-2023,N,,,,,Don't know what happened to him. Not seen after this date
+7,Elvis,ELV,?,M,END,7-Jun-2023,,,N,,,,,
+1,Emily,EMI,Escameka,F,DOB,1-Jul-2011,,,Y,Alex/JCO,,,,
+2,Emily,EMI,Escameka,F,START,17-Mar-2021,17-Mar-2021,17-Mar-2021,N,,,,,
+3,Emily,EMI,Escameka,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Emily,EMI,Escameka,F,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+5,Emily,EMI,Escameka,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+6,Emily,EMI,Escameka,F,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Emily,EMI,Escameka,F,END,NOT YET,,,,,,,,
+1,Emma,EMM,Escameka,F,DOB,1-Jul-2018,,,Y,Alex/JCO,,,,
+2,Emma,EMM,Escameka,F,Changed to Juvenile,1-Jul-2020,1-Jul-2020,1-Jul-2020,Y,,,,,
+3,Emma,EMM,Escameka,F,START,4-Jan-2022,4-Jan-2022,4-Jan-2022,N,,,,,
+4,Emma,EMM,Escameka,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+5,Emma,EMM,Escameka,F,Changed to Sub-Adult - female,1-Feb-2023,1-Feb-2023,1-Feb-2023,Y,,,,,
+6,Emma,EMM,Escameka,F,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+7,Emma,EMM,Escameka,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+8,Emma,EMM,Escameka,F,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Emma,EMM,Escameka,F,END,NOT YET,,,,,,,,
+1,Enrique,ENR,Escameka,M,DOB,1-Jul-2010,,,Y,Alex/JCO,,,,
+2,Enrique,ENR,Escameka,M,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Enrique,ENR,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Enrique,ENR,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Enrique,ENR,?,M,END,7-Aug-2023,,,Y,Alex/JCO,,,,Could've left earlier but this is the last date we have accurate Did Not See data
+1,Erick,ERI,Escameka,M,DOB,1-Jul-2000,,,Y,Alex/JCO,,,,
+2,Erick,ERI,Escameka,M,START,4-Jan-2018,4-Jan-2018,4-Jan-2018,N,,,,,
+3,Erick,ERI,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Erick,ERI,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Erick,ERI,?,M,END,7-Aug-2023,7-Aug-2023,7-Aug-2023,Y,Alex/JCO,,,,Could've left earlier but this is the last date we have accurate Did Not See data
+1,Ernesto,ERN,Escameka,M,DOB,14-Jan-2013,,,Y,Alex/JCO,,,,
+2,Ernesto,ERN,Escameka,M,START,14-Jan-2020,14-Jan-2020,14-Jan-2020,N,,,,,
+3,Ernesto,ERN,Escameka,M,END,14-Jan-2020,,,N,,,,,Team doesn't know who this monkey is. No census data on him
+1,Escameka,ESC,Escameka,F,DOB,1-Jul-1998,,,Y,Alex/JCO,,,,
+2,Escameka,ESC,Escameka,F,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Escameka,ESC,?,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,Team does not know where they are (21-Feb-2024)
+4,Escameka,ESC,?,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Escameka,ESC,?,F,END,7-Aug-2023,,,Y,Alex/JCO,,,,Could've left earlier but this is the last date we have accurate Did Not See data
+1,Esdras (antes llamda Esmeralda con codigo ESM),ESD,Escameka,F,DOB,13-Feb-2008,,,Y,JCO,,,,
+2,Esdras (antes llamda Esmeralda con codigo ESM),ESD,Escameka,F,START,13-Feb-2020,13-Feb-2020,13-Feb-2020,N,,,,,
+3,Esdras (antes llamda Esmeralda con codigo ESM),ESD,Escameka,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Esdras (antes llamda Esmeralda con codigo ESM),ESD,Escameka,F,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+5,Esdras (antes llamda Esmeralda con codigo ESM),ESD,Escameka,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+6,Esdras (antes llamda Esmeralda con codigo ESM),ESD,Escameka,F,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Esdras (antes llamda Esmeralda con codigo ESM),ESD,Escameka,F,END,NOT YET,,,,,,,,
+1,Esmael,ESM,Escameka,M,DOB,29-Jul-2012,,,Y,JCO,,,,Needs new name--overlaps with Esmarelda
+2,Esmael,ESM,Escameka,M,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Esmael,ESM,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Esmael,ESM,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Esmael,ESM,?,M,END,23-May-2023,,,N,,,,,
+1,Esparza,ESP,Escameka,F,DOB,4-Jan-2020,,,,,,,,
+2,Esparza,ESP,Escameka,F,START,4-Jan-2022,4-Jan-2022,4-Jan-2022,N,,,,,
+3,Esparza,ESP,Escameka,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Esparza,ESP,Escameka,F,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+5,Esparza,ESP,Escameka,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+6,Esparza,ESP,Escameka,F,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Esparza,ESP,Escameka,F,END,NOT YET,,,,,,,,
+1,Ethiopia,ETH,Escameka,F,DOB,1-Jul-2002,,,Y,Alex/JCO,,,,
+2,Ethiopia,ETH,Escameka,F,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Ethiopia,ETH,Escameka,F,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Ethiopia,ETH,Escameka,F,Takeover,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,Mickey takes over group from Eloy
+5,Ethiopia,ETH,Escameka,F,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+6,Ethiopia,ETH,Escameka,F,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Ethiopia,ETH,Escameka,F,END,NOT YET,,,,,,,,
+1,Evan,EVA,Escameka,M,DOB,1-Jul-2015,,,Y,Alex/JCO,,,,
+2,Evan,EVA,Escameka,M,START,26-Feb-2021,26-Feb-2021,26-Feb-2021,N,,,,,
+3,Evan,EVA,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Evan,EVA,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Evan,EVA,?,M,END,7-Aug-2023,,,Y,Alex/JCO,,,,Could've left earlier but this is the last date we have accurate Did Not See data
+1,Estefan,EST,Escameka,M,DOB,1-Jul-1992,,,Y,Alex/JCO,,,,
+2,Estefan,EST,Escameka,M,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Estefan,EST,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Estefan,EST,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Estefan,EST,?,M,END,7-Aug-2023,,,Y,Alex/JCO,,,,Could've left earlier but this is the last date we have accurate Did Not See data
+1,Elmo,ELM,Escameka,M,DOB,1-Jul-2009,,,Y,Alex/JCO,,,,
+2,Elmo,ELM,Escameka,M,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Elmo,ELM,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Elmo,ELM,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Elmo,ELM,?,M,END,7-Aug-2023,,,Y,Alex/JCO,,,,Could've left earlier but this is the last date we have accurate Did Not See data
+1,Echo,ECH,Escameka,M,DOB,1-Jul-2011,,,Y,Alex/JCO,,,,
+2,Echo,ECH,Escameka,M,START,29-Jul-2017,29-Jul-2017,29-Jul-2017,N,,,,,
+3,Echo,ECH,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+4,Echo,ECH,?,M,Fission?,29-May-2023,15-Mar-2023,29-May-2023,Y,Alex,"Alex definitely saw Eloy in INTA with some other males and females from Escameka on 29-May-2023. On 15-Mar-2023, he saw the entire original group in the neem. But exact date of overthrow not known",,,
+5,Echo,ECH,?,M,END,7-Aug-2023,,,Y,Alex/JCO,,,,Could've left earlier but this is the last date we have accurate Did Not See data
+1,Exa,EXA,Escameka,F,DOB,21-Jun-2017,,,Y,JCO,estimated around 7 y/o,,,
+2,Exa,EXA,Escameka,F,Conception,9-Nov-2023,9-Nov-2023,9-Nov-2023,N,,150 days before birth,,,
+3,Exa,EXA,Escameka,F,Birth,7-Apr-2024,7-Apr-2024,7-Apr-2024,N,JCO,"Observation (EpiCollect LH, around 3 days old)",,,Maybe first birth
+4,Exa,EXA,Escameka,F,START,10-Apr-2024,10-Apr-2024,10-Apr-2024,N,,,,,
+100,Exa,EXA,Escameka,F,END,NOT YET,,,,,,,,
+1,Macaco,MAC,Mesas,M,DOB,02-Aug-2017,,,Y,"EM, JCO",,,,First date of focal follow is 02 Aug 2023
+2,Macaco,MAC,Mesas,M,Co-Immigration,25-Jul-2023,20-Jul-2023,31-Jul-2023,Y,,,,,
+3,Macaco,MAC,Mesas,M,START,02-Aug-2023,02-Aug-2023,02-Aug-2023,N,,,,,
+4,Macaco,MAC,Mesas,M,Changed to Subadult - male,02-Aug-2024,02-Aug-2024,02-Aug-2024,Y,JCO/FK,7 years,,,
+100,Macaco,MAC,Mesas,M,END,NOT YET,,,,,,,,
+1,Mae,MAE,Mesas,M,DOB,05-Jul-2012,,,Y,AF,,,,
+2,Mae,MAE,Mesas,M,Co-Immigration,2-Jul-2023,24-Jun-2023,3-Jul-2023,Y,JCO/FK,Based on census data,,,
+3,Mae,MAE,Mesas,M,START,3-Jul-2023,3-Jul-2023,3-Jul-2023,N,,,,,
+100,Mae,MAE,Mesas,M,END,NOT YET,,,,,,,,
+1,Malvaviscus,MAL,Mesas,?,DOB,28-May-2020,28-May-2020,2-Jun-2023,Y,JCO/AF,JCO and AF found baby on 03-Jul-2023 but noted that the baby was about a week old,Meritamon,,
+2,Malvaviscus,MAL,Mesas,?,START,2-Jun-2020,2-Jun-2020,2-Jun-2020,N,,,Meritamon,,
+3,Malvaviscus,MAL,Mesas,?,Mom Died,23-Jul-2020,23-Jul-2020,23-Jul-2020,Y,JCO/AF/CA,Meritamon missing and presumed dead,Meritamon,,
+4,Malvaviscus,MAL,Mesas,?,DOD,5-Aug-2020,23-Jul-2020,18-Aug-2020,Y,,census notes,Meritamon,,
+5,Malvaviscus,MAL,Mesas,?,END,18-Aug-2020,,,,,,Meritamon,,
+1,Mani,MAN,Mesas,M,DOB,1-Jul-2014,,,Y,JCO/AF,,,,
+2,Mani,MAN,Mesas,M,Changed to Juvenile,3-Apr-2016,3-Apr-2018,3-Apr-2018,N,,,,,Moved into Juvenile category from infant because all adult females have new babies
+3,Mani,MAN,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+4,Mani,MAN,Mesas,M,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,Mozote takes over group
+5,Mani,MAN,Mesas,M,Changed to Subadult - male,1-Jul-2021,1-Jul-2021,1-Jul-2021,N,,,,,
+6,Mani,MAN,Mesas,M,Co-Emigration,5-Apr-2023,5-Apr-2023,8-May-2023,N,,,,,Last seen with Mesas was the day before. Leaves with Mau and Mykonos
+7,Mani,MAN,Escameka,M,Co-Immigration,8-May-2023,5-Apr-2023,8-May-2023,N,,,,,First day seen with Escameka
+8,Mani,MAN,Escameka,M,Ambiguous / Gap,,14-Sep-2023,13-Oct-2023,Y,JCO/FK,"Mickey last seen on 13-Sep-2023, not seen when group does not Escameka follow on 13-Oct-2023",,,
+9,Mani,MAN,Escameka,M,Takes Over Group,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+10,Mani,MAN,Escameka,M,Changed to Adult - male,1-Jul-2024,1-Jul-2024,1-Jul-2024,N,,,,,
+100,Mani,MAN,Escameka,M,END,NOT YET,,,,,,,,
+1,Maradona,MAR,Mesas,M,DOB,1-Jul-2001,,,Y,JCO/AF,,,,
+2,Maradona,MAR,Mesas,M,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,Recorded in August 2017 census,,,Alpha male
+3,Maradona,MAR,Mesas,M,DOD,10-Nov-2019,10-Nov-2019,10-Nov-2019,N,,,,,"Found dead on public electric wire, at UTN property, at November 10 2019."
+4,Maradona,MAR,Mesas,M,Overthrown,10-Nov-2019,10-Nov-2019,10-Nov-2019,N,,,,,Electrocuted. Wasn't fought or ousted by Moises. Moises simply assumed the position once Maradona died
+5,Maradona,MAR,Mesas,M,END,10-Nov-2019,,,N,,,,,
+1,Mascherano,MAS,Mesas,M,DOB,1-Jul-2012,,,Y,JCO/AF,One year older than Mosquito,,,
+2,Mascherano,MAS,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+3,Mascherano,MAS,Mesas,M,Changed to Sub-Adult - male,1-Jul-2019,1-Jul-2019,1-Jul-2019,N,,,,,
+4,Mascherano,MAS,Mesas,M,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,Mozote takes over group
+5,Mascherano,MAS,Mesas,M,DOD,27-Mar-2020,27-Mar-2020,27-Mar-2020,N,,,,,Electrocuted in same place as Maradona and Messi
+6,Mascherano,MAS,Mesas,M,END,27-Mar-2020,,,N,,,,,
+1,Mau,MAU,Mesas,M,DOB,1-Jul-2013,,,Y,JCO/AF,one year older than Mani,,,
+2,Mau,MAU,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+3,Mau,MAU,Mesas,M,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,Mozote takes over group
+4,Mau,MAU,Mesas,M,Changed to Sub-Adult - male,1-Jul-2020,1-Jul-2020,1-Jul-2020,N,JCO/FK,"Previously there were two ""changed to subadult"" events on 1-Jul-2022 and 6-Dec-2021. JCO and FK decided to combine the two and place the change date as the median between the two. There were no notes on his change to subadult previously.",,,
+5,Mau,MAU,Mesas,M,Co-Emigration,5-Apr-2023,5-Apr-2023,8-May-2023,Y,,,,,Last seen with Mesas was the day before
+6,Mau,MAU,Escameka,M,Co-Immigration,8-May-2023,5-Apr-2023,8-May-2023,Y,,,,,First day seen with Escameka
+7,Mau,MAU,Escameka,M,Changed to Adult - male,1-Jul-2023,1-Jul-2023,1-Jul-2023,N,,,,,
+8,Mau,MAU,Escameka,M,Ambiguous / Gap,,14-Sep-2023,13-Oct-2023,Y,JCO/FK,"Mickey last seen on 13-Sep-2023, not seen when group does not Escameka follow on 13-Oct-2023",,,
+9,Mau,MAU,Escameka,M,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Mau,MAU,Escameka,M,END,NOT YET,,,,,,,,
+1,Max,MAX,Mesas,?,DOB,12-May-2024,12-May-2024,12-May-2024,N,AF,"Observed 13-May-24, 1-3 days old",MON,,
+2,Max,MAX,Mesas,?,START,13-May-2024,13-May-2024,13-May-2024,N,AF,,MON,,Named at dinner that evening after Alex saw baby passing by the road
+100,Max,MAX,Mesas,?,END,NOT YET,,,,,,MON,,
+1,Mayo,MAY,Mesas,F,DOB,28-Dec-2018,,,N,,,MEZ,,
+2,Mayo,MAY,Mesas,F,START,2-Jan-2019,2-Jan-2019,2-Jan-2019,N,,,MEZ,,
+3,Mayo,MAY,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,MEZ,,Mozote takes over group
+4,Mayo,MAY,Mesas,F,Independent,6-Mar-2020,6-Mar-2020,6-Mar-2020,N,,1 month before MEZ's next conception date,MEZ,,
+5,Mayo,MAY,Mesas,F,Changed to Juvenile,13-Mar-2021,13-Mar-2021,13-Mar-2021,N,,,MEZ,,
+6,Mayo,MAY,Mesas,F,Mom Died,03-May-2023,29-Apr-2023,08-May-2023,Y,AF/JCO,Found her on 08-May-2023. She was already decomposing. AF/JCO estimated she might've been electrocuted between 29-Apr-2023 and 30-Apr-2023,MEZ,,MEZ electrocuted
+7,Mayo,MAY,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,MEZ,,Infanticide from MOS on MOR and MOZ is gone
+8,Mayo,MAY,Mesas,F,Changed to Subadult - female,28-Jun-2023,28-Jun-2023,28-Jun-2023,N,,,MEZ,,
+9,Mayo,MAY,Mesas,F,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,MEZ,,MOJ takeover from MOS
+11,Mayo,MAY,Mesas,F,Conception,13-Dec-2023,13-Dec-2023,13-Dec-2023,N,,150 days before,MEZ,MOO,
+10,Mayo,MAY,Mesas,F,Changed to Adult - female,20-Dec-2023,20-Dec-2023,20-Dec-2023,N,,She is pregnant,MEZ,,
+12,Mayo,MAY,Mesas,F,Pregnant,20-Feb-2024,20-Dec-2023,13-May-2024,N,JCO,Observation (EpiCollect LH on 20-Feb-2024 calculated about 2 months),MEZ,MOO,
+13,Mayo,MAY,Mesas,F,First Birth,11-May-2024,11-May-2024,11-May-2024,N,AF,,MEZ,,
+100,Mayo,MAY,Mesas,F,END,NOT YET,,,,,,MEZ,,
+1,Mechas,MEC,Mesas,M,DOB,1-Jul-2013,,,Y,JCO/AF,Same as mosquito,,,
+2,Mechas,MEC,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+3,Mechas,MEC,Mesas,M,Co-Emigration,20-Apr-2018,20-Apr-2018,11-May-2018,Y,CA,,,,"Emigrated from Mesas; Seen on 19/Apr/2018 but never returned to Mesas, with mickey and medio"
+4,Mechas,MEC,Escameka,M,Co-Immigration,11-May-2018,20-Apr-2018,11-May-2018,Y,CA,,,,"Immigrated to Escameka; Seen with Escameka on 11/May/2018 but exact date of migration not known, with mickey and medio"
+5,Mechas,MEC,Escameka,M,Takeover,11-May-2018,11-May-2018,11-May-2018,N,,,,,
+6,Mechas,MEC,Escameka,M,Changed to Subadult - male,1-Jul-2020,1-Jul-2020,1-Jul-2020,N,,,,,
+7,Mechas,MEC,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+8,Mechas,MEC,Escameka,M,Changed to Adult - male,1-Jul-2023,1-Jul-2023,1-Jul-2023,N,,,,,
+9,Mechas,MEC,Escameka,M,Ambiguous / Gap,,14-Sep-2023,13-Oct-2023,Y,JCO/FK,"Last seen on 13-Sep-2023, not seen when group does not Escameka follow on 13-Oct-2023",,,
+10,Mechas,MEC,Escameka,M,Co-Emigration,14-Sep-2023,14-Sep-2023,14-Sep-2023,N,,,,,with mickey
+11,Mechas,MEC,Escameka,M,END,13-Sep-2023,,,N,,,,,
+1,Medio,MED,Mesas,M,DOB,1-Jul-2012,,,Y,JCO/AF,one year older than Mechas,,,
+2,Medio,MED,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+3,Medio,MED,Mesas,M,Co-Emigration,4-May-2018,4-May-2018,21-May-2018,N,,,,,"Seen on 3/05/2018 and seen again in Mesas 21/05/2018, with mickey and mechas"
+4,Medio,MED,Escameka,M,Co-Immigration,21-May-2018,4-May-2018,21-May-2018,Y,CA,,,,"Seen with Escameka on 11/May/2018 but exact date of migration not known, with mickey and mechas"
+5,Medio,MED,Escameka,M,Changed to Subadult - male,1-Jul-2019,1-Jul-2019,1-Jul-2019,N,,,,,
+7,Medio,MED,Escameka,M,Emigration,5-Jan-2022,5-Jan-2022,5-Jan-2022,Y,JCO/FK,Seen in census day before this date. No more data to know for certain,,,don't know where he went
+8,Medio,MED,Escameka,M,END,4-Jan-2022,,,N,,,,,Not much data on him. Census last saw him this date
+1,Mega,MEG,Mesas,?,DOB,1-Apr-2018,31-Mar-2018,2-Apr-2018,Y,JCO/AF,"Following group, JCO/AF remember the births. On census notes says she and Mega were around 5 days old. But one was definitely bigger than the other (tbd with DNA)",Minnie,,"Before seeing Mega and Mushu, group saw that both moms Minnie and Mulan were pregnant. When team returned to the group on 3-Apr-2018, Minnie was carrying both babies and Mulan no longer had a pregnant belly. She didn't show much interest, but did feed Mushu milk a few times the months following. *Should do DNA to figure out maternity of Mushu. All of this information can be found on Mesas Census 2018"
+2,Mega,MEG,Mesas,?,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,Minnie,,
+3,Mega,MEG,Mesas,?,DOD,12-Jun-2018,12-Jun-2018,14-Dec-2018,N,,,Minnie,,Not seen on 6/12/18 and 14/12/2018
+4,Mega,MEG,Mesas,?,END,12-Jun-2018,12-Jun-2018,14-Dec-2018,N,,,Minnie,,Not seen on 6/12/18 and 14/12/2018
+1,Melocoton,MEL,Mesas,M,DOB,12-Dec-2022,,,N,,,Milagro,,
+2,Melocoton,MEL,Mesas,M,START,13-Dec-2022,13-Dec-2022,13-Dec-2022,N,,,Milagro,,
+3,Melocoton,MEL,Mesas,M,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,Milagro,,Infanticide from MOS on MOR and MOZ is gone
+4,Melocoton,MEL,Mesas,M,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,Milagro,,MOJ takeover from MOS
+5,Melocoton,MEL,Mesas,M,DOD,12-Jan-2024,27-Dec-2023,29-Jan-2024,Y,JCO/FK,mesas last followed between these two dates,Milagro,,
+6,Melocoton,MEL,Mesas,M,END,27-Dec-2023,,,N,,,Milagro,,
+1,Mepe,MEP,Mesas,M,DOB,05-Jul-2016,,,Y,AF,,,,
+2,Mepe,MEP,Mesas,M,Co-Immigration,2-Jul-2023,2-Jul-2023,2-Jul-2023,N,,,,,"came with Mojito, mepe, mexico, moco, mae"
+3,Mepe,MEP,Mesas,M,START,3-Jul-2023,3-Jul-2023,3-Jul-2023,N,,,,,
+4,Mepe,MEP,Mesas,M,Changed to Subadult - male,5-Jul-2023,5-Jul-2023,5-Jul-2023,N,,7 y/o,,,
+100,Mepe,MEP,Mesas,M,END,NOT YET,,,,,,,,
+1,Meritamon,MER,Mesas,F,DOB,1-Jul-2001,,,Y,JCO/AF,,,,
+2,Meritamon,MER,Mesas,F,Conception,27-Aug-2017,15-Jul-2017,30-Jul-2017,Y,CA,FK/JCO subtracted 150 days from birth. CA added first and last date in 2017 but FK/JCO didn't know where those dates came from,,MON,
+3,Meritamon,MER,Mesas,F,Birth,24-Jan-2018,24-Jan-2018,24-Jan-2018,Y,CA/AF/JCO,,,MON,"First date seen on the camera trap, very very new"
+4,Meritamon,MER,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+5,Meritamon,MER,Mesas,F,Wean/Resumes Cycling,4-May-2019,4-May-2019,4-May-2019,N,,,,,
+6,Meritamon,MER,Mesas,F,Conception,30-Dec-2019,30-Dec-2019,30-Dec-2019,Y,JCO/RR,Subtracted 150 days from birth,,MAL,
+7,Meritamon,MER,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,Mozote takes over group
+8,Meritamon,MER,Mesas,F,Pregnant,16-Apr-2020,16-Dec-2019,28-May-2020,Y,JCO/AF,"Observation (Census 3-4 months. Date is the day we noted and have evidence of the estimation. First date is based on the estimation, Last date is based on the birth date)",,,
+9,Meritamon,MER,Mesas,F,Birth,28-May-2020,28-May-2020,28-May-2020,N,,,,MAL,
+10,Meritamon,MER,Mesas,F,DOD,23-Jul-2020,23-Jul-2020,23-Jul-2020,Y,JCO/AF/CA,,,,
+11,Meritamon,MER,Mesas,F,END,23-Jul-2020,,,N,JCO/AF/CA,,,,
+1,Messi,MES,Mesas,M,DOB,1-Jul-2015,,,Y,JCO/AF,Same as Mau,,,
+2,Messi,MES,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+3,Messi,MES,Mesas,M,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,Mozote takes over group
+4,Messi,MES,Mesas,M,DOD,27-Mar-2020,27-Mar-2020,27-Mar-2020,N,,,,,"found dead on public electric wire, at UTN property, at March 27 2020"
+5,Messi,MES,Mesas,M,END,27-Mar-2020,,,N,,,,,"found dead on public electric wire, at UTN property, at March 27 2020"
+1,Mexico,MEX,Mesas,M,DOB,05-Jul-2009,,,Y,AF,,,,
+2,Mexico,MEX,Mesas,M,Co-Immigration,2-Jul-2023,2-Jul-2023,2-Jul-2023,N,,,,,"came with Mojito, mepe, mexico, moco, mae"
+3,Mexico,MEX,Mesas,M,START,3-Jul-2023,3-Jul-2023,3-Jul-2023,N,,,,,
+4,Mexico,MEX,Mesas,M,Emigration,15-Nov-2023,15-Nov-2023,26-Dec-2023,Y,FK,Census data,,,
+5,Mexico,MEX,Mesas,M,END,14-Nov-2023,,,N,,,,,
+1,Meza,MEZ,Mesas,F,DOB,1-Jul-2002,,,Y,JCO/AF,Slightly younger than Meritamon,,,
+2,Meza,MEZ,Mesas,F,Conception,4-Aug-2016,1-Jul-2016,1-Jul-2016,Y,CA,FK/JCO subtracted 150 days from birth. CA added first and last date in 2017 but FK/JCO didn't know where those dates came from,,MIL,Estimated as 6months prior to birth
+3,Meza,MEZ,Mesas,F,Birth,1-Jan-2017,1-Jan-2017,1-Jan-2017,Y,JCO,,,MIL,Gave birth to Milagro
+4,Meza,MEZ,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+5,Meza,MEZ,Mesas,F,Wean/Resumes Cycling,11-Apr-2018,11-Apr-2018,11-Apr-2018,Y,,no notes so assuming it's an estimate -FK/JCO,,,
+6,Meza,MEZ,Mesas,F,Conception,31-Jul-2018,30-Jun-2018,30-Jul-2018,Y,JCO/AF,,,MAY,Estimated as 6 months prior to birth
+7,Meza,MEZ,Mesas,F,Pregnant,6-Dec-2018,6-Sep-2018,28-Dec-2018,Y,JCO/AF,Observation (Census around 2-3 months),,,
+8,Meza,MEZ,Mesas,F,Birth,28-Dec-2018,28-Dec-2018,31-Dec-2018,Y,AF,,,MAY,Gave birth to Mayo
+9,Meza,MEZ,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,Mozote takes over group
+10,Meza,MEZ,Mesas,F,Wean/Resumes Cycling,6-Apr-2020,6-Apr-2020,6-Apr-2020,Y,,no notes so assuming it's an estimate -FK/JCO,,,
+11,Meza,MEZ,Mesas,F,Conception,25-Aug-2020,25-Aug-2020,25-Aug-2020,Y,JCO/RR,FK/JCO subtracted 150 days from birth,,MYK,
+12,Meza,MEZ,Mesas,F,Pregnant,9-Dec-2020,9-Sep-2020,22-Jan-2021,Y,JCO/AF,Observation (Census around 3 months),,,
+13,Meza,MEZ,Mesas,F,Birth,22-Jan-2021,22-Jan-2021,22-Jan-2021,Y,JCO,,,MYK,
+14,Meza,MEZ,Mesas,F,Conception?,06-Jun-2021,Mar-2021,1-Jun-2021,Y,,"VV please check hormone levels. says she has high pregnancy-like levels during this time but she gave birth to Myk earlier in the year. the date 6-Jun-2021 was already here befpre we started working on it. On April 25 2024, JCO/VV/AF/FK talked about this point aain. It's present in the life history form in August 2023. VV's hormone analysis shows there's something there on Jun 2021, but we have no other data to compare what this date and hormone data means",,,
+15,Meza,MEZ,Mesas,F,Pregnant,4-Apr-2022,4-Apr-2022,4-Apr-2022,Y,,EpiCollect LH entries said she's probably pregnant. On 2-Mar-2022 says she might be pregnant but was still nursing Mykonos. Let's keep this April date because it is more definite,,,
+16,Meza,MEZ,Mesas,F,Wean/Resumes Cycling,2-May-2022,2-May-2022,2-May-2022,Y,,no notes so assuming it's an estimate -FK/JCO,,,
+17,Meza,MEZ,Mesas,F,Conception,10-Aug-2022,10-Aug-2022,10-Aug-2022,Y,,FK/JCO subtracted 150 days from birth,,,
+18,Meza,MEZ,Mesas,F,Birth,07-Jan-2023,07-Jan-2023,07-Jan-2023,N,,,,MOR,
+19,Meza,MEZ,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,,,Infanticide from MOS on MOR and MOZ is gone
+20,Meza,MEZ,Mesas,F,DOD,06-Jun-2023,06-Jun-2023,06-Jun-2023,Y,AF,Saturday afternoon given the amount of degradation,,MOR,Electrocuted on an electricity poll by the comedor
+21,Meza,MEZ,Mesas,F,END,06-Jun-2023,,,Y,AF,Saturday afternoon given the amount of degradation,,MOR,Electrocuted on an electricity poll by the comedor
+1,Mickey,MIC,Mesas,M,DOB,1-Jul-2010,,,Y,JCO/AF,,,,
+2,Mickey,MIC,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+3,Mickey,MIC,Mesas,M,Co-Emigration,20-Apr-2018,20-Apr-2018,11-May-2018,N,,,,,"Seen on 19/Apr/2018 but never returned to Mesas, with mechas and medio"
+4,Mickey,MIC,Escameka,M,Co-Immigration,11-May-2018,20-Apr-2018,11-May-2018,Y,CA,,,,Seen with Escameka on 11/May/2018 but exact date of migration not known. with mechas and medio
+5,Mickey,MIC,Escameka,M,Changed to Adult - male,1-Jul-2020,1-Jul-2020,1-Jul-2020,N,,10 y/o,,,
+6,Mickey,MIC,Escameka,M,Ambiguous / Gap,,4-Jan-2022,29-May-2023,N,,"Possible fission event during this gap. Group not followed until 22-May-2023, but census is incomplete between 22-May-24-May-2023",,,
+7,Mickey,MIC,Escameka,M,Takes Over Group,07-Aug-2023,07-Aug-2023,07-Aug-2023,Y,Alex/JCO,Eloy definitely not in group this date,,,
+8,Mickey,MIC,Escameka,M,Ambiguous / Gap,,14-Sep-2023,13-Oct-2023,Y,JCO/FK,"Last seen on 13-Sep-2023, not seen when group does not Escameka follow on 13-Oct-2023",,,
+9,Mickey,MIC,Escameka,M,Overthrown,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+10,Mickey,MIC,Escameka,M,Co-Emigration,14-Sep-2023,14-Sep-2023,14-Sep-2023,N,,,,,with mechas
+11,Mickey,MIC,Escameka,M,END,13-Sep-2023,,,N,,,,,
+1,Miel,MIE,Mesas,F,DOB,24-Jan-2021,,,N,,,Mulan,,
+2,Miel,MIE,Mesas,F,START,25-Jan-2021,25-Jan-2021,25-Jan-2021,N,,,Mulan,,
+3,Miel,MIE,Mesas,F,DOD,6-Jul-2022,5-Jul-2022,7-Jul-2022,Y,JCO/FK,Last seen on 4-Jul-2022. Next group census 7-Jul-2022,Mulan,,
+4,Miel,MIE,Mesas,F,END,4-Jul-2022,,,N,,,Mulan,Never seen again,
+1,Milagro,MIL,Mesas,F,DOB,1-Jan-2017,,,Y,,,Meza,,
+2,Milagro,MIL,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,Meza,,
+3,Milagro,MIL,Mesas,F,Independent,11-Apr-2018,11-Apr-2018,11-Apr-2018,N,,Based off MEZ's wean/resume cycling,,,
+4,Milagro,MIL,Mesas,F,Changed to Juvenile,1-Jan-2019,1-Jan-2019,1-Jan-2019,N,,,Meza,,
+5,Milagro,MIL,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,Meza,,Mozote takes over group
+6,Milagro,MIL,Mesas,F,Changed to Subadult - female,1-Jun-2021,1-Jun-2021,1-Jun-2021,N,,4.5 y/o,Meza,,
+7,Milagro,MIL,Mesas,F,Conception,10-Jul-2022,10-Jul-2022,10-Jul-2022,Y,JCO/FK,FK/JCO subtracted 150 days from birth,Meza,Melocoton,
+8,Milagro,MIL,Mesas,F,Changed to Adult - female,10-Jul-2022,10-Jul-2022,10-Jul-2022,Y,JCO/FK,Date of first conception,Meza,,
+9,Milagro,MIL,Mesas,F,First Birth,7-Dec-2022,2-Dec-2022,12-Dec-2022,Y,JCO/FK,Mesas census between these two dates,Meza,Melocoton,
+10,Milagro,MIL,Mesas,F,Mom Died,06-Jun-2023,06-Jun-2023,06-Jun-2023,Y,AF,,Meza,,MEZ electrocuted
+11,Milagro,MIL,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,Meza,,Infanticide from MOS on MOR and MOZ is gone
+12,Milagro,MIL,Mesas,F,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,Meza,,MOJ takeover from MOS
+13,Milagro,MIL,Mesas,F,Infant Death,12-Jan-2024,27-Dec-2023,29-Jan-2024,Y,JCO/FK,mesas last followed between these two dates,Meza,Melocoton,
+14,Milagro,MIL,Mesas,F,Wean/Resumes Cycling,12-Jan-2024,27-Dec-2023,29-Jan-2024,Y,JCO/FK,mesas last followed between these two dates,Meza,,
+100,Milagro,MIL,Mesas,F,END,NOT YET,,,,,,Meza,,
+1,Minnie,MIN,Mesas,F,DOB,1-Jul-2011,,,Y,JCO/AF,Same age as Mulan,,,
+2,Minnie,MIN,Mesas,F,Conception,1-Nov-2017,1-Nov-2017,1-Nov-2017,Y,JCO/AF,,,MEG,
+3,Minnie,MIN,Mesas,F,Birth,1-Apr-2018,31-Mar-2018,2-Apr-2018,Y,JCO/AF,"Following group, JCO/AF remember the births. On census notes says she and Mega were around 5 days old. But one was definitely bigger than the other (tbd with DNA)",,MEG,"Before seeing Mega and Mushu, group saw that both moms Minnie and Mulan were pregnant. When team returned to the group on 3-Apr-2018, Minnie was carrying both babies and Mulan no longer had a pregnant belly. She didn't show much interest, but did feed Mushu milk a few times the months following. *Should do DNA to figure out maternity of Mushu. All of this information can be found on Mesas Census 2018"
+4,Minnie,MIN,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+5,Minnie,MIN,Mesas,F,DOD,12-Jun-2018,12-Jun-2018,14-Dec-2018,Y,JCO/AF,,,,
+6,Minnie,MIN,Mesas,F,END,12-Jun-2018,,,N,JCO/AF,,,,
+1,Mississippi,MIS,Mesas,F,DOB,5-Jan-2019,,,N,,,MUL,,
+2,Mississippi,MIS,Mesas,F,START,12-Apr-2019,12-Apr-2019,12-Apr-2019,N,,,MUL,,
+3,Mississippi,MIS,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,MUL,,Mozote takes over group
+4,Mississippi,MIS,Mesas,F,Independent,9-Jul-2019,9-Jul-2019,9-Jul-2019,N,,based off MUL's wean/resume cycling,MUL,,
+5,Mississippi,MIS,Mesas,F,Changed to Juvenile,13-Mar-2021,13-Mar-2021,13-Mar-2021,N,,,MUL,,
+6,Mississippi,MIS,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,MUL,,Infanticide from MOS on MOR and MOZ is gone
+7,Mississippi,MIS,Mesas,F,Changed to Subadult - female,5-Jun-2023,5-Jun-2023,5-Jun-2023,N,,4.5 y/o,MUL,,
+8,Mississippi,MIS,Mesas,F,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,MUL,,MOJ takeover from MOS
+9,Mississippi,MIS,Mesas,F,Conception,20-Dec-2023,20-Dec-2023,20-Dec-2023,Y,FK/JCO,"Miscarriage, therefore conception is estimated based on how many months the team estimated her to be pregnant",MUL,,
+11,Mississippi,MIS,Mesas,F,Changed to Adult - female,20-Dec-2023,20-Dec-2023,20-Dec-2023,N,JCO/AF/FK,About the same pregnancy timeline as MAY; 2 months pregnant on 20-Feb-2024,MUL,,
+10,Mississippi,MIS,Mesas,F,Pregnant,20-Feb-2024,20-Dec-2023,21-May-2024,Y,JCO/AF/FK,"MIS about the same pregnancy as MAY, but we forgot to put in EpiCollect that MIS was pregnant; 2 months pregnant on 20-Feb-2024",MUL,,Last date seen not pregnant
+12,Mississippi,MIS,Mesas,F,Miscarriage,21-May-2024,21-May-2024,21-May-2024,Y,JCO,No notes on pregnancy throughout. This is the only date we know for certain that she isn't pregnant,MUL,,
+100,Mississippi,MIS,Mesas,F,END,NOT YET,,,,,,MUL,,
+1,Moco,MOC,Mesas,M,DOB,05-Jul-2016,,,Y,AF,,,,
+2,Moco,MOC,Mesas,M,Co-Immigration,2-Jul-2023,2-Jul-2023,2-Jul-2023,N,,,,,"came with Mojito, mepe, mexico, moco, mae"
+3,Moco,MOC,Mesas,M,START,3-Jul-2023,3-Jul-2023,3-Jul-2023,N,,,,,
+4,Moco,MOC,Mesas,M,Changed to Subadult - male,5-Jul-2023,5-Jul-2023,5-Jul-2023,N,,7 y/o,,,
+100,Moco,MOC,Mesas,M,END,NOT YET,,,,,,,,
+1,Moises,MOI,Mesas,M,DOB,1-Jul-1999,,,Y,JCO/AF,Estimated based off of Tev (slightly older than),,,
+2,Moises,MOI,Mesas,M,START,17-Aug-2017,17-Aug-2017,17-Aug-2017,N,JCO/FK,Recorded in August 2017 census,,,
+3,Moises,MOI,Mesas,M,Major Injury,11-Oct-2017,1-Oct-2017,11-Oct-2017,Y,CA,,,,"MOI seen with severe injuries on tail, back, and around face, was seen traveling along and away from the group for about two weeks afterwards before rejoining Mesas"
+4,Moises,MOI,Mesas,M,Ambiguous / Gap,,10-Nov-2019,10-Dec-2019,Y,JCO/FK,Could've been alpha during this month but there is no clear information,,,
+5,Moises,MOI,Mesas,M,Absence,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,
+6,Moises,MOI,Mesas,M,END,12-Feb-2020,,,N,,,,,
+1,Mojito,MOJ,Mesas,M,DOB,05-Jul-2009,,,Y,AF,,,,
+2,Mojito,MOJ,Mesas,M,Co-Immigration,2-Jul-2023,2-Jul-2023,2-Jul-2023,N,,,,,"came with Mojito, mepe, mexico, moco, mae"
+3,Mojito,MOJ,Mesas,M,Takes Over Group,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,,,,,
+4,Mojito,MOJ,Mesas,M,START,3-Jul-2023,3-Jul-2023,3-Jul-2023,N,,,,,
+100,Mojito,MOJ,Mesas,M,END,NOT YET,,,,,,,,
+1,Molly,MOL,Mesas,F,DOB,1-Jul-2017,,,Y,JCO/AF,Same as Milagro,Mulan,,
+2,Molly,MOL,Mesas,F,Independent,3-Apr-2018,3-Apr-2018,3-Apr-2018,N,,,Mulan,,Moved into Juvenile category from infant because all adult females have new babies
+3,Molly,MOL,Mesas,F,Changed to Juvenile,1-Jul-2019,1-Jul-2019,1-Jul-2019,Y,,2 years after birth,Mulan,,
+4,Molly,MOL,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,Mulan,,
+5,Molly,MOL,Mesas,F,Major Injury,10-Jul-2018,10-Jul-2018,10-Jul-2018,N,,,Mulan,,"Found with hand very swollen and wrist hairless. On 12-Jul-18 hand started falling off, bones visible. Seen 10, 11, 12, 13, July."
+6,Molly,MOL,Mesas,F,DOD,17-Jul-2018,17-Jul-2018,17-Jul-2018,N,,,Mulan,,"Not seen 17, 18, 19 July, 6, 14 December."
+7,Molly,MOL,Mesas,F,END,17-Jul-2018,,,N,,,Mulan,,"Not seen 17, 18, 19 July, 6, 14 December."
+1,Montaña,MON,Mesas,F,DOB,24-Jan-2018,,,N,,,Meritamon,,
+2,Montaña,MON,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,Meritamon,,
+3,Montaña,MON,Mesas,F,Independent,4-May-2019,4-May-2019,4-May-2019,N,,based off MER's wean/resume cycling,Meritamon,,
+4,Montaña,MON,Mesas,F,Changed to Juvenile,24-Jan-2020,30-Dec-2019,24-Jan-2020,Y,JCO/FK,The last date was the date already there. But MAL was conceived on the first date,Meritamon,,
+5,Montaña,MON,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,Meritamon,,Mozote takes over group
+6,Montaña,MON,Mesas,F,Mom Died,23-Jul-2020,23-Jul-2020,23-Jul-2020,Y,JCO/AF/CA,Meritamon missing and presumed dead,Meritamon,,
+7,Montaña,MON,Mesas,F,Changed to Subadult - female,24-Jun-2022,24-Jun-2022,24-Jun-2022,N,,4.5 y/o,Meritamon,,
+8,Montaña,MON,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,Meritamon,,Infanticide from MOS on MOR and MOZ is gone
+9,Montaña,MON,Mesas,F,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,Meritamon,,MOJ takeover from MOS
+11,Montaña,MON,Mesas,F,Conception,14-Dec-2023,14-Dec-2023,14-Dec-2023,N,,150 days minus birth,Meritamon,MAX,
+10,Montaña,MON,Mesas,F,Changed to Adult - female,14-Dec-2023,14-Dec-2023,14-Dec-2023,N,JCO/FK,EpiCollect says she was around 3 months pregnent on 20-Feb-2024,Meritamon,,
+12,Montaña,MON,Mesas,F,Pregnant,20-Feb-2024,20-Nov-2023,12-May-2024,Y,JCO,Observation (EpiCollect LH about 3 months),Meritamon,MAX,
+13,Montaña,MON,Mesas,F,First Birth,12-May-2024,12-May-2024,12-May-2024,N,AF,"Observed on 13-May-24, between 1-3 days",Meritamon,MAX,
+100,Montaña,MON,Mesas,F,END,NOT YET,,,,,,Meritamon,,
+1,Moon,MOO,Mesas,?,DOB,11-May-2024,11-May-2024,11-May-2024,N,AF/JCO,"Observed 21-May-24, 3-4 days old ( Mario observation), but AF/JCO observed later and think tha baby is older than MAX, we need to do estimation of First and last date",MAY,,"Infant look grey hair, and we think is older than MAX, named during the dinner"
+2,Moon,MOO,Mesas,?,START,13-May-2024,13-May-2024,13-May-2024,N,AF,,MAY,,
+100,Moon,MOO,Mesas,?,END,NOT YET,,,,,,MAY,,
+1,Mora,MOR,Mesas,F,DOB,07-Jan-2023,,,Y,,no notes in census when she was born. Assumed that Vasco put this information in,MEZ,,
+2,Mora,MOR,Mesas,F,START,09-Jan-2023,09-Jan-2023,09-Jan-2023,N,,,MEZ,,
+3,Mora,MOR,Mesas,F,Mom Died,06-Jun-2023,06-Jun-2023,06-Jun-2023,Y,AF,,MEZ,,MEZ electrocuted
+4,Mora,MOR,Mesas,F,DOD,15-May-2023,15-May-2023,15-May-2023,N,,,MEZ,,Infanticide by MOS
+5,Mora,MOR,Mesas,F,END,15-May-2023,,,N,,,MEZ,,Infanticide by MOS
+1,Mosquito,MOS,Mesas,M,DOB,1-Jul-2013,,,Y,JCO/AF,,,,
+2,Mosquito,MOS,Mesas,M,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+3,Mosquito,MOS,Mesas,M,Changed to Sub-Adult - male,1-Jul-2020,1-Jul-2020,1-Jul-2020,N,,7 y/o,,,
+4,Mosquito,MOS,Mesas,M,Takes Over Group,15-May-2023,15-May-2023,15-May-2023,N,,,,,MOZ is no longer with the group and MOS commits infanticide on MOR
+5,Mosquito,MOS,Mesas,M,Changed to Adult - male,1-Jul-2023,1-Jul-2023,1-Jul-2023,N,,10 y/o,,,
+6,Mosquito,MOS,Mesas,M,Overthrown,2-Jul-2023,2-Jul-2023,2-Jul-2023,N,,,,,"Left the group but has been ""around"" seen again running from the group limping 12-Jul-2023"
+7,Mosquito,MOS,Mesas,M,Major Injury,2-Jul-2023,2-Jul-2023,2-Jul-2023,N,,,,,Major injury to the right elbow
+8,Mosquito,MOS,Mesas,M,Emigration,2-Jul-2023,2-Jul-2023,12-Jan-2024,Y,JCO/FK,,,,CB VM VV FK saw Mos alone on Escameka mountain foraging near howler monkeys on 18-Sep-2023. Broken index finger on right hand. He is not bearing a lot of weight on his left arm. Small bald patch on leg. MOS was injured by MAE around June of this year. No one has seen him until today.
+9,Mosquito,MOS,Escameka,M,Immigration,12-Jan-2024,2-Jul-2023,12-Jan-2024,Y,JCO/FK,,,,
+100,Mosquito,MOS,Escameka,M,END,NOT YET,,,,,,,,
+1,Mowgli,MOW,Mesas,F,DOB,23-Jun-2022,,,N,,,Mulan,,
+2,Mowgli,MOW,Mesas,F,START,23-Jun-2022,23-Jun-2022,23-Jun-2022,N,,,Mulan,,
+3,Mowgli,MOW,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,Mulan,,Infanticide from MOS on MOR and MOZ is gone
+4,Mowgli,MOW,Mesas,F,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,Mulan,,MOJ takeover from MOS
+100,Mowgli,MOW,Mesas,F,END,NOT YET,,,,,,Mulan,,
+1,Mozote,MOZ,Mesas,M,DOB,1-Jul-2010,,,Y,JCO/AF,Same as Mickey,,,
+2,Mozote,MOZ,Mesas,M,START,17-Aug-2017,17-Aug-2017,17-Aug-2017,N,,Recorded in August 2017 census,,,
+3,Mozote,MOZ,Mesas,M,Takes Over Group,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,
+4,Mozote,MOZ,Mesas,M,Changed to Adult,1-Jul-2020,1-Jul-2020,1-Jul-2020,Y,JCO/AF,,,,
+5,Mozote,MOZ,Mesas,M,Overthrown,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,,,Infanticide from MOS on MOR and MOZ is gone
+6,Mozote,MOZ,Mesas,M,Absence,14-May-2023,13-May-2023,15-May-2023,Y,,,,,Last seen in an Intergroup with escameka on 12-May. Not seen in group on 15-May
+7,Mozote,MOZ,Mesas,M,END,13-May-2023,,,,,,,,Possibly dead
+1,Mulan,MUL,Mesas,F,DOB,1-Jul-2011,,,Y,JCO/AF,Same age as Minnie--has had at least 2 infants,,,
+2,Mulan,MUL,Mesas,F,Conception,1-Feb-2017,1-Feb-2017,1-Feb-2017,Y,JCO/FK,150 days before birth,,MOL,
+3,Mulan,MUL,Mesas,F,Birth,1-Jul-2017,1-Jul-2017,1-Jul-2017,Y,JCO/AF,Same as Milagro,,MOL,
+4,Mulan,MUL,Mesas,F,Wean/Resumes Cycling,3-Oct-2017,3-Oct-2017,3-Oct-2017,Y,,1 month before conception of MUS,,,
+5,Mulan,MUL,Mesas,F,Conception,2-Nov-2017,1-Nov-2017,3-Nov-2017,Y,JCO/FK,150 days before birth,,MUS?,"CA wrote first/last date as 1-Sep-2017. But if estimated birth was end of March (done by JCO/AF), then the conception date doesn't match with the estimated 150 days. JCO/FK changed this on 21-Feb-2024"
+6,Mulan,MUL,Mesas,F,Birth,1-Apr-2018,31-Mar-2018,2-Apr-2018,Y,JCO/AF,"Following group, JCO/AF remember the births. On census notes says she and Mega were around 5 days old. But one was definitely bigger than the other (tbd with DNA)",,MUS?,"Before seeing Mega and Mushu, group saw that both moms Minnie and Mulan were pregnant. When team returned to the group on 3-Apr-2018, Minnie was carrying both babies and Mulan no longer had a pregnant belly. She didn't show much interest, but did feed Mushu milk a few times the months following. *Should do DNA to figure out maternity of Mushu. All of this information can be found on Mesas Census 2018"
+7,Mulan,MUL,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,,,
+8,Mulan,MUL,Mesas,F,Infant Death,17-Jul-2018,17-Jul-2018,17-Jul-2018,N,,,,MOL,"Molly not seen 17, 18, 19 July, 6, 14 December. This doesn't effect her cycling because Molly is already independent after giving birth to Mushu(?)"
+9,Mulan,MUL,Mesas,F,Pregnant,6-Dec-2018,6-Oct-2018,6-Dec-2018,Y,JCO/AF,Observation (Census around 2 months),,,
+10,Mulan,MUL,Mesas,F,Wean/Resumes Cycling,9-Jul-2019,9-Jul-2019,9-Jul-2019,Y,JCO/AF,No longer showing interest in feeding her possible baby Mushu,,MUS?,
+11,Mulan,MUL,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,,,Mozote takes over group
+12,Mulan,MUL,Mesas,F,Pregnant,16-Apr-2020,16-Feb-2020,16-Apr-2020,Y,JCO/AF,Observation (Census around 2 months),,,
+13,Mulan,MUL,Mesas,F,Miscarriage?,,,,,,VV hormone help,,,
+14,Mulan,MUL,Mesas,F,Wean/Resumes Cycling?,,,,,,VV hormone help,,,
+15,Mulan,MUL,Mesas,F,Conception,27-Aug-2020,27-Aug-2020,27-Aug-2020,Y,JCO,150 days before birth,,MIE,
+16,Mulan,MUL,Mesas,F,Pregnant,24-Nov-2020,24-Sep-2020,24-Jan-2021,N,JCO,Observation (Census around 2 months),,MIE,
+17,Mulan,MUL,Mesas,F,Birth,24-Jan-2021,24-Jan-2021,24-Jan-2021,Y,JCO,,,MIE,
+18,Mulan,MUL,Mesas,F,Wean/Resumes Cycling,14-Jan-2022,25-Dec-2021,3-Feb-2022,Y,JCO/FK,"25-Dec-2021 is 1 month before estimated conception of MOW. But, MIE is still seen nursing from MUL on 3-Feb-2022. Maybe MOW was born premature. Or MIE was suckling and MUL didn't have any milk. In any case, the date given is the date between the first and last date",,,
+19,Mulan,MUL,Mesas,F,Conception,24-Jan-2022,24-Jan-2022,24-Jan-2022,Y,JCO/FK,150 days before birth,,MOW ,
+20,Mulan,MUL,Mesas,F,Birth,23-Jun-2022,23-Jun-2022,23-Jun-2022,Y,JCO/FK,"first seen on census on 23-Jun-2022, group last followed on 10-Jun-2022",,MOW ,
+21,Mulan,MUL,Mesas,F,Infant Death,6-Jul-2022,5-Jul-2022,7-Jul-2022,Y,JCO/FK,Last seen on 4-Jul-2022. Next group census 7-Jul-2022,,MIE,Disappeared. Assumed dead
+22,Mulan,MUL,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,,,Infanticide from MOS on MOR and MOZ is gone
+23,Mulan,MUL,Mesas,F,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,,,MOJ takeover from MOS
+24,Mulan,MUL,Mesas,F,Pregnant,14-Nov-2023,14-Nov-2023,14-Nov-2023,Y,,"Observation (EpiCollect, no estimation, nor follow up)",,,
+25,Mulan,MUL,Mesas,F,Miscarriage,27-Dec-2023,27-Dec-2023,27-Dec-2023,Y,FK,No notes on pregnancy follow up. This is the next date that census has her listed as seen,,,
+100,Mulan,MUL,Mesas,F,END,NOT YET,,,,,,,,
+1,Mushu,MUS,Mesas,F,DOB,1-Apr-2018,31-Mar-2018,2-Apr-2018,Y,JCO/AF,"Following group, JCO/AF remember the births. On census notes says she and Mega were around 5 days old. But one was definitely bigger than the other (tbd with DNA)",MUL?,,"Before seeing Mega and Mushu, group saw that both moms Minnie and Mulan were pregnant. When team returned to the group on 3-Apr-2018, Minnie was carrying both babies and Mulan no longer had a pregnant belly. She didn't show much interest, but did feed Mushu milk a few times the months following. *Should do DNA to figure out maternity of Mushu. All of this information can be found on Mesas Census 2018"
+2,Mushu,MUS,Mesas,F,START,5-Apr-2018,5-Apr-2018,5-Apr-2018,N,,,MUL?,,
+3,Mushu,MUS,Mesas,F,Takeover,12-Feb-2020,12-Feb-2020,12-Feb-2020,N,,,MUL?,,Mozote takes over group
+4,Mushu,MUS,Mesas,F,Independent,6-Sep-2018,6-Sep-2018,6-Sep-2018,Y,JCO/FK,1 month before supposed pregnancy timeline of MUL,,,
+5,Mushu,MUS,Mesas,F,Changed to Juvenile,31-Mar-2021,31-Mar-2021,31-Mar-2021,Y,JCO/AF,We can't write in independent date because she was still feeding from Minnie and not Mulan,MUL?,,
+6,Mushu,MUS,Mesas,F,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,MUL?,,Infanticide from MOS on MOR and MOZ is gone
+7,Mushu,MUS,Mesas,F,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,MUL?,,MOJ takeover from MOS
+8,Mushu,MUS,Mesas,F,Changed to Subadult - female,1-Oct-2022,1-Oct-2022,1-Oct-2022,N,,4.5 y/o,,,
+9,Mushu,MUS,Mesas,F,Conception,22-Jan-2024,22-Jan-2024,22-Jan-2024,Y,FK/JCO,"Miscarriage, therefore conception is estimated based on how many months the team estimated her to be pregnant",,,
+10,Mushu,MUS,Mesas,F,Pregnant,22-Feb-2024,22-Jan-2024,21-May-2024,Y,JCO,"Observation (EpiCollect 1-2 months, maybe)",,,Last date seen not pregnant
+11,Mushu,MUS,Mesas,F,Changed to Adult - female,22-Dec-2023,22-Dec-2023,22-Dec-2023,N,JCO,Based off pregnancy estimate,,,
+12,Mushu,MUS,Mesas,F,Miscarriage,21-May-2024,21-May-2024,21-May-2024,Y,JCO,No notes on pregnancy throughout. This is the only date we know for certain that she isn't pregnant,,,
+100,Mushu,MUS,Mesas,F,END,NOT YET,,,,,,,,
+1,Mykonos,MYK,Mesas,M,DOB,22-Jan-2021,,,N,,,Meza,,
+2,Mykonos,MYK,Mesas,M,START,22-Jan-2021,22-Jan-2021,22-Jan-2021,N,,,Meza,,
+3,Mykonos,MYK,Mesas,M,Independent?,06-May-2021,06-May-2021,06-May-2021,Y,,This could be wrong: based on MEZ's conception date that has questions around its validity,,,
+4,Mykonos,MYK,Mesas,M,Changed to Juvenile,22-Jan-2023,22-Jan-2023,22-Jan-2023,Y,,Two years old,Meza,,
+5,Mykonos,MYK,Mesas,M,Mom Died,03-May-2023,29-Apr-2023,08-May-2023,Y,AF/JCO,Found her on 08-May-2023. She was already decomposing. AF/JCO estimated she might've been electrocuted between 29-Apr-2023 and 30-Apr-2023,Meza,,MEZ electrocuted
+6,Mykonos,MYK,Mesas,M,Takeover,14-May-2023,13-May-2023,15-May-2023,Y,JCO,Notes say that Mozote was found in intergroup with Escameka on 12 May. Found group with Mosquito on 15 May-2023,Meza,,Infanticide from MOS on MOR and MOZ is gone
+7,Mykonos,MYK,Mesas,M,Takeover,2-Jul-2023,2-Jul-2023,3-Jul-2023,Y,JCO/FK,Someone wrote previous (unknown by JCO and FK) that Takeover was 2-Jul-2023. Census notes say that Mosquito was seen with group in the morning but left midday on 3-Jul-2023,Meza,,MOJ takeover from MOS
+8,Mykonos,MYK,Mesas,M,Co-Emigration,10-Jul-2023,10-Jul-2023,3-Aug-2023,N,,,Meza,,First date is the first time he is absent from Mesas and last date is the first time we spot him in Escameka. With Mani and Mau
+9,Mykonos,MYK,Escameka,M,Co-Immigration,03-Aug-2023,10-Jul-2023,3-Aug-2023,N,,,Meza,,First date is the first time he is absent from Mesas and last date is the first time we spot him in Escameka. With Mani and Mau
+10,Mykonos,MYK,Escameka,M,Ambiguous / Gap,,14-Sep-2023,13-Oct-2023,Y,JCO/FK,"Mickey last seen on 13-Sep-2023, not seen when group does not Escameka follow on 13-Oct-2023",,,
+11,Mykonos,MYK,Escameka,M,Takeover,12-Nov-2023,14-Sep-2023,11-Jan-2024,Y,JCO/MP/FK,"Mickey absent in 14-Sep-2023, uncertain between that date and 11-Jan-2024 because group didn't follow Escameka as frequently. But Mani is definitely alpha 11-Jan-2024",,,Mani takesover from Mickey
+100,Mykonos,MYK,Escameka,M,END,NOT YET,,,,,,,,
+1,Paco,PAC,Palmas,M,DOB,01-Jul-2017,,,Y,JCO,,,,
+2,Paco,PAC,Palmas,M,Changed to Juvenile,1-Jul-2019,1-Jul-2019,1-Jul-2019,N,,2 y/o,,,
+3,Paco,PAC,Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+4,Paco,PAC,Palmas,M,START,12-Jul-2022,12-Jul-2022,12-Jul-2022,N,,,,,
+5,Paco,PAC,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Paco,PAC,Palmas A,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+7,Paco,PAC,Palmas A,M,Changed to Subadult - male,01-Jul-2024,01-Jul-2024,01-Jul-2024,N,,7 y/o,,,
+100,Paco,PAC,Palmas A,M,END,NOT YET,,,,,,,,
+1,Paige ,PAI,Palmas,F,DOB,27-Mar-2020,,,Y,"JCO, AF","When they added her, they estimated her to be about 2.5 years",,,
+2,Paige ,PAI,Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+3,Paige ,PAI,Palmas,F,Changed to Juvenile,27-Mar-2022,27-Mar-2022,27-Mar-2022,N,,2 y/o,,,
+4,Paige ,PAI,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+5,Paige ,PAI,Palmas,F,START,27-Sep-2022,27-Sep-2022,27-Sep-2022,N,,,,,
+6,Paige ,PAI,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+7,Paige ,PAI,Palmas A,F,Changed to Subadult - female,27-Sep-2024,27-Sep-2024,27-Sep-2024,N,,4.5 y/o,,,
+100,Paige ,PAI,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pajarita,PAJ,Palmas,F,DOB,7-Jan-2019,,,Y,"JCO, AF","When they added her, they estimated her as just over 2 years",,,
+2,Pajarita,PAJ,Palmas,F,Changed to Juvenile,7-Jan-2021,7-Jan-2021,7-Jan-2021,N,,2 y/o,,,
+3,Pajarita,PAJ,Ramas de Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Pajarita,PAJ,Ramas de Palmas,F,START,15-Mar-2021,15-Mar-2021,15-Mar-2021,N,,,,,
+5,Pajarita,PAJ,Ramas de Palmas,F,Takeover,20-Dec-2021,25-Nov-2021,20-Dec-2021,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,"TOR is new alpha, waltzed into group when there was no other male"
+6,Pajarita,PAJ,Ramas de Palmas,F,Takeover,16-Apr-2022,13-Apr-2022,19-Apr-2022,Y,,,,,RAM takeover from TOR
+7,Pajarita,PAJ,Ramas de Palmas,F,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+1,Palito,PAL,Palmas,M,DOB,25-Nov-2000,,,Y,"JCO, AF",Visual guess,,,
+2,Palito,PAL,Palmas,M,START,23-Oct-2017,23-Oct-2017,23-Oct-2017,N,,,,,
+3,Palito,PAL,Ramas de Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Palito,PAL,Ramas de Palmas,M,Takes Over Group,1-Mar-2021,1-Mar-2021,1-Mar-2021,Y,,,,,"PAL was alpha of group following fission--did not ""take over"" group from an existing alpha"
+5,Palito,PAL,Ramas de Palmas,M,Co-Emigration,29-Oct-2021,29-Oct-2021,29-Oct-2021,N,,"Ramas females found alone, no males in sight on October 29. PAL leaves even though he was still alpha.",,,
+6,Palito,PAL,Tenori,M,Co-Immigration,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,
+7,Palito,PAL,Tenori,M,Takes Over Group,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Overthrows TOR,,,
+8,Palito,PAL,Tenori,M,Overthrown,5-Oct-2022,5-Oct-2022,5-Oct-2022,N,,"PED takes over, not totally sure about first and last date, original date was written as 6-Oct-2022, but this is inconsistent with immigration dates",,,
+9,Palito,PAL,Tenori,M,Co-Emigration,19-Nov-2022,18-Oct-2022,19-Nov-2022,N,,PAL keeps leaving and coming back to Tenori. Then finally leaves for good.,,,
+10,Palito,PAL,?,M,Co-Immigration,19-Nov-2022,19-Nov-2022,19-Nov-2022,N,,,,,
+11,Palito,PAL,?,M,END,19-Nov-2022,,,N,,,,,
+1,Pampa,PAM,Palmas,F,DOB,01-Jul-2012,,,Y,JCO/AF,Had baby in 2018--has to be at least 8 years old,,,
+2,Pampa,PAM,Palmas,F,START,04-Jan-2018,4-Jan-2018,4-Jan-2018,N,,,,,Based on Alex's handwritten notes !!! :)
+3,Pampa,PAM,Palmas,F,Changed to Adult - female,24-Mar-2018,24-Mar-2018,24-Mar-2018,N,,conception date,,,
+4,Pampa,PAM,Palmas,F,Conception,24-Mar-2018,24-Mar-2018,24-Mar-2018,Y,,,,,
+5,Pampa,PAM,Palmas,F,First Birth,21-Aug-2018,21-Aug-2018,21-Aug-2018,Y,,,,,
+6,Pampa,PAM,Palmas,F,Wean/Resumes Cycling,29-Nov-2019,29-Nov-2019,29-Nov-2019,Y,,What is this based on? We aren't sure,,,
+7,Pampa,PAM,Palmas,F,Conception,25-Oct-2020,25-Oct-2020,25-Oct-2020,Y,,,,,
+8,Pampa,PAM,Ramas de Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,Y,,Fisson to Ramas,,,
+9,Pampa,PAM,Ramas de Palmas,F,Takeover,20-Dec-2021,25-Nov-2021,20-Dec-2021,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,"TOR is new alpha, waltzed into group when there was no other male"
+10,Pampa,PAM,Ramas de Palmas,F,Birth,24-Mar-2022,24-Mar-2022,24-Mar-2022,N,AF/EM,"PAM seen with new baby (Rodilo) on the 24th, not with the baby on the 23rd ",,ROD,EpiCollect LH says ROD born 24-Mar-22. Seen later that day not carrying baby
+11,Pampa,PAM,Ramas de Palmas,F,Takeover,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,
+12,Pampa,PAM,Ramas de Palmas,F,Infant Death,18-Jun-2022,28-Apr-2022,9-Aug-2022,Y,,,,ROD,Died same day as birth
+13,Pampa,PAM,Ramas de Palmas,F,Wean/Resumes Cycling,18-Jun-2022,28-Apr-2022,9-Aug-2022,Y,,,,,
+14,Pampa,PAM,Ramas de Palmas,F,Pregnant,9-Dec-2022,9-Oct-2022,9-Dec-2022,Y,,Observation (EpiCollect LH 2 months),,,
+15,Pampa,PAM,Ramas de Palmas,F,Miscarriage?,UNK,,,,,VV help,,,
+16,Pampa,PAM,Ramas de Palmas,F,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+17,Pampa,PAM,Ramas de Palmas,F,Pregnant,16-Jan-2024,16-Nov-2024,16-Jan-2024,N,JCO,Observation (EpiCollect LH 2 months),,,
+1,Pangolin,PAN,Palmas,F,DOB,01-Jul-2017,2-Jan-2017,28-Dec-2017,Y,,,,,
+2,Pangolin,PAN,Palmas,F,START,12-Apr-2023,12-Apr-2023,12-Apr-2023,N,,,,,
+3,Pangolin,PAN,Palmas,F,DOD,13-May-2023,13-May-2023,13-May-2023,N,,,,,
+4,Pangolin,PAN,Palmas,F,END,13-May-2023,,,N,,,,,
+1,Papi,PAP,Palmas,M,DOB,01-Jul-2010,2-Jan-2010,28-Dec-2010,Y,JCO/AF,,,,
+2,Papi,PAP,Palmas,M,START,12-Nov-2017,12-Nov-2017,12-Nov-2017,N,,,,,
+4,Papi,PAP,Palmas,M,Fission,01-Mar-2021,1-Mar-2021,1-Mar-2021,Y,,,,,
+3,Papi,PAP,Palmas,M,Takes Over Group,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,Takes over PLU
+5,Papi,PAP,Palmas A,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,Based on the day team had call with Jacinta about naming procedures,,,
+100,Papi,PAP,Palmas A,M,END,NOT YET,,,,,,,,
+1,Paris,PAR,Palmas A,M,DOB,17-Jan-2016,,,Y,JCO/FK,,,,
+2,Paris,PAR,Palmas A,M,Co-Immigration,16-Jan-2024,16-Jan-2024,16-Jan-2024,N,JCO/FK,"Don't know precisly how long he was scouting Palmas A immigration, but it's the first day we see him and he's definitely integrated. Co-immigration with Pibe",,,"Seen in southern entrance to Palmas de Aceite after major 3-way intergroup with Palmas A, Ramas, and Tenori. Seen aggressing Juan and Fran. Integrated into the group fairly quickly. Paco unhappy."
+3,Paris,PAR,Palmas A,M,START,17-Jan-2024,17-Jan-2024,17-Jan-2024,N,,,,,
+100,Paris,PAR,Palmas A,M,END,NOT YET,,,,,,,,
+1,Pascal,PAS,Palmas,M,DOB,11-Jun-2020,,,Y,JCO/EM/MP,about 4 y/o estimation,,,
+2,Pascal,PAS,Palmas,M,Changed to Juvenile,11-Jun-2022,11-Jun-2022,11-Jun-2022,N,,2 y/o,,,
+3,Pascal,PAS,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+4,Pascal,PAS,Palmas B,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,Palmas to Palmas A and Palmas B
+5,Pascal,PAS,Palmas B,M,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+6,Pascal,PAS,Palmas B,M,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+100,Pascal,PAS,Palmas B,M,END,NOT YET,,,,,,,,
+1,Paquira,PAQ,Palmas,?,DOB,08-Jun-2022,,,N,,,Patricia,,
+2,Paquira,PAQ,Palmas,?,START,08-Jun-2022,08-Jun-2022,08-Jun-2022,N,,,Patricia,,
+3,Paquira,PAQ,Palmas,?,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,Patricia,,PAP takes over
+4,Paquira,PAQ,Palmas,?,DOD,10-Oct-2022,29-Sep-2022,21-Oct-2022,Y,,,Patricia,,
+5,Paquira,PAQ,Palmas,?,END,10-Oct-2022,29-Sep-2022,21-Oct-2022,Y,,,Patricia,,
+1,Patricia,PAT,Palmas,F,DOB,01-Jul-2007,,,Y,JCO/AF,,,,
+2,Patricia,PAT,Palmas,F,Conception,15-May-2018,1-Mar-2018,30-Apr-2018,Y,JCO/AF,,,,
+3,Patricia,PAT,Palmas,F,START,05-Sep-2018,05-Sep-2018,05-Sep-2018,N,,,,,
+4,Patricia,PAT,Palmas,F,Birth,12-Oct-2018,12-Oct-2018,12-Oct-2018,Y,AF,,,,
+5,Patricia,PAT,Palmas,F,Wean/Resumes Cycling,15-Oct-2019,15-Oct-2019,15-Oct-2019,Y,FK,1 month before conception,,,
+6,Patricia,PAT,Palmas,F,Conception,14-Nov-2019,14-Nov-2019,14-Nov-2019,Y,,,,,
+7,Patricia,PAT,Palmas,F,Birth,12-Apr-2020,12-Apr-2020,12-Apr-2020,N,,,,,
+8,Patricia,PAT,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,Y,,,,,
+9,Patricia,PAT,Palmas,F,Wean/Resumes Cycling,21-Jul-2021,21-Jul-2021,21-Jul-2021,Y,,,,,"for some reason, we don't have any information on behavioral observations here. but then she's pregrant at least in May 2022, then the takeover process begins, and it is reported that she no longer has a baby in July 2022. not sure what happened - check AO?"
+10,Patricia,PAT,Palmas,F,Conception,10-Dec-2021,10-Dec-2021,10-Dec-2021,Y,,,,PAQ,
+11,Patricia,PAT,Palmas,F,Pregnant,02-May-2022,02-Dec-2022,08-Jun-2022,N,JCO,Observation (EpiCollect 5 months or more),,,
+12,Patricia,PAT,Palmas,F,Birth,08-Jun-2022,08-Jun-2022,08-Jun-2022,N,,,,PAQ,
+13,Patricia,PAT,Palmas,F,Infant Death,11-Jul-2022,11-Jul-2022,11-Jul-2022,Y,JCO/EM,Observation (EpiCollect). JCO and EM said that they didn't see month old baby. Probably died,,PAQ,This original information is weird. It states that PAQ probably died from infanticide. It says in census data that PAT has baby on 29-Sep-22. But on EpiCollect LH says that PAT no longer has baby on 11-Jul-22. JCO and FK are in agreement that the first date is likely more accurate and that the census in September simply saw her with another baby.
+14,Patricia,PAT,Palmas,F,Wean/Resumes Cycling,11-Jul-2022,11-Jul-2022,11-Jul-2022,Y,,same as infant death,,,
+15,Patricia,PAT,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,PAQ,PAP takes over
+16,Patricia,PAT,Palmas,F,Conception,10-Oct-2022,10-Oct-2022,10-Oct-2022,Y,,,,POR,
+17,Patricia,PAT,Palmas,F,Pregnant,09-Mar-2023,09-Mar-2023,22-Apr-2023,N,,"Observation (EpiCollect LH, no estimation)",,POR,
+18,Patricia,PAT,Palmas,F,Birth,24-Apr-2023,22-Apr-2023,27-Apr-2023,Y,CB,2 days before found,,POR,
+19,Patricia,PAT,Palmas B,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+20,Patricia,PAT,Palmas B,F,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+21,Patricia,PAT,Palmas B,F,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+22,Patricia,PAT,Palmas B,F,Infant Death,09-Dec-2023,01-Dec-2023,17-Dec-2023,Y,JCO/FK,Epicollect forms,,POR,Major injury was fatal
+23,Patricia,PAT,Palmas B,F,Wean/Resumes Cycling,09-Dec-2023,01-Dec-2023,17-Dec-2023,N,JCO/FK,Infant death,,,
+24,Patricia,PAT,Palmas B,F,Conception,,,,,,,,,
+25,Patricia,PAT,Palmas B,F,Pregnant,22-May-2024,22-Jan-2024,,N,JCO,"Observation (EpiCollect, estimated 3-4 months)",,,
+26,Patricia,PAT,Palmas B,F,Birth,,,,,,,,,
+100,Patricia,PAT,Palmas B,F,END,NOT YET,,,,,,,,
+1,Porky,POR,Palmas,?,DOB,24-Apr-2023,22-Apr-2023,27-Apr-2023,Y,JCO/FK,Estimated using census and notes found on epicollect life history form.,PAT,,
+2,Porky,POR,Palmas,?,START,28-Apr-2023,28-Apr-2023,28-Apr-2023,N,,,PAT,,
+3,Porky,POR,Palmas B,?,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,PAT,,
+4,Porky,POR,Palmas B,?,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,PAT,,
+5,Porky,POR,Palmas B,?,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,PAT,,
+6,Porky,POR,Palmas B,?,Major Injury,27-Nov-2023,25-Nov-2023,30-Nov-2023,Y,JCO,JCO observed the fracture on 30-Nov-2023. It cannot be more than 5 days of injury,PAT,,Not using left (?) leg nor tail
+7,Porky,POR,Palmas B,?,DOD,09-Dec-2023,01-Dec-2023,17-Dec-2023,Y,JCO/FK,Epicollect forms,PAT,,Major injury was fatal
+8,Porky,POR,Palmas B,?,END,30-Nov-2023,,,N,,,PAT,,
+1,Peanut,PEA,Palmas,F,DOB,01-Jul-2011,,,Y,JCO/AF,,,,
+2,Peanut,PEA,Palmas,F,START,12-Sep-2018,12-Sep-2018,12-Sep-2018,N,,,,,
+3,Peanut,PEA,Palmas,F,Conception,18-Dec-2018,18-Dec-2018,18-Dec-2018,Y,,,,,
+4,Peanut,PEA,Palmas,F,Changed to Adult - female,18-Dec-2018,18-Dec-2018,18-Dec-2018,N,,conception date,,,
+5,Peanut,PEA,Palmas,F,Pregnant,21-Mar-2019,21-Jan-2019,13-May-2019,Y,,Observation (census like 2 months),,,
+6,Peanut,PEA,Palmas,F,First Birth,13-May-2019,13-May-2019,13-May-2019,N,,,,,
+7,Peanut,PEA,Palmas,F,Ambiguous / Gap,,09-Nov-2019,09-Jul-2020,N,,,,,
+8,Peanut,PEA,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,Y,,,,,
+9,Peanut,PEA,Palmas,F,Wean/Resumes Cycling,17-Mar-2021,17-Mar-2021,17-Mar-2021,N,JCO/AF/FK,1 month before conception date,,,
+10,Peanut,PEA,Palmas,F,Conception,16-Apr-2021,16-Apr-2021,16-Apr-2021,Y,,,,,
+11,Peanut,PEA,Palmas,F,Birth,13-Sep-2021,13-Sep-2021,13-Sep-2021,N,JCO,,,,
+12,Peanut,PEA,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,
+13,Peanut,PEA,Palmas,F,Wean/Resumes Cycling,22-Nov-2022,22-Nov-2022,22-Nov-2022,Y,,The last day we saw her infant with her was this date,,,
+14,Peanut,PEA,Palmas,F,Pregnant?,9-Dec-2022,9-Dec-2022,9-Dec-2022,N,,Hormones were high,,,
+15,Peanut,PEA,Palmas,F,Pregnant?,23-Mar-2023,23-Mar-2023,23-Mar-2023,N,,Hormones were high,,,
+16,Peanut,PEA,Palmas,F,Miscarriage?,11-Apr-2023,11-Apr-2023,11-Apr-2023,N,,Hormones were low,,,
+17,Peanut,PEA,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+100,Peanut,PEA,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pedro,PED,Palmas,M,DOB,01-Jul-2010,,,Y,JCO/AF,,,,
+2,Pedro,PED,Palmas,M,Changed to Adult - male,1-Jul-2020,1-Jul-2020,1-Jul-2020,N,,10 y/o,,,
+3,Pedro,PED,Ramas de Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,Y,,Fisson to Ramas,,,
+4,Pedro,PED,Ramas de Palmas,M,Co-Emigration,29-Oct-2021,29-Oct-2021,29-Oct-2021,N,,"Ramas females found alone, no males in sight on October 29. ",,,
+5,Pedro,PED,Tenori,M,Co-Immigration,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,
+6,Pedro,PED,Tenori,M,Co-Emigration,12-Sep-2022,12-Sep-2022,15-Sep-2022,N,JCO,,,,Daily general says he left with the sub-adult males. Intention was to leave the group for a few days but changed his mind
+7,Pedro,PED,Tenori,M,Immigration,16-Sep-2022,16-Sep-2022,16-Sep-2022,N,,,,,He came back into the group
+8,Pedro,PED,Tenori,M,Takes Over Group,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,,,,
+100,Pedro,PED,Tenori,M,END,NOT YET,,,,,,,,
+1,Pelé,PEL,Palmas,M,DOB,01-Jul-2011,,,Y,JCO/AF,,,,
+2,Pelé,PEL,Palmas,M,START,22-Dec-2018,22-Dec-2018,22-Dec-2018,N,,,,,
+3,Pelé,PEL,Ramas de Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Pelé,PEL,Ramas de Palmas,M,Emigration,28-May-2021,28-May-2021,28-May-2021,N,,,,,
+5,Pelé,PEL,?,M,END,28-May-2021,,,N,,,,,
+1,Penelope,PEN,Palmas,F,DOB,01-Jul-2002,,,Y,JCO/AF,,,,
+2,Penelope,PEN,Palmas,F,START,23-Oct-2017,23-Oct-2017,23-Oct-2017,N,,,,,
+3,Penelope,PEN,Palmas,F,Wean/Resumes Cycling,20-Jan-2018,20-Jan-2018,20-Jan-2018,N,,30 days before conception,,,
+4,Penelope,PEN,Palmas,F,Conception,19-Feb-2018,19-Feb-2018,19-Feb-2018,Y,,,,,
+5,Penelope,PEN,Palmas,F,Birth,19-Jul-2018,19-Jul-2018,19-Jul-2018,Y,,,,,
+6,Penelope,PEN,Palmas,F,Wean/Resumes Cycling,26-Jan-2019,26-Jan-2019,26-Jan-2019,N,,30 days before conception,,,
+7,Penelope,PEN,Palmas,F,Conception,25-Feb-2019,25-Feb-2019,25-Feb-2019,N,,150 days before birth,,,
+8,Penelope,PEN,Palmas,F,Pregnant,24-Jul-2019,17-Mar-2019,24-Jul-2019,N,,Observation (census 3-4 months). On 25 Jul 2019 had baby,,,
+9,Penelope,PEN,Palmas,F,Birth,25-Jul-2019,25-Jul-2019,25-Jul-2019,N,,Daily General notes,,,
+10,Penelope,PEN,Palmas,F,Ambiguous / Gap,,19-Oct-2019,08-Nov-2019,N,,Group scan data only on these first and last dates. unknown if had baby between these dates,,,
+11,Penelope,PEN,Palmas,F,Infant Death,29-Oct-2019,19-Oct-2019,08-Nov-2019,Y,JCO/FK,"Group Scan data. Infant present on first date, not present on last date. Estimated death",,,
+12,Penelope,PEN,Palmas,F,Wean/Resumes Cycling,27-Oct-2019,27-Oct-2019,27-Oct-2019,Y,,JCO/FK don't know where this came from. We estimated that she lost the baby between October and November but the only evidence we found was from Group Scan. We will leave this here in case it is actually true that she lost the baby on an earlier date.,,,
+13,Penelope,PEN,Palmas,F,Ambiguous / Gap,,12-Feb-2020,8-Jun-2020,N,,,,,
+14,Penelope,PEN,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,
+15,Penelope,PEN,Palmas,F,Conception,14-May-2021,5-Apr-2021,11-Oct-2021,Y,JCO/LK,Subtracted 6 months from estimated birth date of Penelope's infant (11 Oct 2021),,,
+16,Penelope,PEN,Palmas,F,Birth,11-Oct-2021,6-Oct-2021,11-Oct-2021,N,JCO/AF,We saw Penelope with the new infant today (11/10/21) for the first time. JCO/AF estimated that baby was born within past 5 days. Last saw PEN on 17 Sep 2021 when she was still pregnant,,,
+17,Penelope,PEN,Palmas,F,Infant Death,20-Oct-2021,15-Oct-2021,25-Oct-2021,N,,,,,
+18,Penelope,PEN,Palmas,F,Wean/Resumes Cycling,20-Oct-2021,15-Oct-2021,25-Oct-2021,N,,Same date as Infant Death. And further evidence that PLU sniffed where PEN urinated on 01-Nov-2021,,,
+19,Penelope,PEN,Palmas,F,Conception,31-Dec-2021,31-Dec-2021,31-Dec-2021,Y,,,,,
+20,Penelope,PEN,Palmas,F,Pregnant,02-May-2022,02-May-2022,30-May-2022,N,,"Observation (EpiCollect LH, doesn't say how many months)",,,
+21,Penelope,PEN,Palmas,F,Birth,30-May-2022,30-May-2022,30-May-2022,N,JCO,"Saw Penelope with the new infant today (June 4, 2022) for the first time. JCO/AF estimated that baby was born within past 5 days.Seems likely that her other infant from Oct 11, 2021 died since she is already giving birth again in June 2022. Unsure of when she resumed cycling again.",,PON,
+22,Penelope,PEN,Palmas,F,Takeover,8-Aug-2022,8-Aug-2022,10-Aug-2022,N,,,,PON,
+23,Penelope,PEN,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+24,Penelope,PEN,Palmas,F,Wean/Resumes Cycling,07-Sep-2023,07-Sep-2023,07-Sep-2023,Y,,,,,
+25,Penelope,PEN,Palmas,F,Conception,16-Jan-2024,15-Jun-2024,17-Jun-2024,N,FK,150 days before birth,,PIJ,
+26,Penelope,PEN,Palmas,F,Pregnant,13-Mar-2024,13-Jan-2024,14-Jun-2024,N,JCO/FK,"Observation (EpiCollect, 2 months, probably JCO estimate)",,PIJ,
+27,Penelope,PEN,Palmas,F,Birth,14-Jun-2024,13-Jun-2024,15-Jun-2024,N,FK,Seen 18-Jun-2024,,PIJ,
+100,Penelope,PEN,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pequeno,PEQ,Palmas,M,DOB,01-Jul-2013,,,Y,JCO/AF,,,,
+2,Pequeno,PEQ,Palmas,M,START,9-Nov-2019,9-Nov-2019,9-Nov-2019,N,,,,,
+3,Pequeno,PEQ,Palmas,M,Changed to Sub-Adult - male,1-Jul-2020,1-Jul-2020,1-Jul-2020,N,,7 y/o,,,
+4,Pequeno,PEQ,Ramas de Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+5,Pequeno,PEQ,Ramas de Palmas,M,Co-Emigration,29-Oct-2021,29-Oct-2021,29-Oct-2021,N,,"Ramas females found alone, no males in sight on October 29. ",,,
+6,Pequeno,PEQ,Tenori,M,Co-Immigration,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,
+7,Pequeno,PEQ,Tenori,M,Co-Emigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,,,,,
+8,Pequeno,PEQ,?,M,Co-Immigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,,,,,AF saw in the Canal group
+9,Pequeno,PEQ,?,M,END,13-Sep-2022,,,N,,,,,
+1,Pery,PER,Palmas,M,DOB,01-Jul-2013,,,Y,JCO/AF,,,,
+2,Pery,PER,Palmas,M,START,23-Sep-2018,23-Sep-2018,23-Sep-2018,N,,,,,
+3,Pery,PER,Palmas,M,Changed to Sub-Adult - male,1-Jul-2020,1-Jul-2020,1-Jul-2020,N,,7 y/o,,,
+4,Pery,PER,Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+5,Pery,PER,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,PAP takeover,,,
+6,Pery,PER,Palmas,M,Changed to Adult - male,01-Jul-2023,01-Jul-2023,01-Jul-2023,N,,10 y/o,,,
+7,Pery,PER,Palmas B,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+8,Pery,PER,Palmas B,M,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+100,Pery,PER,Palmas B,M,END,NOT YET,,,,,,,,
+1,Pesto,PES,Palmas,M,DOB,01-Jul-2012,,,Y,JCO/AF,,,,
+2,Pesto,PES,Palmas,M,Changed to Subadult - male,1-Jul-2019,1-Jul-2019,1-Jul-2019,N,,7 y/o,,,
+3,Pesto,PES,Palmas,M,START,18-Dec-2019,18-Dec-2019,18-Dec-2019,N,,,,,
+4,Pesto,PES,Ramas de Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+5,Pesto,PES,Ramas de Palmas,M,Co-Emigration,29-Oct-2021,29-Oct-2021,29-Oct-2021,N,,"Ramas females found alone, no males in sight on October 29. ",,,
+6,Pesto,PES,Tenori,M,Co-Immigration,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,
+7,Pesto,PES,Tenori,M,Changed to Adult - male,1-Jul-2022,1-Jul-2022,1-Jul-2022,,,10 y/o,,,
+8,Pesto,PES,Tenori,M,Co-Emigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,,,,,
+9,Pesto,PES,?,M,Co-Immigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,,,,,AF saw in Canal group
+10,Pesto,PES,?,M,END,13-Sep-2022,,,N,,,,,
+1,Petronila,PET,Palmas,F,DOB,01-Jul-2002,,,Y,JCO/AF,Slightly older than Peanut,,,
+2,Petronila,PET,Palmas,F,START,02-Dec-2017,02-Dec-2017,02-Dec-2017,N,,,,,
+3,Petronila,PET,Palmas,F,Wean/Resumes Cycling,25-Jul-2017,25-Jul-2017,25-Jul-2017,N,,30 days before conception,,,
+4,Petronila,PET,Palmas,F,Conception,24-Aug-2017,24-Aug-2017,24-Aug-2017,N,,150 days before birth,,PIP,
+5,Petronila,PET,Palmas,F,Birth,20-Feb-2018,20-Feb-2018,20-Feb-2018,N,,Based on Alex's notes,,PIP,
+6,Petronila,PET,Palmas,F,Ambiguous / Gap,,12-Feb-2020,8-Jun-2020,N,,,,,
+7,Petronila,PET,Palmas,F,Wean/Resumes Cycling,11-Feb-2020,11-Feb-2020,11-Feb-2020,N,,30 days before conception,,,
+8,Petronila,PET,Palmas,F,Conception,12-Mar-2020,12-Mar-2020,12-Mar-2020,N,,150 days before birth,,,
+9,Petronila,PET,Palmas,F,Pregnant,09-Jul-2020,09-Feb-2020,09-Aug-2020,Y,,Observation (census 5 months),,,
+10,Petronila,PET,Palmas,F,Ambiguous / Gap,,09-Jul-2020,13-Oct-2020,N,,Not much data to confirm when baby birth and/or loss occurred,,,
+11,Petronila,PET,Palmas,F,Birth,09-Aug-2020,09-Aug-2020,14-Oct-2020,Y,JCO/FK,From group scan in October she is in contact with UI. First date is calculated 6 months based on pregnancy observation.,,,
+12,Petronila,PET,Palmas,F,Infant Death,15-Oct-2020,15-Oct-2020,18-Dec-2020,Y,JCO/FK,"Group Scan data, with UI on first date and not with UI on last date. We aren't certain about the last date's validity",,,
+13,Petronila,PET,Palmas,F,Wean/Resumes Cycling,15-Oct-2020,15-Oct-2020,18-Dec-2020,Y,JCO/FK,"Date that baby is perceived lost (based on notes, not field observation)",,,
+14,Petronila,PET,Palmas,F,Ambiguous / Gap,,15-Oct-2020,28-Apr-2023,Y,,,,,must've had pregnancy during this time period but there is no data showing evidence of pregnancy
+15,Petronila,PET,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,Started to see fision between Dec 20 and Mar 21,,,
+16,Petronila,PET,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+17,Petronila,PET,Palmas,F,Wean/Resumes Cycling,30-Oct-2022,30-Oct-2022,30-Oct-2022,Y,FK,Subtracted 1 month from conception,,,
+18,Petronila,PET,Palmas,F,Conception,29-Nov-2022,29-Nov-2022,29-Nov-2022,Y,,,,,
+19,Petronila,PET,Palmas,F,Birth,28-Apr-2023,28-Apr-2023,28-Apr-2023,N,,,,,
+20,Petronila,PET,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+100,Petronila,PET,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pez,PEZ,Palmas,M,DOB,11-Jun-2022,,,Y,JCO/EM/MP,about 2 y/o estimation,,,
+2,Pez,PEZ,Palmas,M,Changed to Juvenile,11-Jun-2024,11-Jun-2024,11-Jun-2024,N,,2 y/o,,,
+3,Pez,PEZ,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+4,Pez,PEZ,Palmas B,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,Palmas to Palmas A and Palmas B
+5,Pez,PEZ,Palmas B,M,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+6,Pez,PEZ,Palmas B,M,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+100,Pez,PEZ,Palmas B,M,END,NOT YET,,,,,,,,
+1,Philadelphia,PHI,Palmas,F,DOB,24-Jan-1988,,,Y,JCO/AF,,,,
+2,Philadelphia,PHI,Palmas,F,START,24-Jan-2019,24-Jan-2019,24-Jan-2019,N,,,,,
+3,Philadelphia,PHI,Palmas,F,DOD,24-Feb-2019,25-Jan-2019,24-Feb-2019,Y,,,,,"We named her but she died shortly after, there is absolutely no census data for her"
+4,Philadelphia,PHI,Palmas,F,END,24-Feb-2019,,,N,,,,,
+1,Pia,PIA,Palmas,F,DOB,14-May-2021,,,Y,JCO,estimated at 3 y/o,,,
+2,Pia,PIA,Palmas,F,Changed to Juvenile,14-May-2023,14-May-2023,14-May-2023,N,,2 y/o,,,
+3,Pia,PIA,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,Palmas to Palmas A and Palmas B
+4,Pia,PIA,Palmas A,F,START,14-May-2024,14-May-2024,14-May-2024,N,,,,,
+100,Pia,PIA,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pibe,PIB,Palmas A,M,DOB,19-Jan-2017,,,Y,JCO/FK,About a year younger than Paris,,,
+2,Pibe,PIB,Palmas A,M,Co-Immigration,16-Jan-2024,16-Jan-2024,16-Jan-2024,Y,JCO/FK,"Don't know precisly how long he was scouting Palmas A immigration, but it's the first day we see him and he's definitely integrated. Could be co-immigration with Paris",,,"Seen in southern entrance to Palmas de Aceite after major 3-way intergroup with Palmas A, Ramas, and Tenori. Seen aggressing Juan and Fran. Integrated into the group fairly quickly. Paco unhappy."
+3,Pibe,PIB,Palmas A,M,START,6-Feb-2024,6-Feb-2024,6-Feb-2024,N,,,,,
+100,Pibe,PIB,Palmas A,M,END,NOT YET,,,,,,,,
+1,Piccolo,PIC,Palmas,M,DOB,01-Jul-2014,,,Y,JCO/AF,,,,
+2,Piccolo,PIC,Palmas,M,START,20-Sep-2018,20-Sep-2018,20-Sep-2018,N,,,,,
+3,Piccolo,PIC,Palmas,M,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,
+4,Piccolo,PIC,Palmas,M,Changed to Sub-Adult - male,01-Jul-2021,01-Jul-2021,01-Jul-2021,N,,7 y/o,,,
+5,Piccolo,PIC,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Piccolo,PIC,Palmas B,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+7,Piccolo,PIC,Palmas B,M,Takes Over Group,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,Takes over from PIR
+8,Piccolo,PIC,Palmas B,M,Changed to Adult - male,01-Jul-2024,01-Jul-2024,01-Jul-2024,N,,10 y/o,,,
+100,Piccolo,PIC,Palmas B,M,END,NOT YET,,,,,,,,
+1,Piglet,PIG,Palmas,F,DOB,01-Jul-2017,,,Y,,,,,
+2,Piglet,PIG,Palmas,F,Changed to Juvenile,01-Jul-2019,01-Jul-2019,01-Jul-2019,N,,2 y/o,,,
+3,Piglet,PIG,Ramas de Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Piglet,PIG,Ramas de Palmas,F,START,15-Mar-2021,15-Mar-2021,15-Mar-2021,N,,,,,
+5,Piglet,PIG,Ramas de Palmas,F,Takeover,25-Nov-2021,25-Nov-2021,20-Dec-2021,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,"TOR is new alpha, waltzed into group when there was no other male"
+6,Piglet,PIG,Ramas de Palmas,F,Changed to Sub-Adult - female,1-Jan-2022,1-Jan-2022,1-Jan-2022,N,,4.5 y/o,,,
+7,Piglet,PIG,Ramas de Palmas,F,Takeover,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,
+8,Piglet,PIG,Ramas de Palmas,F,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+1,Pijije,PIJ,Palmas A,?,DOB,14-Jun-2024,13-Jun-2024,15-Jun-2024,N,FK,Seen 18-Jun-2024,PEN,,
+2,Pijije,PIJ,Palmas A,?,START,24-Jun-2024,24-Jun-2024,24-Jun-2024,N,,,,,date named during Monday meeting
+100,Pijije,PIJ,Palmas A,?,END,NOT YET,,,,,,,,
+1,Pimienta,PIM,Palmas,F,DOB,01-Jul-2017,,,Y,JCO,,,,
+2,Pimienta,PIM,Palmas,F,Changed to Juvenile,01-Jul-2019,01-Jul-2019,01-Jul-2019,Y,,,,,
+3,Pimienta,PIM,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,
+4,Pimienta,PIM,Palmas,F,Changed to Subadult - female,1-Jan-2022,1-Jan-2022,1-Jan-2022,N,,4.5 y/o,,,
+5,Pimienta,PIM,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Pimienta,PIM,Palmas,F,START,09-Sep-2022,09-Sep-2022,09-Sep-2022,N,,,,,
+7,Pimienta,PIM,Palmas,F,Changed to Adult - female,12-Mar-2023,12-Mar-2023,12-Mar-2023,N,,,,,
+8,Pimienta,PIM,Palmas,F,Conception,12-Mar-2023,12-Mar-2023,12-Mar-2023,N,,,,,
+9,Pimienta,PIM,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+10,Pimienta,PIM,Palmas A,F,First Birth,09-Aug-2023,09-Aug-2023,09-Aug-2023,N,,,,,
+11,Pimienta,PIM,Palmas A,F,Infant Death,18-Aug-2023,18-Aug-2023,05-Sep-2023,Y,JCO/FK,Census dates with and without baby,,,
+12,Pimienta,PIM,Palmas A,F,Wean/Resumes Cycling,18-Aug-2023,18-Aug-2023,05-Sep-2023,Y,,,,,
+13,Pimienta,PIM,Palmas A,F,Conception,,,,,,,,,
+14,Pimienta,PIM,Palmas A,F,Pregnant,3-Jun-2024,3-Apr-2024,,N,,"Observation (EpiCollect, 2-3 months estimated)",,,
+100,Pimienta,PIM,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pino,PIN,Palmas,M,DOB,01-Jul-2007,,,Y,JCO/AF,,,,
+2,Pino,PIN,Palmas,M,START,23-Oct-2017,23-Oct-2017,23-Oct-2017,N,,,,,
+3,Pino,PIN,Palmas,M,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,
+4,Pino,PIN,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+5,Pino,PIN,Palmas A,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+100,Pino,PIN,Palmas A,M,END,NOT YET,,,,,,,,
+1,Pio,PIO,Palmas,M,DOB,01-Jul-2011,,,Y,JCO/AF,,,,
+2,Pio,PIO,Palmas,M,START,18-Sep-2018,18-Sep-2018,18-Sep-2018,N,,,,,
+3,Pio,PIO,Ramas de Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Pio,PIO,Ramas de Palmas,M,Co-Emigration,29-Oct-2021,29-Oct-2021,29-Oct-2021,N,,"Ramas females found alone, no males in sight on October 29. ",,,
+5,Pio,PIO,Tenori,M,Co-Immigration,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,
+6,Pio,PIO,Tenori,M,Co-Emigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,,,,,
+7,Pio,PIO,?,M,Co-Immigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,,,,,AF saw him in Canal group
+8,Pio,PIO,?,M,END,13-Sep-2022,,,N,,,,,
+1,Piper,PIP,Palmas,F,DOB,01-Feb-2018,1-Jan-2018,31-Mar-2018,Y,JCO/AF,,PET,,
+2,Piper,PIP,Palmas,F,START,20-Sep-2018,20-Sep-2018,20-Sep-2018,N,,,PET,,
+3,Piper,PIP,Palmas,F,Changed to Juvenile,01-Feb-2020,01-Feb-2020,01-Feb-2020,Y,,,PET,,
+4,Piper,PIP,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,PET,,Palmas and Ramas
+5,Piper,PIP,Palmas,F,Changed to Subadult - female,01-Aug-2022,01-Aug-2022,01-Aug-2022,N,,4.5 y/o,PET,,
+6,Piper,PIP,Palmas,F,Takeover,10-Aug-2022,10-Aug-2022,10-Aug-2022,N,,,PET,,PAP takeover
+7,Piper,PIP,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,PET,,
+100,Piper,PIP,Palmas A,F,END,NOT YET,,,,,,PET,,
+1,Pirulo,PIR,Palmas,M,DOB,01-Jul-2006,,,Y,JCO/AF,,,,
+2,Pirulo,PIR,Palmas,M,START,24-Oct-2017,24-Oct-2017,24-Oct-2017,N,,,,,
+3,Pirulo,PIR,Palmas,M,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,
+4,Pirulo,PIR,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+5,Pirulo,PIR,Palmas B,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+6,Pirulo,PIR,Palmas B,M,Takes Over Group,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,
+7,Pirulo,PIR,Palmas B,M,Emigration,09-Aug-2023,09-Aug-2023,09-Aug-2023,Y,,,,,"We don't know that he was truly taken over, if he was it was PIC who became alpha of Palmas B. PIR left Palmbas B to go to Palmas A before PIC assumed the alpha position in Palmas B"
+8,Pirulo,PIR,Palmas A,M,Immigration,09-Aug-2023,09-Aug-2023,09-Aug-2023,Y,,,,,
+9,Pirulo,PIR,Palmas A,M,Major Injury,07-Feb-2024,07-Feb-2024,07-Feb-2024,N,JCO/AF,,,,"Testicles are bloody, inflammed, pus leaking out. He is seen for the next 2 days traveling on the ground, participating in platforms to eat bananas, cleaning and eating the flies that land on testicles"
+10,Pirulo,PIR,Palmas A,M,DOD,09-Feb-2024,09-Feb-2024,09-Feb-2024,Y,JCO/AF/FK,"looked really sick, walking on forest floor. cause of death infection or predation",,,
+11,Pirulo,PIR,Palmas A,M,END,08-Feb-2024,,,N,,,,,
+1,Pitufo,PIT,Palmas,M,DOB,11-Jun-2021,,,Y,JCO/EM/MP,,,,
+2,Pitufo,PIT,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+3,Pitufo,PIT,Palmas,M,Changed to Juvenile,11-Jun-2023,11-Jun-2023,11-Jun-2023,N,,2 y/o,,,
+4,Pitufo,PIT,Palmas B,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+5,Pitufo,PIT,Palmas B,M,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+6,Pitufo,PIT,Palmas B,M,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+100,Pitufo,PIT,Palmas B,M,END,NOT YET,,,,,,,,
+1,Pixel,PIX,Palmas,F,DOB,27-Apr-2019,,,Y,,,,,
+2,Pixel,PIX,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,Palmas and Ramas
+3,Pixel,PIX,Palmas,F,Changed to Juvenile,27-Apr-2021,27-Apr-2021,27-Apr-2021,N,,2 y/o,,,
+4,Pixel,PIX,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+5,Pixel,PIX,Palmas,F,START,31-Jan-2023,31-Jan-2023,31-Jan-2023,N,,,,,
+6,Pixel,PIX,Palmas B,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+7,Pixel,PIX,Palmas B,F,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+8,Pixel,PIX,Palmas B,F,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+9,Pixel,PIX,Palmas B,F,Changed to Subadult - female,27-Oct-2023,27-Oct-2023,27-Oct-2023,N,,4.5 y/o,,,
+10,Pixel,PIX,Palmas B,F,Conception,10-Jan-2024,10-Jan-2024,10-Jan-2024,N,,150 days before birth,,BEL,
+11,Pixel,PIX,Palmas B,F,Changed to Adult - female,10-Jan-2024,10-Jan-2024,10-Jan-2024,N,,conception date,,,
+12,Pixel,PIX,Palmas B,F,Pregnant,22-May-2024,22-Feb-2024,08-Jun-2024,Y,JCO,"Observation (EpiCollect, estimated 3 months)",,BEL,
+13,Pixel,PIX,Palmas B,F,First Birth,08-Jun-2024,08-Jun-2024,08-Jun-2024,N,JCO,observed by JCO/EM/MP noted as 3 days old,,BEL,
+100,Pixel,PIX,Palmas B,F,END,NOT YET,,,,,,,,
+1,Pizza,PIZ,Palmas,F,DOB,21-Nov-2018,,,Y,,,,,"She's probably older but neither JCO nor AF have notes from when they estimated her age. It's calculated that she has her first birth around the age of 5, hence her age change may be less accurate"
+2,Pizza,PIZ,Palmas,F,Changed to Juvenile,21-Nov-2020,21-Nov-2020,21-Nov-2020,N,,2 y/o,,,
+3,Pizza,PIZ,Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+4,Pizza,PIZ,Palmas,F,START,05-Apr-2022,05-Apr-2022,05-Apr-2022,N,,,,,
+5,Pizza,PIZ,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Pizza,PIZ,Palmas,F,Changed to Adult - female,13-Nov-2022,13-Nov-2022,13-Nov-2022,N,,based on conception date,,,
+7,Pizza,PIZ,Palmas,F,Conception,13-Nov-2022,13-Nov-2022,13-Nov-2022,Y,,,,PEP,
+8,Pizza,PIZ,Palmas,F,Pregnant,08-Dec-2022,08-Nov-2022,12-Apr-2023,Y,,Observation (EpiCollect LH 1-2 months),,PEP,
+9,Pizza,PIZ,Palmas,F,First Birth,12-Apr-2023,12-Apr-2023,12-Apr-2023,N,,Found in life history EpiCollect,,PEP,
+10,Pizza,PIZ,Palmas B,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+11,Pizza,PIZ,Palmas B,F,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+12,Pizza,PIZ,Palmas B,F,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+100,Pizza,PIZ,Palmas B,F,END,NOT YET,,,,,,,,
+1,Pepperoni,PEP,Palmas,M,DOB,12-Apr-2023,,,N,,,PIZ,,
+2,Pepperoni,PEP,Palmas,M,START,12-Apr-2023,12-Apr-2023,12-Apr-2023,Y,JCO,,PIZ,,
+3,Pepperoni,PEP,Palmas B,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,PIZ,,
+4,Pepperoni,PEP,Palmas B,M,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,PIZ,,
+5,Pepperoni,PEP,Palmas B,M,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,PIZ,,
+100,Pepperoni,PEP,Palmas B,M,END,NOT YET,,,,,,PIZ,,
+1,Platanito,PLA,Palmas,M,DOB,21-May-2018,,,Y,,could be born in 2019. Don't want to change because people might've already used this info,,,
+2,Platanito,PLA,Palmas,M,Changed to Juvenile,21-May-2020,21-May-2020,21-May-2020,Y,,2 y/o,,,
+3,Platanito,PLA,Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+4,Platanito,PLA,Palmas,M,START,26-Nov-2021,26-Nov-2021,26-Nov-2021,N,,,,,
+5,Platanito,PLA,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Platanito,PLA,Palmas A,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+100,Platanito,PLA,Palmas A,M,END,NOT YET,,,,,,,,
+1,Pluto,PLU,Palmas,M,DOB,01-Jul-1994,,,Y,JCO/AF,Older than Tevez by 2 years,,,
+2,Pluto,PLU,Palmas,M,START,23-Oct-2017,23-Oct-2017,23-Oct-2017,N,,,,,
+3,Pluto,PLU,Palmas,M,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,
+4,Pluto,PLU,Palmas,M,Overthrown,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,by PAP
+5,Pluto,PLU,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Pluto,PLU,Palmas A,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+100,Pluto,PLU,Palmas A,M,END,NOT YET,,,,,,,,
+1,Poace,POA,Palmas,F,DOB,14-May-2022,,,Y,JCO,estimated 2 y/o,,,
+2,Poace,POA,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,Palmas to Palmas A and Palmas B
+3,Poace,POA,Palmas A,F,Changed to Juvenile,14-May-2024,14-May-2024,14-May-2024,N,,2 y/o,,,
+4,Poace,POA,Palmas A,F,START,14-May-2024,14-May-2024,14-May-2024,N,,,,,
+100,Poace,POA,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pocahontas,POC,Palmas,F,DOB,09-Sep-2022,,,N,,,PRI,,
+2,Pocahontas,POC,Palmas,F,START,16-Jan-2023,16-Jan-2023,16-Jan-2023,N,,,PRI,,
+3,Pocahontas,POC,Palmas A,F,Ambiguous / Gap,,1-Jun-2023,11-Sep-2023,Y,,,PRI,,"She was ID'ed as an infant. Once off PRI's body, no one could identify her. But JCO is able to ID her again"
+4,Pocahontas,POC,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,PRI,,
+5,Pocahontas,POC,Palmas A,F,Changed to Juvenile,09-Sep-2024,09-Sep-2024,09-Sep-2024,N,,,PRI,,
+100,Pocahontas,POC,Palmas A,F,END,NOT YET,,,,,,PRI,,
+1,Pompeya,POM,Palmas,F,DOB,01-Jul-1994,,,Y,JCO/AF,2 years older than Telula,,,
+2,Pompeya,POM,Palmas,F,Wean/Resumes Cycling,11-Nov-2018,11-Nov-2018,11-Nov-2018,Y,,30 days before conception,,,
+3,Pompeya,POM,Palmas,F,Conception,11-Dec-2018,11-Dec-2018,11-Dec-2018,Y,,,,,
+4,Pompeya,POM,Palmas,F,START,21-Mar-2019,21-Mar-2019,21-Mar-2019,N,,,,,
+5,Pompeya,POM,Palmas,F,Birth,10-May-2019,10-May-2019,10-May-2019,N,,,,,
+6,Pompeya,POM,Ramas de Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+7,Pompeya,POM,Ramas de Palmas,F,Wean/Resumes Cycling,17-Aug-2020,17-Aug-2020,17-Aug-2020,Y,,,,,
+8,Pompeya,POM,Ramas de Palmas,F,Conception,24-Nov-2020,24-Nov-2020,24-Nov-2020,Y,,,,,
+9,Pompeya,POM,Ramas de Palmas,F,Birth,23-Apr-2021,23-Apr-2021,23-Apr-2021,N,,,,,
+10,Pompeya,POM,Ramas de Palmas,F,Infant Death,20-Dec-2021,25-Nov-2021,20-Dec-2021,Y,,"When Ramas females found 20-Dec, Ren is no longer seen",,,
+11,Pompeya,POM,Ramas de Palmas,F,Wean/Resumes Cycling,20-Dec-2021,20-Dec-2021,20-Dec-2021,Y,,,,,
+12,Pompeya,POM,Ramas de Palmas,F,Takeover,25-Nov-2021,25-Nov-2021,20-Dec-2021,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,"TOR is new alpha, waltzed into group when there was no other male"
+13,Pompeya,POM,Ramas de Palmas,F,Takeover,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,
+14,Pompeya,POM,Ramas de Palmas,F,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+1,Poncho,PON,Palmas,F,DOB,01-Jul-2022,,,N,,,PEN,,
+2,Poncho,PON,Palmas,F,START,25-Nov-2022,25-Nov-2022,25-Nov-2022,N,,,PEN,,
+3,Poncho,PON,Palmas A,F,Ambiguous / Gap,,1-Jun-2023,11-Sep-2023,Y,,,PEN,,"She was ID'ed as an infant. Once off PEN's body, no one could identify her. But JCO is able to ID her again"
+4,Poncho,PON,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,PEN,,
+5,Poncho,PON,Palmas A,F,Changed to Juvenile,01-Jul-2024,01-Jul-2024,01-Jul-2024,N,,,PEN,,
+100,Poncho,PON,Palmas A,F,END,NOT YET,,,,,,PEN,,
+1,Pooh,POO,Palmas,F,DOB,01-Jul-2018,,,,,,,,
+2,Pooh,POO,Palmas,F,Changed to Juvenile,01-Jul-2020,01-Jul-2020,01-Jul-2020,N,,2 y/o,,,
+3,Pooh,POO,Ramas de Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Pooh,POO,Ramas de Palmas,F ,START,15-Mar-2021,15-Mar-2021,15-Mar-2021,N,,,,,
+5,Pooh,POO,Ramas de Palmas,F,Takeover,20-Dec-2021,25-Nov-2022,20-Dec-2022,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,"TOR is new alpha, waltzed into group when there was no other male"
+6,Pooh,POO,Ramas de Palmas,F,Takeover,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,
+7,Pooh,POO,Ramas de Palmas,F,Changed to Subadult - female,01-Jan-2023,01-Jan-2023,01-Jan-2023,N,,4.5 y/o,,,
+8,Pooh,POO,Ramas de Palmas,F,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+1,Popeye,POP,Palmas,M,DOB,01-Jul-1992,,,Y,JCO/AF,,,,
+2,Popeye,POP,Palmas,M,START,11-Oct-2017,11-Oct-2017,11-Oct-2017,N,,,,,
+3,Popeye,POP,Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+4,Popeye,POP,Palmas,M,Absence,28-Apr-2021,28-Apr-2021,10-May-2021,Y,JCO/FK,Not seen for a week. Found in census 2021,,,
+5,Popeye,POP,Palmas,M,END,11-May-2021,,,N,,,,,
+1,Posh,POS,Palmas,F,DOB,01-Jul-2014,,,Y,,,,,
+2,Posh,POS,Palmas,F,Changed to Sub-Adult - female,1-Jan-2019,1-Jan-2019,1-Jan-2019,N,,4.5 y/o,,,
+3,Posh,POS,Ramas de Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Posh,POS,Ramas de Palmas,F,START,15-Mar-2021,15-Mar-2021,15-Mar-2021,N,,,,,
+5,Posh,POS,Ramas de Palmas,F,Changed to Adult - female,10-Mar-2021,10-Mar-2021,10-Mar-2021,N,,conception date,,,
+6,Posh,POS,Ramas de Palmas,F,Conception,10-Mar-2021,10-Mar-2021,10-Mar-2021,N,,,,,
+7,Posh,POS,Ramas de Palmas,F,Birth,7-Aug-2021,7-Aug-2021,7-Aug-2021,N,,,,,
+8,Posh,POS,Ramas de Palmas,F,Infant Death,20-Dec-2021,25-Nov-2021,20-Dec-2021,Y,,,,,
+9,Posh,POS,Ramas de Palmas,F,Wean/Resumes Cycling,20-Dec-2021,20-Dec-2021,20-Dec-2021,Y,,,,,
+10,Posh,POS,Ramas de Palmas,F,Takeover,20-Dec-2021,25-Nov-2021,20-Dec-2021,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,"TOR is new alpha, waltzed into group when there was no other male"
+11,Posh,POS,Ramas de Palmas,F,Takeover,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,
+12,Posh,POS,Ramas de Palmas,F,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+13,Posh,POS,Ramas de Palmas,F,Pregnant,16-Jan-2024,16-Sep-2023,16-Jan-2024,N,JCO,Observation (3-4 months pregnant on 16-Jan-2024),,,
+1,Poza,POZ,Palmas A,M,DOB,28-Jul-2023,27-Jul-2023,30-Jul-2023,Y,VM,,,,"Born very gray, sickly looking. Only started leaving Prunella around 4 months old. Started having interactions with other monkeys around this time. Prunella is still diligently carrying her 7 months later. Previously sexed as a female. Revised around April 2024"
+2,Poza,POZ,Palmas A,M,START,14-Feb-2024,14-Feb-2024,14-Feb-2024,N,,,,,
+100,Poza,POZ,Palmas A,M,END,NOT YET,,,,,,,,
+1,Praga,PRA,Palmas,F,DOB,21-Nov-2014,,,Y,,,,,
+2,Praga,PRA,Palmas,F,Changed to Subadult - female,21-May-2019,21-May-2019,21-May-2019,N,,4.5 y/o,,,
+3,Praga,PRA,Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+4,Praga,PRA,Palmas,F,START,06-Jun-2022,06-Jun-2022,06-Jun-2022,N,,,,,
+5,Praga,PRA,Palmas,F,Changed to Adult - female,28-Dec-2022,28-Dec-2022,28-Dec-2022,N,,conception date,,,
+6,Praga,PRA,Palmas,F,Conception,28-Dec-2022,28-Dec-2022,28-Dec-2022,N,,150 days before birth,,,
+7,Praga,PRA,Palmas,F,Pregnant,07-Mar-2023,07-Jan-2023,27-May-2023,N,,Observation (Epicollect LH around 2 months),,,
+8,Praga,PRA,Palmas,F,First Birth,27-May-2023,27-May-2023,27-May-2023,N,CB,2 days before found,,,
+9,Praga,PRA,Palmas B,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+10,Praga,PRA,Palmas B,F,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+11,Praga,PRA,Palmas B,F,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+12,Praga,PRA,Palmas B,F,DOD,22-Sep-2023,15-Sep-2023,29-Sep-2023,Y,JCO/FK,We looked into group scan and census 2023 data,,,
+13,Praga,Pra,Palmas B,F,END,15-Sep-2023,,,N,,,,,
+1,Princesa,PRI,Palmas,F,DOB,01-Jul-2015,,,Y,,,,,
+2,Princesa,PRI,Palmas,F,START,11-Aug-2019,11-Aug-2019,11-Aug-2019,N,,,,,
+3,Princesa,PRI,Palmas,F,Changed to Sub-Adult - female,01-Jan-2020,01-Jan-2020,01-Jan-2020,N,,4.5 y/o,,,
+4,Princesa,PRI,Palmas,F,Changed to Adult - female,22-May-2020,22-May-2020,22-May-2020,N,,conception date,,,
+5,Princesa,PRI,Palmas,F,Conception,22-May-2020,22-May-2020,22-May-2020,N,,150 days before birth,,,
+6,Princesa,PRI,Palmas,F,Pregnant,09-Jul-2020,09-May-2020,19-Oct-2020,Y,,Observation (census 2 months),,,
+7,Princesa,PRI,Palmas,F,First Birth,19-Oct-2020,19-Oct-2020,19-Oct-2020,N,,,,,
+8,Princesa,PRI,Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,Remains in Palmas
+9,Princesa,PRI,Palmas,F,Wean/Resumes Cycling,07-Feb-2022,07-Feb-2022,07-Feb-2022,N,,30 days before conception,,,
+10,Princesa,PRI,Palmas,F,Conception,09-Mar-2022,09-Mar-2022,09-Mar-2022,N,,150 days before birth,,,
+11,Princesa,PRI,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+12,Princesa,PRI,Palmas,F,Birth,09-Sep-2022,09-Sep-2022,09-Sep-2022,N,,,,POC,POC no longer identifiable since June 2023
+13,Princesa,PRI,Palmas,F,Pregnant?,14-Jun-2023,14-Jun-2023,14-Jun-2023,Y,CIW,"Observation (census. no other info besides ""looks pregnant"")",,,
+14,Princesa,PRI,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+15,Princesa,PRI,Palmas A,F,Wean/Resumes Cycling,18-Dec-2023,18-Dec-2023,18-Dec-2023,Y,,,,POC,POC no longer identifiable since June 2023
+16,Princesa,PRI,Palmas A,F,Conception,,,,,,,,,
+17,Princesa,PRI,Palmas A,F,Pregnant,13-Mar-2024,13-Jan-2024,,N,,"Observation (EpiCollect LH, estimated 2 months)",,,
+100,Princesa,PRI,Palmas A,F,END,NOT YET,,,,,,,,
+1,Prunella,PRU,Palmas,F,DOB,01-Jul-2012,,,Y,JCO/AF,Same age as petronila,,,
+2,Prunella,PRU,Palmas,F,START,29-Sep-2018,29-Sep-2018,29-Sep-2018,N,,,,,
+3,Prunella,PRU,Palmas,F,Pregnant,17-Nov-2020,17-Jul-2020,17-Nov-2020,Y,JCO/FK,Census notes say 17-Nov-2020 she is around 3-4 months pregnant. There is no more data in Palmas until April 2021. She might have had the baby between this break in data collection. There is no way to know for certain.,,,
+4,Prunella,PRU,Palmas,F,Ambiguous / Gap,,18-Nov-2020,27-Apr-2021,N,JCO/FK/VV,"Zero behavioral and hormone data on PRU between these dates. This is based off of census data. On 17-Nov-2020 there is a note written in Census Palmas 2020 that she lookes 3-4 months pregnant. Then there are no more notes until she is ""seen"" again in Census Palmas 2021 27-Apr-2021. If she was pregnant, we have no behavioral data to confirm that she had the baby.",,,
+5,Prunella,PRU,Palmas,F,Miscarriage,06-Feb-2021,18-Nov-2020,27-Apr-2021,Y,JCO/FK,Could also be infant death. Based on absence of behavioral data. But PRU has no physcial data points that she was carrying a baby the following year.,,,
+6,Prunella,PRU,Palmas,F,Fission,01-Mar-2021,01-Mar-2021,01-Mar-2021,N,,,,,
+7,Prunella,PRU,Palmas,F,Pregnant,02-May-2022,02-May-2022,02-May-2022,Y, ,"Observation (EpiCollect LH, no estimation)",,,
+8,Prunella,PRU,Palmas,F,Ambiguous / Gap,,02-May-2022,03-May-2023,Y,,not sure what happened with belly,,,
+9,Prunella,PRU,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+10,Prunella,PRU,Palmas,F,Wean/Resumes Cycling,31-Jan-2023,31-Jan-2023,31-Jan-2023,Y,,30 days before conception,,,
+11,Prunella,PRU,Palmas,F,Conception,02-Mar-2023,02-Mar-2023,02-Mar-2023,Y,,,,POZ,
+12,Prunella,PRU,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+13,Prunella,PRU,Palmas A,F,Pregnant,03-May-2023,03-May-2023,27-Jul-2023,N,,"Observation (EpiCollect LH, no estimation)",,POZ,
+14,Prunella,PRU,Palmas A,F,Birth,28-Jul-2023,27-Jul-2023,30-Jul-2023,Y,VM,2 before found,,POZ,Poza is a very fragile baby. Still carried everywhere after 7 months -FK
+100,Prunella,PRU,Palmas A,F,END,NOT YET,,,,,,,,
+1,Proboscis,PRO,Palmas,M,DOB,16-Jan-2020,,,,,,,,small monkey but probably suffered from a severe infection
+2,Proboscis,PRO,Palmas,M,Changed to Juvenile,16-Jan-2022,16-Jan-2022,16-Jan-2022,Y,,2 y/o,,,
+3,Proboscis,PRO,Palmas,M,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+4,Proboscis,PRO,Palmas A,M,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,Palmas to Palmas A and Palmas B
+5,Proboscis,PRO,Palmas A,M,START,24-Jan-2024,24-Jan-2024,24-Jan-2024,N,,Track of Data Collection Changes,,,
+100,Proboscis,PRO,Palmas A,M,END,NOT YET,,,,,,,,
+1,Pucho,PUC,Palmas,M,DOB,01-Jul-2017,,,Y,,,,,
+2,Pucho,PUC,Palmas,M,Changed to Juvenile,01-Jul-2019,01-Jul-2019,01-Jul-2019,N,,2 y/o,,,
+3,Pucho,PUC,Ramas de Palmas,M,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,Fisson to Ramas,,,
+4,Pucho,PUC,Ramas de Palmas,M,START,23-Apr-2021,23-Apr-2021,23-Apr-2021,N,,,,,
+5,Pucho,PUC,Ramas de Palmas,M,Co-Emigration,29-Oct-2021,29-Oct-2021,29-Oct-2021,N,,"Ramas females found alone, no males in sight on October 29. ",,,
+6,Pucho,PUC,Tenori,M,Co-Immigration,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,
+7,Pucho,PUC,Tenori,M,Co-Emigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,,,,,
+8,Pucho,PUC,?,M,Co-Immigration,13-Sep-2022,12-Sep-2022,13-Sep-2022,N,AF,,,,Left with the Palmas boys
+9,Pucho,PUC,?,M,END,13-Sep-2022,,,N,,,,,
+1,Pulga,PUL,Palmas,F,DOB,01-Jul-2020,,,Y,,,,,17 Jan 2024 EpiCollect LH seen doing duck face to Papi. Could be plus or minus 6 months in age
+2,Pulga,PUL,Palmas,F,Changed to Juvenile,01-Jul-2022,01-Jul-2022,01-Jul-2022,N,,2 y/o,,,
+3,Pulga,PUL,Palmas,F,START,04-Nov-2022,04-Nov-2022,04-Nov-2022,N,,,,,
+4,Pulga,PUL,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+100,Pulga,PUL,Palmas A,F,END,NOT YET,,,,,,,,
+1,Pumpkin,PUM,Palmas,F,DOB,21-Nov-2013,,,Y,,,,,
+2,Pumpkin,PUM,Palmas,F,Changed to Subadult - female,21-May-2018,21-May-2018,21-May-2018,N,,4.5 y/o,,,
+3,Pumpkin,PUM,Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+4,Pumpkin,PUM,Palmas,F,START,12-Jul-2022,12-Jul-2022,12-Jul-2022,N,,,,,
+5,Pumpkin,PUM,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Pumpkin,PUM,Palmas,F,Changed to Adult - female,14-Jun-2023,14-Jun-2023,14-Jun-2023,N,,First date observed pregnancy,,,
+7,Pumpkin,PUM,Palmas,F,Pregnant,14-Jun-2023,14-Jun-2023,26-Jul-2023,N,JCO/CIW,Observation (EpiCollect LH). First and last dates using Census Palmas 2023 data. 26-Jul-2023 the last date moneros habitually saw PUM,,,
+8,Pumpkin,PUM,Palmas,F,Miscarriage,26-Jul-2023,26-Jul-2023,26-Jul-2023,Y,JCO,Baby never born,,,
+9,Pumpkin,PUM,Palmas,F,Wean/Resumes Cycling,26-Jul-2023,26-Jul-2023,26-Jul-2023,Y,,Miscarriage,,,
+10,Pumpkin,PUM,Palmas B,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+11,Pumpkin,PUM,Palmas B,F,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+12,Pumpkin,PUM,Palmas B,F,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+13,Pumpkin,PUM,Palmas B,F,Conception,,,,,,,,,
+14,Pumpkin,PUM,Palmas B,F,Pregnant,22-May-2024,22-Mar-2024,,,JCO,"Observation (EpiCollect, estimated 2 months)",,,
+100,Pumpkin,PUM,Palmas B,F,END,NOT YET,,,,JCO,JCO notes,,,
+1,Punto,PUN,Palmas,M,DOB,01-Dec-2018,,,Y,JCO,JCO notes,,,
+2,Punto,PUN,Palmas,M,START,01-Dec-2021,01-Dec-2021,01-Dec-2021,Y,JCO,JCO notes,,,
+3,Punto,PUN,Palmas,M,Absence,31-Dec-2021,31-Dec-2021,31-Dec-2021,Y,JCO/FK,,,,
+4,Punto,PUN,Palmas,M,END,31-Dec-2021,,,Y,,,,,
+1,Pupusa,PUP,Palmas,F,DOB,05-Dec-2017,,,Y,FK/JCO,,,,
+2,Pupusa,PUP,Palmas,F,Changed to Juvenile,05-Dec-2019,05-Dec-2019,05-Dec-2019,N,,2 y/o,,,
+3,Pupusa,PUP,Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+4,Pupusa,PUP,Palmas A,F,Changed to Sub-Adult - female,05-Jun-2022,05-Jun-2022,05-Jun-2022,N,FK/JCO,"4.5 y/o. 5 Dec 2023 AO observations have PUP doing duck face to Papi. Team observed her for about a month before definitively giving her a name, but she was doing sex solicit (duck face, following Papi) since we started to notice her",,,
+5,Pupusa,PUP,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+6,Pupusa,PUP,Palmas A,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,Palmas to Palmas A and Palmas B
+7,Pupusa,PUP,Palmas A,F,START,05-Dec-2023,05-Dec-2023,05-Dec-2023,N,,,,,
+100,Pupusa,PUP,Palmas A,F,END,NOT YET,,,,,,,,
+1,Purruja,PUR,Palmas,F,DOB,01-Jul-2015,,,Y,,,,,
+2,Purruja,PUR,Palmas,F,Changed to Juvenile,1-Jul-2017,1-Jul-2017,1-Jul-2017,N,,2 y/o,,,
+3,Purruja,PUR,Palmas,F,Changed to Subadult - female,1-Jan-2020,1-Jan-2020,1-Jan-2020,N,,4.5 y/o,,,
+4,Purruja,PUR,Palmas,F,Changed to Adult - female,06-Feb-2021,06-Feb-2021,06-Feb-2021,N,,conception date,,,
+5,Purruja,PUR,Palmas,F,Conception,06-Feb-2021,06-Feb-2021,06-Feb-2021,N,,,,,
+6,Purruja,PUR,Palmas,F,Fission,1-Mar-2021,1-Mar-2021,1-Mar-2021,N,,,,,
+7,Purruja,PUR,Palmas,F,First Birth,06-Jul-2021,03-Jul-2021,10-Jul-2021,N,,,,,
+8,Purruja,PUR,Palmas,F,START,10-Jul-2021,10-Jul-2021,10-Jul-2021,N,,,,,
+9,Purruja,PUR,Palmas,F,Takeover,08-Aug-2022,08-Aug-2022,10-Aug-2022,N,,,,,PAP takeover
+10,Purruja,PUR,Palmas,F,Pregnant,14-Jun-2023,14-Jun-2023,21-Jun-2023,N,JCO/CIW,"Observation (EpiCollect LH, no estimation)",,,
+11,Purruja,PUR,Palmas,F,Miscarriage,21-Jun-2023,21-Jun-2023,21-Jun-2023,Y,,baby not born,,,
+12,Purruja,PUR,Palmas,F,Wean/Resumes Cycling,21-Jun-2023,21-Jun-2023,21-Jun-2023,Y,,Miscarriage,,,
+13,Purruja,PUR,Palmas B,F,Fission,03-Jul-2023,03-Jul-2023,11-Sep-2023,N,,,,,
+14,Purruja,PUR,Palmas B,F,Takeover,03-Jul-2023,03-Jul-2023,03-Jul-2023,N,,,,,PIR takeover
+15,Purruja,PUR,Palmas B,F,Takeover,09-Aug-2023,09-Aug-2023,11-Sep-2023,N,,,,,PIC takeover
+16,Purruja,PUR,Palmas B,F,Conception,09-Jan-2024,09-Jan-2024,09-Jan-2024,N,,150 days before birth,,BET,
+17,Purruja,PUR,Palmas B,F,Pregnant,22-May-2024,22-Mar-2024,7-Jun-2024,Y,JCO,"Observation (EpiCollect, estimated 2 months)",,BET,
+18,Purruja,PUR,Palmas B,F,Birth,07-Jun-2024,07-Jun-2024,07-Jun-2024,N,JCO,EpiCollect notes say 4 days old at time of observation,,BET,
+100,Purruja,PUR,Palmas B,F,END,NOT YET,,,,,,,,
+1,Raimundo,RAI,Ramas de Palmas,M,DOB,16-Apr-2014,,,Y,JCO,found photos from 21-April-2022 on dropbox,,,
+2,Raimundo,RAI,Ramas de Palmas,M,Co-Immigration,16-Apr-2022,13-Apr-2022,19-Apr-2022,Y,,,,,
+3,Raimundo,RAI,Ramas de Palmas,M,Takeover,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,RAM takeover from TOR
+4,Raimundo,RAI,Ramas de Palmas,M,START,21-Apr-2022,21-Apr-2022,21-Apr-2022,N,,,,,
+5,Raimundo,RAI,Ramas de Palmas,M,Ambiguous / Gap,,,,,,,,,
+6,Raimundo,RAI,Ramas de Palmas,M,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+1,Rambo,RAM,Ramas de Palmas,M,DOB,16-Apr-2012,,,Y,JCO,found photos from 21-April-2022 on dropbox,,,
+2,Rambo,RAM,Ramas de Palmas,M,Co-Immigration,16-Apr-2022,13-Apr-2022,19-Apr-2022,Y,,,,,RAI
+3,Rambo,RAM,Ramas de Palmas,M,Takes Over Group,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,
+4,Rambo,RAM,Ramas de Palmas,M,START,21-Apr-2022,21-Apr-2022,21-Apr-2022,N,,,,,
+5,Rambo,RAM,Ramas de Palmas,M,END,24-Feb-2023,09-Dec-2022,24-Feb-2023,N,,,,,There is no Ramas de Palmas data between 09-Dec-2022 and 06-Feb-2023. We assume RAM is still alpha between these dates
+1,Ren (formerly PEEWEE),REN,Ramas de Palmas,F,DOB,1-Apr-2021,,,N,,,,,
+2,Ren (formerly PEEWEE),REN,Ramas de Palmas,F,START,1-Apr-2021,1-Apr-2021,1-Apr-2021,N,,,,,
+3,Ren (formerly PEEWEE),REN,Ramas de Palmas,F,Absence,20-Dec-2021,25-Nov-2021,20-Dec-2021,Y,,"When TOR found with Ramas, REN is gone",,,
+4,Ren (formerly PEEWEE),REN,Ramas de Palmas,F,Takeover,20-Dec-2021,25-Nov-2021,20-Dec-2021,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,"TOR is new alpha, waltzed into group when there was no other male"
+5,Ren (formerly PEEWEE),REN,Ramas de Palmas,F,END,20-Dec-2021,,,N,,,,,
+1,Rincon,RIN,Ramas de Palmas,M,DOB,1-Mar-2018,,,Y,AF/JCO,Estiamted to be 4 years old as of March 2022. Not born in Ramas,,,
+2,Rincon,RIN,Ramas de Palmas,M,START,23-Mar-2022,23-Mar-2022,23-Mar-2022,N,,,,,
+3,Rincon,RIN,Ramas de Palmas,M,Immigration,23-Mar-2022,23-Mar-2022,23-Mar-2022,N,,,,,
+4,Rincon,RIN,Ramas de Palmas,M,Emigration,06-Feb-2023,06-Feb-2023,06-Feb-2023,Y,JCO/FK,unknown for certain what happened to him or when he might've left,,,
+5,Rincon,RIN,Ramas de Palmas,M,END,06-Feb-2023,,,N,JCO/FK,Ramas not followed after 6-Feb-2023,,,
+1,Rodillo,ROD,Ramas de Palmas,?,DOB,24-Mar-2022,,,N,,,PAM,,
+2,Rodillo,ROD,Ramas de Palmas,?,START,24-Mar-2022,24-Mar-2022,24-Mar-2022,N,,,PAM,,
+3,Rodillo,ROD,Ramas de Palmas,?,DOD,18-Jun-2022,28-Apr-2022,9-Aug-2022,Y,,First and Last Date between when team followed Ramas,PAM,,
+4,Rodillo,ROD,Ramas de Palmas,?,END,28-Mar-2022,,,N,,,PAM,,
+1,Taboga,TAB,Tenori,F,DOB,16-Jan-2017,1-Jan-2017,1-Feb-2017,Y,JCO/AF,,,,
+2,Taboga,TAB,Tenori,F,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,TEL,,In JCO notes
+3,Taboga,TAB,Tenori,F,Major Injury,13-May-2018,11-May-2018,14-May-2018,Y,CM,,TEL,,"Big wound on inside leg, 2-5 cm long wound inside right forearm, on both feet. Spent a great deal of time cleaning wounds, had trouble walking on injured arm 14/05/18."
+4,Taboga,TAB,Tenori,F,Changed to Juvenile,1-Feb-2019,1-Feb-2019,1-Feb-2019,N,CM AF JCO AN,2 y/o,TEL,,
+5,Taboga,TAB,Tenori,F,Independent,26-Mar-2020,26-Mar-2020,26-Mar-2020,Y,,next confirmed wean / resume cycling for TEL,TEL,,
+6,Taboga,TAB,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",TEL,,TIC takeover
+7,Taboga,TAB,Tenori,F,Changed to Sub-Adult - female,16-Jul-2021,16-Jul-2021,16-Jul-2021,N,,4.5 y/o,TEL,,
+8,Taboga,TAB,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Tic overthrown by Pal,TEL,,PAL takes over group and 5 other males from Ramas come with him
+9,Taboga,TAB,Tenori,F,Mom Died,21-Feb-2022,21-Feb-2022,21-Feb-2022,N,,,TEL,,TEL absent starting 21-Feb-22. TAB is already independent by the time TEL dies
+10,Taboga,TAB,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,"PAL overthrown by PED takes over, not totally sure about first and last date, original date was written as 6-Oct-2022, but this is inconsistent with immigration dates",,,PED takeover
+11,Taboga,TAB,Tenori,F,Changed to Adult - female,23-Nov-2022,22-Nov-2022,25-Nov-2022,N,,conception date,,,
+12,Taboga,TAB,Tenori,F,Conception,23-Nov-2022,22-Nov-2022,25-Nov-2022,N,JCO FK,Someone put this date 27-Sep-2022 originally in the conception. But if you estimate using 150 days before DOB it is actually 23-Nov-2022,,Tiburon,
+13,Taboga,TAB,Tenori,F,Pregnant,20-Feb-2023,20-Feb-2023,21-Apr-2023,N,,"Observation (census, no estimation)",,,
+14,Taboga,TAB,Tenori,F,First Birth,22-Apr-2023,21-Apr-2023,24-Apr-2023,Y,JCO,Probably born on the weekend. Baby observed on Monday 24-Apr-2023,,Tiburon,
+15,Taboga,TAB,Tenori,F,Infant Death,19-Jul-2023,18-Jul-2023,20-Jul-2023,Y,,,,Tiburon,
+16,Taboga,TAB,Tenori,F,Wean/Resumes Cycling,19-Jul-2023,18-Jul-2023,20-Jul-2023,Y,,,,,
+17,Taboga,TAB,Tenori,F,Conception,8-Jan-2024,8-Jan-2024,8-Jan-2024,N,,,,,
+18,Taboga,TAB,Tenori,F,Pregnant,6-Mar-2024,10-Jan-2024,6-Jun-2024,N,,"Observation (EpiCollect LH, AF estimated 3 months on 10 Apr 2024)",,,
+19,Taboga,TAB,Tenori,F,Birth,6-Jun-2024,6-Jun-2024,6-Jun-2024,N,,,,,
+100,Taboga,TAB,Tenori,F,END,NOT YET,,,,,,,,
+1,Taco,TAC,Tenori,M,DOB,13-Sep-2016,,,Y,JCO/AF,,,,
+2,Taco,TAC,Tenori,M,Co-Immigration,13-Sep-2022,13-Sep-2022,13-Sep-2022,N,,,,,
+3,Taco,TAC,Tenori,M,START,15-Sep-2022,15-Sep-2022,15-Sep-2022,N,,,,,
+4,Taco,TAC,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,,,
+5,Taco,TAC,Tenori,M,Changed to Subadult - male,13-Sep-2023,13-Sep-2023,13-Sep-2023,N,,7 y/o,,,
+100,Taco,TAC,Tenori,M,END,NOT YET,,,,,,,,
+1,Tail,TAI,Tenori,M,DOB,1-Jul-2013,,,Y,JCO/AF,,,,
+2,Tail,TAI,Tenori,M,START,18-Jul-2017,18-Jul-2017,18-Jul-2017,N,,,,,In JCO notes
+3,Tail,TAI,Tenori,M,Emigration,14-Mar-2020,14-Mar-2020,14-Mar-2020,N,,,,,
+4,Tail,TAI,Tenori,M,END,14-Mar-2020,,,N,,,,,
+5,Tail,TAI,Canal,M,Seen in other group,13-Dec-2023,13-Dec-2023,13-Dec-2023,N,JCO/AF,He was seen in the home range of the Canal group. Not certain if it's Canal or Dren group,,,
+1,Tajin,TAJ,Tenori,,DOB,,,,,,,,,
+2,Tajin,TAJ,Tenori,,START,2-Jul-2024,,,,,,,,
+100,Tajin,TAJ,Tenori,,END,NOT YET,,,,,,,,
+1,Tamarindo,TAM,Tenori,F,DOB,1-Jul-2014,,,Y,JCO/AF,estimated off of when she lost the baby (Apr 2021),,,
+2,Tamarindo,TAM,Tenori,F,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,,,In JCO notes
+3,Tamarindo,TAM,Tenori,F,Changed to Subadult - female,1-Jan-2019,1-Jan-2019,1-Jan-2019,N,,4.5 y/o. But seen doing sex solicit behavior 18 Dec 2018,,,
+4,Tamarindo,TAM,Tenori,F,Ambiguous / Gap,,21-Feb-2020,24-Jan-2021,N,,,,,No fecal samples during this time
+5,Tamarindo,TAM,Tenori,F,Changed to Adult - female,14-Dec-2020,2-Nov-2020,25-Jan-2021,Y,,conception date,,,
+6,Tamarindo,TAM,Tenori,F,Conception,14-Dec-2020,2-Nov-2020,25-Jan-2021,Y,JCO/FK,"There is a gap during COVID. Fecal samples weren't collected. She could've been pregnant before the Last Date, but this is the first time we have fecal samples again",,Miscarriage,
+7,Tamarindo,TAM,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",,,
+8,Tamarindo,TAM,Tenori,F,Miscarriage,7-Apr-2021,7-Apr-2021,7-Apr-2021,N,JCO/AF,Observation (seen in field without pregnancy belly),,,
+9,Tamarindo,TAM,Tenori,F,Wean/Resumes Cycling,7-Apr-2021,7-Apr-2021,7-Apr-2021,N,JCO/AF,seen in field without pregnancy belly,,,
+10,Tamarindo,TAM,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,PAL takes over group from Tic and 5 other males from Ramas come with him
+11,Tamarindo,TAM,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,,,,PED takes over group from Pal
+12,Tamarindo,TAM,Tenori,F,Conception,18-Mar-2022,18-Mar-2022,18-Mar-2022,Y,,,,TUR,This needs to be checked with genetics. It could be that TAM is mother to TUC who was born on 15-Aug-2022 and TES mother to TUR who was born on 21-Jun-2022
+13,Tamarindo,TAM,Tenori,F,Pregnant,05-May-2022,5-Mar-2022,14-Aug-2022,N,,"Observation (EpiCollect LH, 2 months)",,,
+14,Tamarindo,TAM,Tenori,F,Birth,15-Aug-2022,15-Aug-2022,16-Aug-2022,Y,,Found in EpiCollect Life History sheet,,TUR,This needs to be checked with genetics. It could be that TAM is mother to TUC who was born on 15-Aug-2022 and TES mother to TUR who was born on 21-Jun-2022
+15,Tamarindo,TAM,Tenori,F,Conception,,,,,,,,,
+16,Tamarindo,TAM,Tenori,F,Pregnant,02-May-2024,17-Feb-2024,,N,EM/FK,"Observation (EpiCollect LH, estimated by EM FK 2.5 months)",,,
+100,Tamarindo,TAM,Tenori,F,END,NOT YET,,,,,,,,
+1,Tango,TAN,Tenori,F,DOB,1-Mar-2017,,,Y,JCO/AF,,TRU,,
+2,Tango,TAN,Tenori,F,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,TRU,,In JCO field notes
+3,Tango,TAN,Tenori,F,Changed to Juvenile,1-Mar-2019,1-Mar-2019,1-Mar-2019,N,CM AF JCO AN,2 y/o,TRU,,
+4,Tango,TAN,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",TRU,,
+5,Tango,TAN,Tenori,F,Changed to Sub-Adult - female,1-Sep-2021,1-Sep-2021,1-Sep-2021,N,,4.5 y/o,,,
+6,Tango,TAN,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,TRU,,PAL takes over group from Tic and 5 other males from Ramas come with him
+7,Tango,TAN,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,,TRU,,Ped takes over group from Pal
+8,Tango,TAN,Tenori,F,Changed to Adult - female,18-Dec-2022,18-Dec-2022,18-Dec-2022,N,,conception date,TRU,,
+9,Tango,TAN,Tenori,F,Conception,18-Dec-2022,18-Dec-2022,18-Dec-2022,N,,,TRU,TIM,
+10,Tango,TAN,Tenori,F,First Birth,18-May-2023,17-May-2023,19-May-2023,Y,CB/VM/JL,Found on the 19th,TRU,TIM,
+100,Tango,TAN,Tenori,F,END,NOT YET,,,,,,TRU,,
+1,Tarzan,TAR,Tenori,F,DOB,18-May-2023,17-May-2023,19-May-2023,Y,CB/VM/JL,Found on the 19th,TRU,,
+2,Tarzan,TAR,Tenori,F,START,23-May-2023,23-May-2023,23-May-2023,N,,,TRU,,
+100,Tarzan,TAR,Tenori,F,END,NOT YET,,,,,,TRU,,
+1,Telula,TEL,Tenori,F,DOB,1-Jul-2000,,,Y,JCO/AF,,,,
+2,Telula,TEL,Tenori,F,Conception,19-Aug-2016,19-Aug-2016,19-Aug-2016,Y,JCO/AF/FK,,,TAB,
+3,Telula,TEL,Tenori,F,Birth,16-Jan-2017,1-Jan-2017,1-Feb-2017,Y,JCO/AF,,,TAB,
+4,Telula,TEL,Tenori,F,START,18-Jul-2017,18-Jul-2017,18-Jul-2017,N,,,,,"JCO/AF/MB/TB took notes in their field books and started to add names to the demography. There is no online census on Google Drive, but there are basecamp tracks in July and the ID's were definitely recorded on this date"
+5,Telula,TEL,Tenori,F,Wean/Resumes Cycling,25-Apr-2018,,,,,JCO and FK have no idea where this date came from. We need help trying to figure out this date before deleting it,,,
+6,Telula,TEL,Tenori,F,Pregnant,,,,,,High hormones,,,
+7,Telula,TEL,Tenori,F,Miscarriage?,TRU + TES pregnant around 2019 but not TEL?,,,,,JB needs to confirm if VV's pregnancy graph indicates that TEL was pregnant in 2019,,,
+8,Telula,TEL,Tenori,F,Wean/Resumes Cycling,26-Mar-2020,26-Mar-2020,26-Mar-2020,Y,,Estimated by 1 month before conception date,,,
+9,Telula,TEL,Tenori,F,Conception,25-Apr-2020,25-Apr-2020,25-Apr-2020,N,,,,Teq,
+10,Telula,TEL,Tenori,F,Pregnant,17-Jul-2020,17-May-2020,22-Sep-2020,N,,Observation (census 2 months),,,
+11,Telula,TEL,Tenori,F,Birth,22-Sep-2020,22-Sep-2020,22-Sep-2020,N,,,,Teq,"Census says baby with umbilical cord seen and says birth was 22-Sept-2020, but don't know when died; This is TEQ birth date says in Aug"
+12,Telula,TEL,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",,,
+13,Telula,TEL,Tenori,F,Infant Death,18-Jan-2021,16-Dec-2020,17-Jan-2021,Y,,,,Teq,"Tic probably killed TEQ, based on census notes 2021. Tic new alpha the same time period he overthrows TEV"
+14,Telula,TEL,Tenori,F,Wean/Resumes Cycling,18-Jan-2021,16-Dec-2020,17-Jan-2021,N,,Not estimated because she lost her baby within these few days,,,"Don't know when the baby dies, but first day in 2021 w/ Tenori that there now 2 infants instead of 3"
+15,Telula,TEL,Tenori,F,Conception,1-Apr-2021,22-Mar-2021,1-Apr-2021,N,JCO/FK/VV,Based on hormones: high estrogens,,,
+16,Telula,TEL,Tenori,F,Miscarriage,16-Oct-2021,1-Oct-2021,1-Nov-2021,N,JCO/FK/VV,Based on hormones: high estrogens. This was around new Palmas males immigration. Probably just lost behavioral observations because more focus was on the new males,,,
+17,Telula,TEL,Tenori,F,Wean/Resumes Cycling,16-Oct-2021,1-Oct-2021,1-Nov-2021,Y,,,,,
+18,Telula,TEL,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,PAL takes over group from Tic and 5 other males from Ramas come with him
+19,Telula,TEL,Tenori,F,DOD,21-Feb-2022,21-Feb-2022,21-Feb-2022,N,,,,,"TEL not seen with group starting today, never seen again. Presumed dead"
+20,Telula,TEL,Tenori,F,END,21-Feb-2022,,,N,,,,,
+1,Tempisque,TEM,Tenori,M,DOB,13-Sep-2016,,,Y,JCO/AF,ARound same age as TAC/TIL,,,
+2,Tempisque,TEM,Tenori,M,Co-Immigration,13-Sep-2022,13-Sep-2022,13-Sep-2022,N,,,,,
+3,Tempisque,TEM,Tenori,M,START,15-Sep-2022,15-Sep-2022,15-Sep-2022,N,,,,,
+4,Tempisque,TEM,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,,,
+5,Tempisque,TEM,Tenori,M,Changed to Subadult - male,13-Sep-2023,13-Sep-2023,13-Sep-2023,N,,7 y/o,,,
+100,Tempisque,TEM,Tenori,M,END,NOT YET,,,,,,,,
+1,Tenori,TEN,Tenori,M,DOB,29-Jun-2017,,,Y,JCO/AF,,Tesoro,,
+2,Tenori,TEN,Tenori,M,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,Tesoro,,In JCO field notes
+3,Tenori,TEN,Tenori,M,Independent,4-Oct-2018,4-Oct-2018,4-Oct-2018,Y,,TES's wean/resume cycling date,,,
+4,Tenori,TEN,Tenori,M,Changed to Juvenile,29-Jun-2019,29-Jun-2019,29-Jun-2019,N,,2 y/o,Tesoro,,
+5,Tenori,TEN,Tenori,M,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",Tesoro,,
+6,Tenori,TEN,Tenori,M,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,Tesoro,,PAL takes over group and 5 other males from Ramas come with him
+7,Tenori,TEN,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,Tesoro,,
+8,Tenori,TEN,Tenori,M,Co-Immigration,18-Nov-2022,19-Sep-2022,18-Nov-2022,Y,JCO/FK,Came and left multiple times within these 3 months,Tesoro,,
+9,Tenori,TEN,?,M,Co-Immigration,13-Sep-2022,12-Sep-2022,21-Nov-2022,N,,,,,AF saw him in Canal group
+10,Tenori,TEN,Tenori,M,END,18-Nov-2022,18-Nov-2022,18-Nov-2022,N,,,Tesoro,,
+1,Tequila,TEQ,Tenori,?,DOB,22-Sep-2020,22-Sep-2020,22-Sep-2020,N,,,Telula,,"Census says baby with umbilical cord seen and says birth was 22-Sept-2020, but don't know when died; This is TEQ birth date says in Aug"
+2,Tequila,TEQ,Tenori,?,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",Telula,,
+3,Tequila,TEQ,Tenori,?,DOD,18-Jan-2021,16-Dec-2020,17-Jan-2021,N,,TEQ is missing on 19-Jan-2021 from Tenori Census 2021 notes,Telula,,"Don't know when the baby dies, but first day in 2021 w/ Tenori that there now 2 infants instead of 3"
+4,Tequila,TEQ,Tenori,?,END,25-Nov-2020,,,N,,,Telula,,
+1,Teriyaki,TER,Tenori,F,DOB,1-Jul-2016,,,Y,JCO/AF,,,,
+2,Teriyaki,TER,Tenori,F,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,,,In JCO field notes
+3,Teriyaki,TER,Tenori,F,Changed to Juvenile,1-Jul-2018,1-Jul-2018,1-Jul-2018,N,,2 y/o,,,
+4,Teriyaki,TER,Tenori,F,Changed to Subadult - female,01-Dec-2020,01-Dec-2020,01-Dec-2020,N,,4.5 y/o,,,
+5,Teriyaki,TER,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",,,
+6,Teriyaki,TER,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,,,PAL takes over group and 5 other males from Ramas come with him
+7,Teriyaki,TER,Tenori,F,Changed to Adult - female,02-Sep-2022,02-Sep-2022,02-Sep-2022,N,,"date of first conception. However, on EpiCollect, info says that she had an enlarged vulva on 21-Feb-2022, therefore this date may be inaccurate",,,
+8,Teriyaki,TER,Tenori,F,Conception,02-Sep-2022,02-Sep-2022,02-Sep-2022,N,JCO/FK,150 minus birth. In life history EpiCollect 21-Feb-2022 noted that she has an enlarged vulva,,TOS,Doesn't make sense why PED would kill TOS as alpha if conception was 3 months into his reign. Check the estimation of conception or maybe PED knew he wasn't the father
+9,Teriyaki,TER,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,,,,Ped takes over group from Pal
+10,Teriyaki,TER,Tenori,F,First Birth,30-Jan-2023,30-Jan-2023,30-Jan-2023,N,,,,TOS,
+11,Teriyaki,TER,Tenori,F,Infant Death,03-Apr-2023,03-Apr-2023,03-Apr-2023,N,,,,TOS,Infanticide by PED
+12,Teriyaki,TER,Tenori,F,Wean/Resumes Cycling,03-Apr-2023,03-Apr-2023,03-Apr-2023,N,,,,TOS,Infanticide by PED
+13,Teriyaki,TER,Tenori,F,Conception,,,,,,,,,
+14,Teriyaki,TER,Tenori,F,Pregnant,06-Mar-2024,20-Jan-2024,,N,,"Observation (EpiCollect LH, estimated 1.5 months)",,,
+100,Teriyaki,TER,Tenori,F,END,NOT YET,,,,,,,,
+1,Tesoro,TES,Tenori,F,DOB,1-Jul-2004,,,Y,JCO/AF,,,,
+2,Tesoro,TES,Tenori,F,Conception,27-Jan-2017,20-Jan-2017,17-Feb-2029,Y,JCO/AF,,,TEN,
+3,Tesoro,TES,Tenori,F,Birth,26-Jun-2017,26-Jun-2017,3-Jul-2017,Y,JCO/AF,,,TEN,
+4,Tesoro,TES,Tenori,F,START,18-Jul-2017,18-Jul-2017,18-Jul-2017,N,,,,,"JCO/AF/MB/TB took notes in their field books and started to add names to the demography. There is no online census on Google Drive, but there are basecamp tracks in July and the ID's were definitely recorded on this date"
+5,Tesoro,TES,Tenori,F,Wean/Resumes Cycling,4-Oct-2018,4-Oct-2018,4-Oct-2018,Y,,This date was previously here -FK,,,
+6,Tesoro,TES,Tenori,F,Conception,13-Jan-2019,1-Jan-2019,1-Feb-2019,Y,CM,,,THO,
+7,Tesoro,TES,Tenori,F,Pregnant,25-Mar-2019,25-Jan-2019,12-Jun-2019,Y,,Observation (census 1-2 months),,,
+8,Tesoro,TES,Tenori,F,Birth,12-Jun-2019,12-Jun-2019,12-Jun-2019,N,,,,THO,
+9,Tesoro,TES,Tenori,F,Wean/Resumes Cycling,19-Sep-2020,19-Sep-2020,19-Sep-2020,Y,,,,THO,
+10,Tesoro,TES,Tenori,F,Conception,3-Dec-2020,3-Dec-2020,3-Dec-2020,Y,,,,TIG,
+11,Tesoro,TES,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",,,
+12,Tesoro,TES,Tenori,F,Birth,2-May-2021,2-May-2021,2-May-2021,N,,,,TIG,
+13,Tesoro,TES,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,,,PAL takes over group and 5 other males from Ramas come with him
+14,Tesoro,TES,Tenori,F,Infant Death,3-Nov-2021,3-Nov-2021,3-Nov-2021,N,,,,,TIG killed in act of infanticide by PAL
+15,Tesoro,TES,Tenori,F,Wean/Resumes Cycling,3-Nov-2021,3-Nov-2021,3-Nov-2021,N,,date of infant death,,,
+16,Tesoro,TES,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,,,,PED takeover
+17,Tesoro,TES,Tenori,F,Conception,22-Jan-2022,22-Jan-2022,22-Jan-2022,Y,,"EpiCollect info says she had an enlarged vulva on 21-Feb-2022, therefore this date may be inaccurate",,TUC or TUR,This needs to be checked with genetics. It could be that TAM is mother to TUC who was born on 15-Aug-2022 and TES mother to TUR who was born on 21-Jun-2022
+18,Tesoro,TES,Tenori,F,Birth,21-Jun-2022,21-Jun-2022,21-Jun-2022,N,,,,TUC or TUR,This needs to be checked with genetics. It could be that TAM is mother to TUC who was born on 15-Aug-2022 and TES mother to TUR who was born on 21-Jun-2022
+100,Tesoro,TES,Tenori,F,END,NOT YET,,,,,,,,
+1,Tethys,TET,Tenori,F,DOB,1-Jul-1988,,,Y,JCO/AF,,,,
+2,Tethys,TET,Tenori,F,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,,,In JCO field notes
+3,Tethys,TET,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",,,
+4,Tethys,TET,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,,,PAL takes over group and 5 other males from Ramas come with him
+5,Tethys,TET,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,,,PED takeover
+6,Tethys,TET,Tenori,F,DOD,27-Dec-2023,15-Dec-2023,8-Jan-2024,Y,FK,Based on census and EpiCollect LH form,,,
+7,Tethys,TET,Tenori,F,END,14-Dec-2023,,,N,,,,,
+1,Tevez,TEV,Tenori,M,DOB,1-Jul-2001,,,Y,JCO/AF,,,,
+2,Tevez,TEV,Tenori,M,START,19-Jul-2017,19-Jul-2017,19-Jul-2017,N,,,,,JCO/AF/MB/TB took notes in their field books
+3,Tevez,TEV,Tenori,M,Overthrown,1-Jan-2021,16-Dec-2020,18-Jan-2021,Y,JCO/FK,"Present on 15-Dec-2020, but absense in data until project returns to Tenori on 18-Jan-2021",,,Overthrown by Tic
+4,Tevez,TEV,Tenori,M,Absence,1-Jan-2021,16-Dec-2020,18-Jan-2021,Y,JCO/FK,"Present on 15-Dec-2020, but absense in data until project returns to Tenori on 18-Jan-2021",,,
+5,Tevez,TEV,Tenori,M,END,1-Jan-2021,,,Y,JCO/FK,,,,
+1,Texas,TEX,Tenori,?,DOB,6-Jun-2024,6-Jun-2024,6-Jun-2024,N,EM/MC,,,,
+2,Texas,TEX,Tenori,?,START,10-Jun-2024,10-Jun-2024,10-Jun-2024,N,,,,,
+100,Texas,TEX,Tenori,?,END,NOT YET,,,,,,,,
+1,Thiago,THI,Tenori,M,DOB,1-Jul-2006,,,Y,JCO/AF,,,,
+2,Thiago,THI,Tenori,M,START,1-Feb-2018,1-Feb-2018,1-Feb-2018,N,,,,,
+3,Thiago,THI,Tenori,M,Emigration,22-Jun-2020,22-Jun-2020,22-Jun-2020,N,,,,,
+4,Thiago,THI,Tenori,M,END,22-Jun-2020,,,N,,,,,
+1,Thor,THO,Tenori,M,DOB,12-Jun-2019,,,N,,,Tesoro,,
+2,Thor,THO,Tenori,M,START,12-Jun-2019,12-Jun-2019,12-Jun-2019,N,,,Tesoro,,
+3,Thor,THO,Tenori,M,Independent,19-Sep-2020,19-Sep-2020,19-Sep-2020,Y,,Tes wean/resume cycling,Tesoro,,
+4,Thor,THO,Tenori,M,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",Tesoro,,
+5,Thor,THO,Tenori,M,Changed to Juvenile,12-Jun-2021,12-Jun-2021,12-Jun-2021,Y,,estimated off of 2 years after birth,Tesoro,,TIC takeover
+6,Thor,THO,Tenori,M,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,Tesoro,,PAL takes over group and 5 other males from Ramas come with him
+7,Thor,THO,Tenori,M,Major Injury,23-Feb-2022,23-Feb-2022,23-Feb-2022,N,,,Tesoro,,"THO injured his left hand in a fight and is now not using his left hand. No obvious external signs of injury but he is not using his hand, so lack of mobility. Could impact fitness"
+8,Thor,THO,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,,Tesoro,,PED takeover
+9,Thor,THO,Tenori,M,Emigration,28-Feb-2023,7-Dec-2022,23-May-2023,Y,JCO/FK,Census says that he was seen and not seen between these dates. It's a big gap but the only points we have,Tesoro,,
+10,Thor,THO,Tenori,M,END,24-May-2023,,,N,,,Tesoro,,
+1,Tiburon,TIB,Tenori,?,DOB,22-Apr-2023,,,N,,,Taboga,,
+2,Tiburon,TIB,Tenori,?,START,24-Apr-2023,24-Apr-2023,24-Apr-2023,N,,,Taboga,,
+3,Tiburon,TIB,Tenori,?,DOD,19-Jul-2023,18-Jul-2023,20-Jul-2023,Y,,,Taboga,,
+4,Tiburon,TIB,Tenori,?,END,18-Jul-2023,,,N,,Last data collected on this baby 18-Jul-2023,Taboga,,
+1,Tico,TIC,Tenori,M,DOB,1-Jul-2010,,,Y,JCO/AF,,,,
+2,Tico,TIC,Tenori,M,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,,,In JCO field notes
+3,Tico,TIC,Tenori,M,Takes Over Group,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,,,,,
+4,Tico,TIC,Tenori,M,Overthrown,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,PAL takes over group and brings in 5 other males from Ramas
+5,Tico,TIC,Tenori,M,Absence,3-Nov-2021,3-Nov-2021,3-Nov-2021,N,LK,No confirmed TIC sightings with Tenori since the day after the PAL takeover on 2 Nov 2021,,,
+6,Tico,TIC,Tenori,M,END,3-Nov-2021,,,N,LK,No confirmed TIC sightings with Tenori since the day after the PAL takeover on 2 Nov 2021,,,
+1,Tigger,TIG,Tenori,F,DOB,2-May-2021,,,N,,,Tesoro,,
+2,Tigger,TIG,Tenori,F,START,3-May-2021,3-May-2021,3-May-2021,N,,,Tesoro,,
+3,Tigger,TIG,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,Tesoro,,PAL takes over group and 5 other males from Ramas come with him
+4,Tigger,TIG,Tenori,F,DOD,3-Nov-2021,3-Nov-2021,3-Nov-2021,N,,,Tesoro,,TIG killed by infanticide by one of the males from Ramas during the Tenori-Ramas fusion--believed to have been by PAL
+5,Tigger,TIG,Tenori,F,END,3-Nov-2021,,,N,,,Tesoro,,TIG killed by infanticide by one of the males from Ramas during the Tenori-Ramas fusion--believed to have been by PAL
+1,Tilaran,TIL,Tenori,M,DOB,13-Sep-2016,,,Y,JCO/AF,Around same age as TAC/TEM,,,
+2,Tilaran,TIL,Tenori,M,Immigration,13-Sep-2022,13-Sep-2022,13-Sep-2022,N,,,,,
+3,Tilaran,TIL,Tenori,M,START,15-Sep-2022,15-Sep-2022,15-Sep-2022,N,,,,,
+4,Tilaran,TIL,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,,,
+5,Tilaran,TIL,Tenori,M,Changed to Subadult - male,13-Sep-2023,13-Sep-2023,13-Sep-2023,N,,7 y/o,,,
+100,Tilaran,TIL,Tenori,M,END,NOT YET,,,,,,,,
+1,Timon,TIM,Tenori,M,DOB,17-May-2023,,,Y,CB/VM/JL,Found on the 19th,TAN,,
+2,Timon,TIM,Tenori,M,START,23-May-2023,23-May-2023,23-May-2023,N,,,TAN,,
+100,Timon,TIM,Tenori,M,END,NOT YET,,,,,,TAN,,
+1,Tiny,TIN,Tenori,M,DOB,10-Jun-2019,,,N,,,TRU,,
+2,Tiny,TIN,Tenori,M,START,10-Jun-2019,10-Jun-2019,10-Jun-2019,N,,,TRU,,
+3,Tiny,TIN,Tenori,M,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,,,TRU,,TIC takeover
+4,Tiny,TIN,Tenori,M,Independent,11-May-2021,11-May-2021,11-May-2021,Y,JCO/FK,30 days minus conception,TRU,,
+5,Tiny,TIN,Tenori,M,Changed to Juvenile,10-Jun-2021,10-Jun-2021,10-Jun-2021,Y,,,TRU,,
+6,Tiny,TIN,Tenori,M,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,TRU,,PAL takes over group and 5 other males from Ramas come with him
+7,Tiny,TIN,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,TRU,,PED takeover
+100,Tiny,TIN,Tenori,M,END,NOT YET,,,,,,TRU,,
+1,Tio,TIO,Tenori,M,DOB,1-Jul-2009,,,Y,JCO/AF,,,,
+2,Tio,TIO,Tenori,M,START,1-Feb-2018,1-Feb-2018,1-Feb-2018,N,,,,,
+3,Tio,TIO,Tenori,M,Changed to Adult - male,1-Jul-2019,1-Jul-2019,1-Jul-2019,N,,10 y/o,,,
+4,Tio,TIO,Tenori,M,Emigration,14-Mar-2020,14-Mar-2020,14-Mar-2020,N,,,,,
+5,Tio,TIO,Tenori,M,END,14-Mar-2020,,,N,,,,,Left with TIA and TAI
+1,Tiquicia,TIQ,Tenori,M,DOB,16-May-2021,,,Y,JCO/AF,,TRU,,
+2,Tiquicia,TIQ,Tenori,M,START,17-May-2021,17-May-2021,17-May-2021,N,,,TRU,,
+3,Tiquicia,TIQ,Tenori,M,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,TRU,,PAL takes over group and 5 other males from Ramas come with him
+4,Tiquicia,TIQ,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,TRU,,PED takeover
+5,Tiquicia,TIQ,Tenori,M,Independent,19-Nov-2022,19-Nov-2022,19-Nov-2022,Y,JCO/FK,30 days minus conception,TRU,,
+6,Tiquicia,TIQ,Tenori,M,Changed to Juvenile,16-May-2023,16-May-2023,16-May-2023,Y,JCO/FK,two years after birth,TRU,,
+100,Tiquicia,TIQ,Tenori,M,END,NOT YET,,,,,,TRU,,
+1,Titi,TIT,Tenori,?,DOB,23-Apr-2023,,,N,,,TOT,,
+2,Titi,TIT,Tenori,?,START,24-Apr-2023,24-Apr-2023,24-Apr-2023,N,,,TOT,,
+3,Titi,TIT,Tenori,?,DOD,19-Oct-2023,18-Oct-2023,19-Oct-2023,Y,JCO/FK,from epi-collect and census notes,TOT,,
+4,Titi,TIT,Tenori,?,END,19-Oct-2023,,,N,,,TOT,,
+1,Tizon,TIZ,Tenori,M,DOB,17-Nov-2012,,,Y,AF,,,,
+2,Tizon,TIZ,Tenori,M,Immigration,17-Nov-2022,17-Nov-2022,17-Nov-2022,N,,,,,
+3,Tizon,TIZ,Tenori,M,START,18-Nov-2022,18-Nov-2022,18-Nov-2022,N,,,,,
+100,Tizon,TIZ,Tenori,M,END,NOT YET,,,,,,,,
+1,Tobias,TOB,Tenori,M,DOB,31-Oct-2019,,,Y,JCO/AF,,,,
+2,Tobias,TOB,Tenori,M,Immigration,14-Nov-2022,31-Oct-2022,14-Nov-2022,Y,,,,,
+3,Tobias,TOB,Tenori,M,START,14-Nov-2022,14-Nov-2022,14-Nov-2022,N,,,,,
+100,Tobias,TOB,Tenori,M,END,NOT YET,,,,,,,,
+1,Tofu,TOF,Tenori,M,DOB,9-Jun-2015,,,Y,JCO,,,,
+2,Tofu,TOF,Tenori,M,Immigration,9-Jun-2020,9-Jun-2020,9-Jun-2020,N,,,,,
+3,Tofu,TOF,Tenori,M,START,16-Jul-2020,16-Jul-2020,16-Jul-2020,N,,,,,
+4,Tofu,TOF,Tenori,M,Emigration,29-Jul-2020,6-Jul-2020,22-Aug-2020,Y,JCO/FK,using census dates where he was seen/not seen,,,
+5,Tofu,TOF,Tenori,M,END,23-Aug-2020,,,N,,,,,
+1,Toledo,TOL,Tenori,M,DOB,3-Oct-2018,,,Y,JCO,,,,
+2,Toledo,TOL,Tenori,M,Immigration,3-Oct-2022,3-Oct-2022,3-Oct-2022,Y,,,,,
+3,Toledo,TOL,Tenori,M,START,7-Oct-2022,7-Oct-2022,7-Oct-2022,N,,,,,"TOL isn't in any group scan/AO data, but he does show up in vocalization log"
+4,Toledo,TOL,Tenori,M,Emigration,25-Oct-2022,19-Oct-2022,31-Oct-2022,Y,JCO/FK,using census notes,,,
+5,Toledo,TOL,Tenori,M,END,31-Oct-2022,,,N,,,,,
+1,Tonya,TON,Tenori,F,DOB,1-Jul-2012,,,Y,JCO/AF,,,,
+2,Tonya,TON,Tenori,F,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,,,In JCO field notes
+3,Tonya,TON,Tenori,F,DOD,14-Mar-2019,12-Mar-2019,14-Mar-2019,Y,CM,,,,First noticed missing during a primate transect.
+4,Tonya,TON,Tenori,F,END,14-Mar-2019,12-Mar-2019,14-Mar-2019,Y,CM,,,,First noticed missing during a primate transect.
+1,Tornado,TOR,Tenori,M,DOB,1-Jul-2012,,,Y,JCO/AF,"Not born in Tenori, arrived and we put name of Tenori",,,
+2,Tornado,TOR,Tenori,M,START,16-Jul-2020,16-Jul-2020,16-Jul-2020,N,,,,,
+3,Tornado,TOR,Tenori,M,Emigration,5-Nov-2021,5-Nov-2021,5-Nov-2021,N,,TOR not seen with rest of Tenori starting a few days following PAL takeover,,,
+4,Tornado,TOR,Ramas de Palmas,M,Immigration,20-Dec-2021,25-Nov-2022,20-Dec-2022,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,TOR new alpha of Ramas
+5,Tornado,TOR,Ramas de Palmas,M,Takes Over Group,20-Dec-2021,25-Nov-2022,20-Dec-2022,Y,,"Ramas females last seen without male on 25 Nov, seen with TOR as alpha for first time on 20 Dec",,,TOR new alpha of Ramas
+6,Tornado,TOR,Ramas de Palmas,M,Overthrown,20-Apr-2022,20-Apr-2022,21-Apr-2022,Y,JCO/FK,Found on Epi-collect Life History form,,,
+7,Tornado,TOR,?,M,Emigration,21-Apr-2022,21-Apr-2022,21-Apr-2022,N,,,,,
+8,Tornado,TOR,Ramas de Palmas,M,END,21-Apr-2022,,,N,,,,,
+1,Tostada,TOS,Tenori,F,DOB,30-Jan-2023,,,N,,,TER,,
+2,Tostada,TOS,Tenori,F,START,31-Jan-2023,31-Jan-2023,31-Jan-2023,N,,,TER,,
+3,Tostada,TOS,Tenori,F,DOD,03-Apr-2023,03-Apr-2023,03-Apr-2023,N,,,TER,,Infanticide by PED
+4,Tostada,TOS,Tenori,F,END,03-Apr-2023,,,N,,,TER,,Infanticide by PED
+1,Toto,TOT,Tenori,F,DOB,1-Jul-2014,,,Y,JCO/AF,,,,
+2,Toto,TOT,Tenori,F,START,3-Aug-2017,3-Aug-2017,3-Aug-2017,N,,,,,In JCO field notes
+3,Toto,TOT,Tenori,F,Changed to Subadult - female,1-Jan-2019,1-Jan-2019,1-Jan-2019,N,,4.5 y/o,,,
+4,Toto,TOT,Tenori,F,Changed to Adult - female,14-Oct-2020,14-Oct-2020,14-Oct-2020,N,,,,,
+5,Toto,TOT,Tenori,F,Conception,14-Oct-2020,14-Oct-2020,14-Oct-2020,Y,JCO/RR,,,TUA,
+6,Toto,TOT,Tenori,F,Pregnant,15-Dec-2020,15-Oct-2020,13-Mar-2021,Y,,Observation (census 1-2 months),,,
+7,Toto,TOT,Tenori,F,Takeover,1-Jan-2021,15-Dec-2020,19-Jan-2021,Y,JCO,"Tev is absent the first date, Tic officially takesover on the last date",,,
+8,Toto,TOT,Tenori,F,First Birth,13-Mar-2021,13-Mar-2021,13-Mar-2021,N,,,,TUA,
+9,Toto,TOT,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,Pal takeover Tic,,,PAL takes over group and 5 other males from Ramas come with him
+10,Toto,TOT,Tenori,F,Wean/Resumes Cycling,25-Oct-2022,25-Oct-2022,25-Oct-2022,N,JCO/FK,30 days minus conception,,,
+11,Toto,TOT,Tenori,F,Takeover,06-Oct-2022,06-Oct-2022,06-Oct-2022,N,,Ped takeover Pal,,,
+12,Toto,TOT,Tenori,F,Conception,24-Nov-2022,24-Nov-2022,24-Nov-2022,N,,,,TIT,
+13,Toto,TOT,Tenori,F,Pregnant,6-Feb-2023,6-Dec-2022,18-Apr-2023,N,,Observation (Epicollect LH around 2 months),,,
+14,Toto,TOT,Tenori,F,Birth,23-Apr-2023,18-Apr-2023,24-Apr-2023,N,JCO/FK,On census says that baby was probably born over the weekend,,TIT,
+15,Toto,TOT,Tenori,F,Infant Death,19-Oct-2023,18-Oct-2023,19-Oct-2023,N,JCO,Note on epi-collect says we didn't see Titi that day,,TIT,
+16,Toto,TOT,Tenori,F,Wean/Resumes Cycling,19-Oct-2023,19-Oct-2023,19-Oct-2023,N,,,,TIT,Titi died
+17,Toto,TOT,Tenori,F,Conception,,,,,,,,TAJ,
+18,Toto,TOT,Tenori,F,Pregnant,10-Apr-2024,10-Feb-2024,,N,,"Observation (EpiCollect LH, AF FK estimated 2-3 months)",,TAJ,
+19,Toto,TOT,Tenori,F,Birth,,,,,,,,TAJ,
+100,Toto,TOT,Tenori,F,END,NOT YET,,,,,,,,
+1,Trompudo,TRO,Tenori,M,DOB,17-Nov-2013,,,Y,AF,,,,
+2,Trompudo,TRO,Tenori,M,Immigration,17-Nov-2022,17-Nov-2022,17-Nov-2022,N,,,,,
+3,Trompudo,TRO,Tenori,M,START,18-Nov-2022,18-Nov-2022,18-Nov-2022,N,,,,,
+4,Trompudo,TRO,Tenori,M,Changed to Adult - male,17-Nov-2023,17-Nov-2023,17-Nov-2023,N,,10 y/o,,,
+100,Trompudo,TRO,Tenori,M,END,NOT YET,,,,,,,,
+1,Trudy,TRU,Tenori,F,DOB,1-Jul-2007,,,Y,JCO/AF,,,,
+2,Trudy,TRU,Tenori,F,Conception,16-Oct-2016,1-Oct-2016,1-Nov-2016,Y,JCO/AF,,,TAN,
+3,Trudy,TRU,Tenori,F,Birth,16-Mar-2017,1-Mar-2017,1-Apr-2017,Y,JCO/AF,,,TAN,
+4,Trudy,TRU,Tenori,F,START,18-Jul-2017,18-Jul-2017,18-Jul-2017,N,,,,,"JCO/AF/MB/TB took notes in their field books and started to add names to the demography. There is no online census on Google Drive, but there are basecamp tracks in July and the ID's were definitely recorded on this date"
+5,Trudy,TRU,Tenori,F,Wean/Resumes Cycling,12-Dec-2018,2-Dec-2018,2-Jan-2019,Y,JCO/FK,30 days minus conception,,,
+6,Trudy,TRU,Tenori,F,Conception,11-Jan-2019,1-Jan-2019,1-Feb-2019,Y,CM,,,TIN,
+7,Trudy,TRU,Tenori,F,Birth,10-Jun-2019,10-Jun-2019,10-Jun-2019,N,,,,TIN,
+8,Trudy,TRU,Tenori,F,Wean/Resumes Cycling,17-Nov-2020,17-Nov-2020,17-Nov-2020,Y,JCO/FK,30 days minus conception,,,
+9,Trudy,TRU,Tenori,F,Conception,17-Dec-2020,17-Dec-2020,17-Dec-2020,Y,JCO/FK,,,TIQ,
+10,Trudy,TRU,Tenori,F,Birth,16-May-2021,16-May-2021,16-May-2021,N,,,,TIQ,
+11,Trudy,TRU,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,,,PAL takes over group from Tic and 5 other males from Ramas come with him
+12,Trudy,TRU,Tenori,F,Takeover,06-Oct-2022,06-Oct-2022,06-Oct-2022,N,,,,,Ped takeover Pal
+13,Trudy,TRU,Tenori,F,Wean/Resumes Cycling,19-Nov-2022,19-Nov-2022,19-Nov-2022,Y,JCO/FK,30 days minus conception,,,
+14,Trudy,TRU,Tenori,F,Conception,19-Dec-2022,18-Dec-2022,20-Dec-2022,Y,JCO/FK,,,TAR,
+15,Trudy,TRU,Tenori,F,Birth,18-May-2023,17-May-2023,19-May-2023,N,JCO/FK,Census says they were probably born over weekend,,TAR,
+100,Trudy,TRU,Tenori,F,END,NOT YET,,,,,,,,
+1,Tsunami,TSU,Tenori,M,DOB,13-Sep-2017,,,Y,JCO/AF,About one year younger than TEM/TAC/TIL,,,
+2,Tsunami,TSU,Tenori,M,Immigration,13-Sep-2022,13-Sep-2022,13-Sep-2022,N,,,,,
+3,Tsunami,TSU,Tenori,M,START,15-Sep-2022,15-Sep-2022,15-Sep-2022,N,,,,,
+4,Tsunami,TSU,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Ped takeover Pal,,,
+5,Tsunami,TSU,Tenori,M,Changed to Subadult - male,13-Sep-2024,13-Sep-2024,13-Sep-2024,N,JCO,7 y/o. He started displaying sub-adult behavior since October 2023 by annoying females but still needs more time until he's 7 y/o,,,
+100,Tsunami,TSU,Tenori,M,END,NOT YET,,,,,,,,
+1,Tuanis,TUA,Tenori,F,DOB,13-Mar-2021,,,N,,,TOT,,
+2,Tuanis,TUA,Tenori,F,START,13-Mar-2021,13-Mar-2021,13-Mar-2021,N,,,TOT,,
+3,Tuanis,TUA,Tenori,F,Takeover,2-Nov-2021,2-Nov-2021,2-Nov-2021,N,,,TOT,,PAL takes over group from Tic and 5 other males from Ramas come with him
+4,Tuanis,TUA,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,,TOT,,Ped takeover Pal
+5,Tuanis,TUA,Tenori,F,Independent,25-Oct-2022,25-Oct-2022,25-Oct-2022,Y,JCO/FK,One month before conception of Tim (Toto's next baby),TOT,,
+6,Tuanis,TUA,Tenori,F,Changed to Juvenile,13-Mar-2023,13-Mar-2023,13-Mar-2023,Y,JCO/FK,2 years after birth,TOT,,
+100,Tuanis,TUA,Tenori,F,END,NOT YET,,,,,,TOT,,
+1,Tucán,TUC,Tenori,M,DOB,21-Jun-2022,,,N,,Tucan and Turrialba might have been switched at birth. We will fix their ILH when DNA data is analyzed,TES?,,This needs to be checked with genetics. It could be that TAM is mother to TUC who was born on 15-Aug-2022 and TES mother to TUR who was born on 21-Jun-2022
+2,Tucán,TUC,Tenori,M,START,21-Jun-2022,21-Jun-2022,21-Jun-2022,N,,Tucan and Turrialba might have been switched at birth. We will fix their ILH when DNA data is analyzed,TES?,,
+3,Tucán,TUC,Tenori,M,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Tucan and Turrialba might have been switched at birth. We will fix their ILH when DNA data is analyzed,TES?,,
+4,Tucán,TUC,Tenori,M,Changed to Juvenile,21-Jun-2024,21-Jun-2024,21-Jun-2024,N,,2 y/o,TES?,,
+100,Tucán,TUC,Tenori,M,END,NOT YET,,,,,Tucan and Turrialba might have been switched at birth. We will fix their ILH when DNA data is analyzed,TES?,,
+1,Turrialba,TUR,Tenori,F,DOB,15-Aug-2022,,,N,,Tucan and Turrialba might have been switched at birth. We will fix their ILH when DNA data is analyzed,TAM?,,This needs to be checked with genetics. It could be that TAM is mother to TUC who was born on 15-Aug-2022 and TES mother to TUR who was born on 21-Jun-2022
+2,Turrialba,TUR,Tenori,F,START,15-Aug-2022,15-Aug-2022,15-Aug-2022,N,,Tucan and Turrialba might have been switched at birth. We will fix their ILH when DNA data is analyzed,TAM?,,
+3,Turrialba,TUR,Tenori,F,Takeover,6-Oct-2022,6-Oct-2022,6-Oct-2022,N,,Tucan and Turrialba might have been switched at birth. We will fix their ILH when DNA data is analyzed,TAM?,,
+4,Turrialba,TUR,Tenori,F,Changed to Juvenile,21-Jun-2024,21-Jun-2024,21-Jun-2024,N,,2 y/o,TAM?,,
+100,Turrialba,TUR,Tenori,F,END,NOT YET,,,,,,TAM?,,

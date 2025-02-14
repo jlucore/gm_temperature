@@ -1,0 +1,26 @@
+
+
+
+
+# loop through all of the files
+for i in *R1.fastq; do
+
+# Extract the base filename
+        filename=$(basename "$i")
+        fname="${filename%_R*.fastq}"
+
+# Run kneaddata with specified options
+        kneaddata --input1 ${fname}_R1.fastq \
+        --input2 ${fname}_R2.fastq \
+        --output 
+        --reference-db 
+        --remove-intermediate-output \
+        -t 4 \
+        -p 2 \
+        --trimmomatic-options "SLIDINGWINDOW:4:20 MINLEN:90"
+done
+
+# Generate read count table
+kneaddata_read_count_table 
+	--input \
+	--output

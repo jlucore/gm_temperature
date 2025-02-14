@@ -1,0 +1,445 @@
+---
+title: "2024-09-16_16s_compile_metadata"
+author: "Lucore"
+date: "2024-09-16"
+output: html_document
+---
+
+# NOTES: 
+compiles most recent metadata fro 16s samples. Does not include reproductive status because the code was throwing weird errors. Will need to check up on that. 
+
+# 1. Environmnet set up 
+
+```{r}
+
+library(tidyverse)
+
+m <- as.data.frame(read_tsv("data/metadata/sampleinfo_16s.tsv")) 
+
+```
+
+# 2. Tidy sample log 
+
+```{r}
+
+# add date variable 
+m1 <- m %>%
+   mutate(monkey_id = case_when(monkey_id == "May" ~ "MAY",    # adjust some monkey_ID's that are wrong
+                                monkey_id == "mon" ~ "MON",
+                                monkey_id == "mos" ~ "MOS",
+                                TRUE ~ monkey_id)) %>%
+  rename(ID = monkey_id,
+         sample = sampleid) %>%
+  select(-c(group,sample_name2))
+
+```
+
+
+
+# 3.Add demography data 
+
+## 3a. calculate age 
+
+```{r}
+#load data
+d <- read_csv("data/metadata/2024-09-05_Life History.csv", show_col_types = FALSE)
+
+#create list of id's from sample data
+id <- m1 %>%
+  select(ID) 
+id <- unique(id)
+
+#tidy data for age calculation
+dob <- d %>%
+  select(c('Name', 'ID', 'Group', 'Sex', 'Event', 'Date', 'Estimated?')) %>%
+  rename(name = Name,
+         group = Group, 
+         sex = Sex, 
+         event = Event, 
+         date = Date, 
+         estimated = 'Estimated?') %>%
+  filter(event == "DOB") %>%
+  mutate(date = dmy(date)) # fail to parse are not monkeys with samples, do not need to fix this
+
+#filter dob table for ID's 
+dob2 <- inner_join(dob, id, by = "ID")
+
+#finish cleaning dob table, join with neopterin table, calculate age
+dob3 <- dob2 %>%
+  select(c(ID, group, sex, date)) %>%
+  rename(DOB = date) %>%
+  mutate(group = case_when( # change PED to Tenori
+    ID == "PED" ~ "Tenori",
+    TRUE ~ group  
+  ))
+
+m2 <- left_join(m1, dob3, by = "ID")
+m2 <- m2 %>% 
+  mutate(agedays = as.numeric(date - DOB)) %>%
+  mutate(age = round(agedays/ 365, 1)) %>%
+  select(-agedays, -DOB)
+
+```
+
+
+## 3b calculate repro state
+
+```{r}
+
+#tidy data
+r <- d %>%
+  select(c('ID', 'Event', 'Date')) %>%
+  rename(event = Event, 
+         date = Date) %>%
+  mutate(ID = str_squish(ID)) %>%
+  mutate(date = dmy(date)) #don't worry about the lines that don't parse
+
+# filter for study females
+r1 <- inner_join(r, id, by = "ID") %>%
+  filter(event == "Wean/Resumes Cycling" | event == "Conception" | event == "Birth" | event == "First Birth") %>%
+  filter(date <= as.Date("2023-07-21")) %>%
+  filter(date >= as.Date("2021-01-01"))
+
+# add end study period line for each individual 78
+new_rows <- r1 %>%
+  group_by(ID) %>%
+  summarise(event = "END_sample", date = "2023-07-21") %>%
+  mutate(date = ymd(date))
+
+r2 <- bind_rows(r1, new_rows) %>% # add ending lines
+  arrange(ID)
+
+# get list of dates for each repro state per ID
+date_sequences <- r2 %>%
+  group_by(ID) %>%
+  mutate(next_date = lead(date) - days(1)) %>% # subtract 1 day from next state to get time period without overlap
+  filter(!is.na(next_date)) %>%
+  rowwise() %>%
+  mutate(date_list = list(seq(date, next_date, by = "day"))) %>%
+  ungroup()
+
+date_sequences_unnested <- date_sequences %>%
+  select(ID, event, date_list) %>%
+  unnest(cols = c(date_list))
+
+# Assign repro state for each date
+repro_state <- date_sequences_unnested %>%
+  mutate(repro = case_when(event == "Wean/Resumes Cycling" ~ "Cycling",
+                           event == "Conception" ~ "Pregnant",
+                           event == "Birth" ~ "Lactating",
+                           event == "First Birth" ~ "Lactating")) %>%
+  mutate(date = ymd(date_list)) %>%
+  select(c(ID, repro, date))
+
+# combine with other metadata
+m2 <- m2 %>% 
+  left_join(repro_state, by = c("date", "ID"))%>%
+  mutate(repro = case_when(sex == "M" ~ "M",
+                           age <= 6 & is.na(repro) ~ "juv",
+                           age >=6 & is.na(repro) ~ "Cycling",
+                           TRUE ~ repro))
+        
+```
+
+# 4. Add scfa data
+
+```{r}
+
+#load data
+s <- read_csv("data/metadata/SCFA_results_Jordan_Lucore.csv", show_col_types = FALSE)
+
+s1 <- s %>%
+  rename(samplename = 'Sample name',
+         PA = `PA (ug/g)`,
+         BA = `BA (ug/g)`,
+         iVA = `iVA (ug/g)`,
+         AA = `AA (ug/g)`) %>%
+  mutate(samplename = str_replace(samplename, "_.*", "")) %>%
+  mutate(across(everything(), ~ replace(.x, .x == "ND", 0))) %>% #replace not detected with zeros 
+  select(samplename, PA, BA, iVA, AA) %>%
+  mutate(BA = as.numeric(BA)) %>%
+  group_by(samplename) %>%
+  mutate(all_scfa = sum(PA, BA, iVA, AA)) %>%
+  mutate(sample_number = as.numeric(str_extract(samplename, "\\d+")),  
+         ID = str_extract(samplename, "[A-Za-z]+"))
+
+  
+  
+m3 <- m2 %>%
+  left_join(s1, by = c("sample_number", "ID")) %>%
+  select(-samplename)
+
+```
+
+
+#  5. Add neopterin data
+
+remember tat you need to do this with a sheet where no column have "days" in the column name or else the code will break
+
+```{r}
+
+source("functions/generate_time_intervals.R")
+source("functions/full_intervals.R")
+source("functions/sample_averages.R")
+
+# load and clean neopterin data
+n <- read_csv("data/metadata/2024-07-25_compiled_neopterin.csv") %>%
+  #select(sample:datetime1) %>%
+  rename(sampleid = sample,
+         date_range = date, # rename to work with sample_averages function
+         neo = neo_nmol_SG) %>%
+  select(date_range, ID, neo)
+
+# first, generate time windows of interest, here choosing pre and post of 3, 5, and 7 days
+interval_df <- generate_intervals(m3, c(-3, 3, 5, -5, -7, 7))
+
+# next, combine pre and pot intervals to get a total before and after interval
+df_total_3day <- create_full_intervals(interval_df, "3days", "total_3_day")
+df_total_5day <- create_full_intervals(interval_df, "5days", "total_5_day")
+df_total_7day <- create_full_intervals(interval_df, "7days", "total_7_day")
+
+# combine dataframes from previous step with pre and post interval dataframe
+df_combined <- bind_rows(interval_df, df_total_3day, df_total_5day, df_total_7day) %>%
+  arrange(sample, date_range)
+
+# calculate neopterin averages for each specific time interval
+final <- sample_averages(df_combined, n, "neo")
+
+# add averages to metadata
+m4 <- m3 %>%
+  left_join(final, by = "sample")
+
+```
+
+
+# 6. Add weather data
+
+can adjust time periods whenever you want
+remember you can also add min temp but sticking with max for now because we know they are highly correlated
+
+```{r}
+
+# load data
+w <- read_csv("data/metadata/raw_paloverde_weather.csv") %>%
+   mutate(date_range = date)
+
+# load function to calculate avergaes
+source("functions/calculate_weather_averages.R")
+
+max_t <- calculate_weather_averages(m4, w, "max_t", c(1:3, 5, 10, 15, 20, 30))
+rain <- calculate_weather_averages(m4, w, "rain", c(1:4, 5, 10, 15, 20, 30)) # 4 days is the first interval with no NA's
+
+w_calc <- max_t %>%
+  left_join(rain, by = "sample") 
+
+m5 <- m4 %>%
+  left_join(w_calc, by = "sample")
+
+```
+
+
+# 7. Add feeding data
+
+Right now we are just calculating a diversity variable. But can also calc part plant vs insect/animal ect. 
+
+## 7a. combine sample info with feed scans
+
+```{r}
+
+f <- read_csv("data/metadata/2024-02-15_FeedScan.csv") %>%
+  rename(date_time2 = datetime,
+         ID = monkey_id) %>%
+  mutate(date_range = date) %>%
+  select(c(date_range, date_time2, ID, food_type, plant_part, plant_name))
+
+# add date variable 
+dates <- m5 %>%
+  mutate(days14 = date - weeks(2)) 
+
+# Expand the date range for each sample
+dates <- dates %>%
+  select(c(sample, ID, time, date, days14)) %>%
+  pivot_longer(cols = starts_with("days"),
+               names_to = "time_window",
+               values_to = "window_date") %>%
+  mutate(datetime_end = paste(date, time, sep = " ")) %>%
+  mutate(datetime_start = paste(window_date, time, sep = " "))
+
+date_range <- dates %>%
+  rowwise() %>%
+  mutate(date_range = list(seq(window_date, date, by = "day")))
+
+exploded_dates <- date_range %>%
+  tidyr::unnest(date_range) %>%
+  select(c(sample:date, ID, datetime_end:date_range))
+  
+# combine with feed data
+d <- exploded_dates %>%
+  left_join(f, by = c('date_range', 'ID'), relationship = "many-to-many") %>%
+  group_by(sample) %>%
+  filter(!is.na(date_time2)) %>%
+  mutate(datetime_start = ymd_hms(datetime_start)) %>%
+  mutate(datetime_end = ymd_hms(datetime_end)) %>%
+  mutate(date_time2 = ymd_hms(date_time2)) %>%
+  filter(date_time2 >= datetime_start & date_time2 <= datetime_end) # IMPORTANT filtering step to make sure you don't include scans from the same day of collection but after the time of collection
+
+```
+
+## 7b. calculate diet diversity index
+
+calculating diet diversity by modeling richness ~ scan_total up to 2 weeks before sample collection, then extract the residuals and use the residuals as the diet diversity predictor. Negative number means less diversity than expected, positive means more diversity than expected. Doing this so I don't have to rarefy when using Shannon. See Marshall et al., 2021 for methods breakdown
+
+```{r}
+
+# calculate total unique diet items per sample
+d1 <- d %>%
+  mutate(plant_name = ifelse(food_type == "amphibian_reptile", "amphibian_reptile", plant_name)) %>%  #add not plant items to plant_name 
+  mutate(plant_name = ifelse(food_type == "bird", "bird", plant_name)) %>%
+  mutate(plant_name = ifelse(food_type == "egg", "egg", plant_name)) %>%
+  mutate(plant_name = ifelse(food_type == "fungi", "fungi", plant_name)) %>%
+  mutate(plant_name = ifelse(food_type == "gastropod", "gastropod", plant_name)) %>%
+  mutate(plant_name = ifelse(food_type == "insect", "insect", plant_name)) %>%
+  mutate(plant_name = ifelse(food_type == "mammal", "mammal", plant_name)) %>% 
+  mutate(plant_name = ifelse(food_type == "nurse", "mammary_milk", plant_name)) %>%
+  mutate(plant_name = ifelse(food_type == "poop", "poop", plant_name)) %>%
+  filter(!is.na(plant_name)) %>%
+  rename(food_name = plant_name) %>%
+  select(sample, food_name) %>%
+  group_by(sample, food_name) %>%
+  summarise(total_count = n()) %>%
+  group_by(sample) %>%
+  summarise(richness = n())
+  
+# calculate total scans per sample 
+total <- d %>%
+  group_by(sample) %>%
+  summarise(total_scans = n())
+
+#combine data
+richness <- d1 %>%
+  left_join(total, by = "sample")
+
+hist(richness$richness)
+
+#model data 
+m1 <- lm(richness ~ total_scans, d = richness)
+
+summary(m1)
+
+richness$residuals <- residuals(m1) # extract residuals
+
+# visualize residuals - everything looks relatively normal
+hist(richness$residuals)
+
+ggplot(richness, aes(x = total_scans, y = richness)) +
+  geom_point() + 
+  geom_smooth(method = "loess")
+
+# add to metadata 
+
+m6 <- m5 %>% left_join(richness, by = "sample") 
+
+```
+
+## 2b. create part plant variable
+
+Make a proportion of plant part versus animal for each sample, two weeks before the sample
+
+```{r}
+
+d2 <- d %>%
+  mutate(food_category = case_when(food_type == "amphibian_reptile" ~ "animal",  #make a general category for plant versus animal
+                                   food_type == "bird" ~ "animal",
+                                   food_type == "egg" ~ "animal",
+                                   food_type == "gastropod" ~ "animal",
+                                   food_type == "insect" ~ "animal",
+                                   food_type == "mammal" ~ "animal",
+                                   food_type == "nurse" ~ NA,
+                                   food_type == "poop" ~ NA,
+                                   food_type == "unknown" ~ NA,
+                                   food_type == "fungi" ~ "plant",
+                                   food_type == "plant" ~ "plant")) %>%
+  filter(!is.na(food_category)) %>%
+  group_by(sample, food_category) %>%
+  summarise(count_food = n())  # get category counts
+
+# calculate the total with the NA's filtered out 
+total2 <- d2 %>%
+  group_by(sample) %>%
+  summarise(total_scans = sum(count_food))
+
+category <- d2 %>%
+  left_join(total2, by = 'sample') %>%
+  mutate(percent = (count_food/total_scans)*100) %>%
+  select(sample, food_category, percent) %>%
+  pivot_wider(names_from = food_category,
+              values_from = percent) %>%
+  mutate_all(~ replace_na(., 0))
+  
+# check that they are 100% correlated
+plot(category$animal, category$plant)
+
+cor(category$animal, category$plant)
+
+# add to metadata 
+
+m7 <- m6 %>% left_join(category, by = "sample") 
+
+```
+
+
+# 7c plant part variable
+
+this compares all the types of plant parts to insect, nurse, or animal
+
+```{r}
+
+d3 <- d %>%
+  mutate(food_part = case_when(plant_part == "flower" ~ "flower",  #make food part category
+                                   plant_part == "fruit" ~ "fruit",
+                                   plant_part == "leaves" ~ "leaves",
+                                   plant_part == "nectar" ~ "nectar",
+                                   plant_part == "pith" ~ "pith",
+                                   plant_part == "seeds" ~ "seeds",
+                                   plant_part == "flower" ~ "flower",
+                                   food_type == "bird" ~ "animal",
+                                   food_type == "egg" ~ "animal",
+                                   food_type == "gastropod" ~ "animal",
+                                   food_type == "mammal" ~ "animal",
+                                   food_type == "amphibian_reptile" ~ "animal",
+                                   food_type == "nurse" ~ "nurse",
+                                   food_type == "fungi" ~ "fungi",
+                                   food_type == "poop" ~ NA,
+                                   food_type == "unknown" ~ NA,
+                                   food_type == "insect" ~ "insect")) %>%
+  filter(!is.na(food_part)) %>%  ## probably not the best way to do this, should account for NA's but doing it for now
+  group_by(sample, food_part) %>%
+  summarise(count_food_part = n())  # get category counts
+
+# calculate the total with the NA's filtered out 
+total2 <- d3 %>%
+  group_by(sample) %>%
+  summarise(total_scans = sum(count_food_part)) # there are a couple samples with only one scan that might need to be filtered out here
+
+category <- d3 %>%
+  left_join(total2, by = 'sample') %>%
+  mutate(percent = (count_food_part/total_scans)*100) %>%
+  select(sample, food_part, percent) %>%
+  pivot_wider(names_from = food_part,
+              values_from = percent) %>%
+  mutate_all(~ replace_na(., 0))
+
+# add to metadata 
+
+m8 <- m7 %>% left_join(category, by = "sample")
+
+```
+
+
+# 8. export metadata
+
+```{r}
+
+write_csv(m8, 'data/metadata/2024-09-16_16s_compiled_metadata.csv')
+
+```

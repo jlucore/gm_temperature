@@ -1,0 +1,63 @@
+
+# 1. LOAD WORKING ENVIRONMENT
+
+module load qiime2-amplicon-2023.9
+conda activate qiime2-amplicon-2023.9
+
+# 2. IMPORT PAIRED-END SEQS
+
+qiime tools import 
+		--type 'SampleData[PairedEndSequencesWithQuality]' 
+		--input-path manifest.csv 
+		--output-path paired-end-demux.qza 
+		--input-format PairedEndFastqManifestPhred33
+
+qiime demux summarize 
+		--i-data paired-end-demux.qza  
+		--o-visualization paired-end-demux.qzv
+
+
+# 3. DENOISE WITH DADA2 
+
+source activate qiime2-amplicon-2023.9
+qiime dada2 denoise-paired
+		--i-demultiplexed-seqs paired-end-demux.qza
+		--p-trunc-len-f 236
+		--p-trunc-len-r 226
+		--p-trim-left-f 20
+		--p-trim-left-r 20
+		--o-table table.qza
+		--o-representative-sequences rep-seqs.qza
+		--o-denoising-stats dada2denoising-stats.qza
+
+qiime metadata tabulate 
+		--m-input-file dada2denoising-stats.qza 
+		--o-visualization dada2denoising-stats.qzv
+
+qiime feature-table summarize
+		--i-table table.qza
+		--o-visualization table.qzv
+		--m-sample-metadata-file metadata.csv
+
+
+# 4. ASSIGN TAXONOMY 
+
+qiime feature-classifier classify-sklearn 
+		--i-classifier 2022.10.backbone.full-length.nb.qza
+		--i-reads rep-seqs.qza
+		--o-classification taxonomy.qza
+
+qiime metadata tabulate
+		--m-input-file taxonomy.qza
+		--o-visualization taxonomy.qzv
+
+# 5. FILTER 
+
+qiime taxa filter-table 
+		--i-table table.qza
+		--i-taxonomy taxonomy.qza
+		--p-exclude mitochondria,chloroplast
+		--o-filtered-table table_dada2_nomito_nochloro.qza
+
+
+
