@@ -1,0 +1,62 @@
+#!/bin/bash
+
+
+#SBATCH --job-name=humann
+#SBATCH --account=jbeehner0
+#SBATCH --time=24:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=4
+#SBATCH --mem-per-cpu=8gb
+
+
+WORKDIR=/home/jlucore/humann_redo
+TESTFILE="001-494MAN-CIMI-CR-23-JL-GMCF2017b_S1_L001_R1_kneaddata_paired_1.fastq"
+OUTPUTDIR=humann.output
+DATABASEDIR=/nfs/turbo/lsa-jbeehner/jlucore
+
+echo $(date) Execution begins
+
+if [[ ! $HOSTNAME =~ gl[0-9][0-9][0-9][0-9] ]]; then echo run me on a compute node; exit 1; fi
+
+cd $WORKDIR
+if [ ! -r $TESTFILE ]; then echo can\'t find test input file $TESTFILE, quitting; exit 1; fi
+
+SAVEDIR=${OUTPUTDIR}_$(date +%FT%T)
+if ! mkdir $SAVEDIR; then echo can\'t create $SAVEDIR, quitting; exit 1; fi
+
+rm -f Miniforge3-Linux-x86_64.sh
+wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+bash Miniforge3-Linux-x86_64.sh -b
+
+rm -rf databases diamond fastq_test_run full_chocophlan.v201901_v31.tar.gz 
+ls
+conda env remove --name biobakery3 -y
+
+module purge
+conda deactivate
+
+conda create --name biobakery3 python=3.7 -y
+### #conda activate $PWD/biobakery3
+source ~/.bashrc
+conda activate biobakery3
+
+conda config --add channels defaults
+conda config --add channels bioconda
+conda config --add channels conda-forge
+conda config --add channels biobakery
+
+conda install humann -c biobakery -y
+
+echo $(date) Installing chocophlan ...
+humann_databases --download chocophlan full $DATABASEDIR/databases --update-config yes
+echo $(date) Installing uniref ...
+humann_databases --download uniref uniref50_diamond $DATABASEDIR/diamond --update-config yes
+
+echo $(date) Starting humann ...
+/usr/bin/time humann --input $TESTFILE --output $SAVEDIR
+echo $(date) Execution terminated
+
+
+
+
+
