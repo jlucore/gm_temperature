@@ -1,0 +1,566 @@
+---
+title: "Untitled"
+author: "Lucore"
+date: "2025-02-18"
+output: html_document
+---
+
+# 1. Load environment
+
+```{r}
+
+library(tidyverse)
+library(phyloseq)
+library(lme4)
+library(conflicted)
+library(mgcv)
+library(gratia)
+library(bbmle)
+library(ggpubr)
+library(factoextra)
+library(gridExtra)
+library(zCompositions)
+
+source("functions/my_scale.R")
+
+source("functions/inverse_scale.R")
+
+conflict_prefer("select", "dplyr")
+conflicts_prefer(dplyr::filter)
+
+
+ko_physeq <- readRDS("phyloseq_objects/ko_phylo.rds")
+
+nog_physeq <- readRDS("phyloseq_objects/eggnog_phylo.rds")
+
+path_physeq <- readRDS("phyloseq_objects/pathway_phylo.rds")
+
+
+```
+
+
+# 2. Evaluate number of unmapped and ungrouped reads
+
+For gene groups umapped values represent the total abundance of reads that failed to align to any known gene sequences and ungrouped values represent reads that mapped to known gene sequences but could not be confidently assigned to a specific functional category. For the pathways data, the unintegrated value represents the total abundance of genes that did not contribute to a pathway. 
+
+The unmapped genes represent a single unknown gene of 1 kilobase but remember that many genes are longer than 1 kilobase so the percent_unmapped category may be inflated ucompared to the ungrouped and mapped categories. 
+
+IMPORTANT: These are the values for for the uniref90 database, you will need to repeat with the uniref50 database to investigate if the mapped values improve. 
+
+```{r}
+
+################## KO ################################
+
+ko <- as.data.frame(t(otu_table(ko_physeq))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped = (UNMAPPED/total) *100,
+         percent_ungrouped = (UNGROUPED/total) *100,
+         percent_mapped = 100 - (percent_unmapped + percent_ungrouped)) %>%
+  select(percent_unmapped, percent_ungrouped, percent_mapped)
+
+ko1 <- ko %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped, percent_ungrouped, percent_mapped),
+               names_to = "Category",
+               values_to = "Percentage") 
+
+
+ggplot(ko1, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+################## EGGNOG ################################
+
+nog <- as.data.frame(t(otu_table(nog_physeq))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped = (UNMAPPED/total) *100,
+         percent_ungrouped = (UNGROUPED/total) *100,
+         percent_mapped = 100 - (percent_unmapped + percent_ungrouped)) %>%
+  select(percent_unmapped, percent_ungrouped, percent_mapped)
+
+nog1 <- nog %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped, percent_ungrouped, percent_mapped),
+               names_to = "Category",
+               values_to = "Percentage") 
+
+ggplot(nog1, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+################## PATHWAY ################################
+
+path <- as.data.frame(t(otu_table(path_physeq))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped = (UNMAPPED/total) *100,
+         percent_ungrouped = (UNINTEGRATED/total) *100,
+         percent_mapped = 100 - (percent_unmapped + percent_ungrouped)) %>%
+  select(percent_unmapped, percent_ungrouped, percent_mapped)
+
+path1 <- path %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped, percent_ungrouped, percent_mapped),
+               names_to = "Category",
+               values_to = "Percentage") 
+
+ggplot(path1, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+
+# 3. Data set up
+
+## a. Filter metadata
+
+decided to use the 87 samples that have feed data associated with them because I felt like I couldn't run the models without fruit since there is such a strong relationship between fruit consumption and temperature
+
+```{r}
+
+m <- data.frame(sample_data(ko_physeq)) %>% # extract metadata 
+  rownames_to_column("sample") %>%
+  rename(temp = max_t_days15,
+         rain = rain_days4,
+         neo = total_3_day) %>%
+  select(sample, ID, time, date, group, sex, age, repro, temp, rain, neo, fruit, residuals, neo, reads)
+
+m_filtered <- m[!is.na(m$fruit), ] # remove samples with no diet data, drops 8 samples
+
+# filter phylozeq objects to remove samples with no diet data 
+ko_physeq2 <- prune_samples(m_filtered$sample, ko_physeq) # filter physeq object
+ko_physeq2 <- prune_taxa(taxa_sums(ko_physeq2) > 0, ko_physeq2) # remove ASV's with zero abundance
+
+nog_physeq2 <- prune_samples(m_filtered$sample, nog_physeq) # filter physeq object
+nog_physeq2 <- prune_taxa(taxa_sums(nog_physeq2) > 0, nog_physeq2) # remove ASV's with zero abundance
+
+path_physeq2 <- prune_samples(m_filtered$sample, path_physeq) # filter physeq object
+path_physeq2 <- prune_taxa(taxa_sums(path_physeq2) > 0, path_physeq2) # remove ASV's with zero abundance
+
+```
+
+## b. Prevalence filtering 
+
+hold off on prev filtering for now... our filter for the 16s data "remove features that are not present in at least 0.5% of total samples" doesn't remove anything here because that filter that the feature needs to be in at least one sample for this data.  
+
+We are going to remove the UNMAPPED and UNGROUPED reads so that we can just compared the mapped reads for each sample. Removing the UNGROUPED reads because we can think of this as taxa with no phylum assignment. 
+
+```{r}
+
+# calculate many samples did each taxa appear at least once
+prev0 = apply(X = otu_table(path_physeq),
+                MARGIN = ifelse(taxa_are_rows(path_physeq), yes = 1, no = 2),
+                FUN = function(x){sum(x > 0)})
+
+# make a dataframe that shows the prevalence (how many sample did the taxa show up in) and total abundance (total reads of that taxa) with taxonomy 
+prevdf = data.frame(Prevalence = prev0,
+                      TotalAbundance = taxa_sums(path_physeq),
+                      tax_table(path_physeq))
+
+# define prevalence threshold
+prevalenceThreshold = 0.005 * nsamples(path_physeq)  
+prevalenceThreshold # must appear in at least two samples
+
+# plot prevalence threshold
+ggplot(prevdf, aes(TotalAbundance, Prevalence)) +
+  geom_hline(yintercept = prevalenceThreshold, alpha = 0.5, linetype = 2) +
+  geom_point(size = 2, alpha = 0.7) +
+  scale_y_log10() + scale_x_log10() +
+  xlab("Total Abundance") +
+  theme_minimal()
+
+## summary stats ##
+asv_onesample <- nrow(prevdf[prevdf$Prevalence == 1,]) # number of ASV's present only in one sample
+total_asv <- nrow(prevdf)
+percent_onesample <- (asv_onesample/total_asv) * 100 # perent ASV's in only one sample
+
+## execute prevalence filter ##
+#ko_filtered <- prune_taxa((prev0 > prevalenceThreshold), ko_physeq) 
+#ko_filtered
+
+####### remove UNMAPPED and UNGROUPED reads #######
+
+
+ko_filtered <- subset_taxa(ko_physeq, 
+                                !(grepl("UNMAPPED", gene_ko) | grepl("UNGROUPED", gene_ko)))
+
+path_filtered <- subset_taxa(path_physeq, 
+                                !(grepl("UNMAPPED", pathway) | grepl("UNINTEGRATED", pathway)))
+
+nog_filtered <- subset_taxa(nog_physeq, 
+                                !(grepl("UNMAPPED", gene_ko) | grepl("UNGROUPED", gene_ko)))
+
+```
+
+## c. alpha diversity
+
+going to calculate this on the raw RPK's and add an offset for seq depth, use the number of paired reads from the kneaddata file
+
+ignore the warning, it is upset because the data is not in counts. Have to calculate the observed metric manually because `estimate_richness()` only takes count data
+
+```{r}
+
+ko_shannon <- estimate_richness(ko_filtered, measures = "Shannon") %>%
+  rownames_to_column(var = "sample") %>%
+  rename(ko_shannon = Shannon) 
+
+ko_alpha <- as.data.frame(colSums(otu_table(ko_filtered) > 0)) %>%
+  rename(ko_observed = 'colSums(otu_table(ko_filtered) > 0)') %>%
+  rownames_to_column(var = "sample") %>%
+  full_join(ko_shannon, by = "sample")
+
+hist(ko_alpha$ko_shannon) 
+hist(ko_alpha$ko_observed) 
+
+#########################
+
+nog_shannon <- estimate_richness(nog_filtered, measures = "Shannon") %>%
+  rownames_to_column(var = "sample") %>%
+  rename(nog_shannon = Shannon) 
+
+nog_alpha <- as.data.frame(colSums(otu_table(nog_filtered) > 0)) %>%
+  rename(nog_observed = 'colSums(otu_table(nog_filtered) > 0)') %>%
+  rownames_to_column(var = "sample") %>%
+  full_join(nog_shannon, by = "sample")
+
+hist(nog_alpha$nog_shannon) 
+hist(nog_alpha$nog_observed) 
+
+#########################
+
+path_shannon <- estimate_richness(path_filtered, measures = "Shannon") %>%
+  rownames_to_column(var = "sample") %>%
+  rename(path_shannon = Shannon) 
+
+path_alpha <- as.data.frame(colSums(otu_table(path_filtered) > 0)) %>%
+  rename(path_observed = 'colSums(otu_table(path_filtered) > 0)') %>%
+  rownames_to_column(var = "sample") %>%
+  full_join(path_shannon, by = "sample")
+
+hist(path_alpha$path_shannon) 
+hist(path_alpha$path_observed)
+
+#########################
+
+m1 <- m_filtered %>% # add to metadata
+  left_join(ko_alpha, by = "sample") %>%
+  left_join(nog_alpha, by = "sample") %>%
+  left_join(path_alpha, by = "sample")
+
+```
+
+## d. CLR transformation
+
+doing the CLR transformation on the RPK abundances 
+
+```{r}
+
+ko_table <- as.matrix(t(otu_table(ko_filtered)))
+ko_table[1:5,1:5] # rows are samples 
+
+ko_czm <- cmultRepl(ko_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
+ko_czm[1:5,1:5] # rows are samples 
+
+ko_clr <- t(apply(ko_czm, 1, function(x){log(x) - mean(log(x))})) # must transpose again
+ko_clr[1:5,1:5] # rows are samples 
+
+ko_pca <- prcomp(ko_clr) # calc pca
+plot(ko_pca$x[,1], ko_pca$x[,2]) # plot 
+
+ko_d.mvar <- sum(ko_pca$sdev^2) # total variance
+ko_PC1 <- paste("PC1 ","(",round(sum(ko_pca$sdev[1]^2)/ko_d.mvar, 3)*100,"%",")",sep="") # PC1 30.8%
+ko_PC2 <- paste("PC2 ","(",round(sum(ko_pca$sdev[2]^2)/ko_d.mvar, 3)*100,"%",")",sep="") # PC2 12.5%
+
+############################################
+
+nog_table <- as.matrix(t(otu_table(nog_filtered)))
+nog_table[1:5,1:5] # rows are samples 
+
+nog_czm <- cmultRepl(nog_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
+nog_czm[1:5,1:5] # rows are samples 
+
+nog_clr <- t(apply(nog_czm, 1, function(x){log(x) - mean(log(x))})) # must transpose again
+nog_clr[1:5,1:5] # rows are samples 
+
+nog_pca <- prcomp(nog_clr) # calc pca
+plot(nog_pca$x[,1], nog_pca$x[,2]) # plot 
+
+nog_d.mvar <- sum(nog_pca$sdev^2) # total variance
+nog_PC1 <- paste("PC1 ","(",round(sum(nog_pca$sdev[1]^2)/nog_d.mvar, 3)*100,"%",")",sep="") # PC1 27.2%
+nog_PC2 <- paste("PC2 ","(",round(sum(nog_pca$sdev[2]^2)/nog_d.mvar, 3)*100,"%",")",sep="") # PC2 14.1%
+
+
+############################################
+
+path_table <- as.matrix(t(otu_table(path_filtered)))
+path_table[1:5,1:5] # rows are samples 
+
+path_czm <- cmultRepl(path_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
+path_czm[1:5,1:5] # rows are samples 
+
+path_clr <- t(apply(path_czm, 1, function(x){log(x) - mean(log(x))})) # must transpose again
+path_clr[1:5,1:5] # rows are samples 
+
+path_pca <- prcomp(path_clr) # calc pca
+plot(path_pca$x[,1], path_pca$x[,2]) # plot 
+
+path_d.mvar <- sum(path_pca$sdev^2) # total variance
+path_PC1 <- paste("PC1 ","(",round(sum(path_pca$sdev[1]^2)/path_d.mvar, 3)*100,"%",")",sep="") # PC1 26.7%
+path_PC2 <- paste("PC2 ","(",round(sum(path_pca$sdev[2]^2)/path_d.mvar, 3)*100,"%",")",sep="") # PC2 9.9%
+
+```
+
+## e. Add PCA values to metadata
+
+```{r}
+
+ko_df<-data.frame(ko_pca$x)
+ko_df$sample<-rownames(ko_df)
+ko_df_small <- ko_df %>% 
+  select(c(1:4,96)) %>%
+  rename_with(~paste0("ko_", .), starts_with("PC"))
+
+nog_df<-data.frame(nog_pca$x)
+nog_df$sample<-rownames(nog_df)
+nog_df_small <- nog_df %>% 
+  select(c(1:4,96)) %>%
+  rename_with(~paste0("nog_", .), starts_with("PC"))
+
+path_df<-data.frame(path_pca$x)
+path_df$sample<-rownames(path_df)
+path_df_small <- path_df %>% 
+  select(c(1:4,96)) %>%
+  rename_with(~paste0("path_", .), starts_with("PC"))
+
+# add to metadata
+m2 <- m1 %>%
+  left_join(ko_df_small, by = "sample") %>%
+  left_join(nog_df_small, by = "sample") %>%
+  left_join(path_df_small, by = "sample")
+
+```
+
+## f. prep data for modeling
+
+scale variables and make categorical variables factors
+
+make all palmas sampels tenori, only 6 palmas samples not enough to estimate effect 
+
+```{r}
+
+table(m2$ID)
+
+# scale variables
+m_model <- m2 %>%
+  mutate(across(c(age, temp, rain, fruit, residuals), my_scale, .names = "{.col}_s")) %>%
+  mutate(group = as.factor(group),
+         ID = as.factor(ID))
+
+```
+
+
+# 3. Community features analysis
+
+## a. model community features
+
+everything seems normally distributed enough to model with Gaussian except for the Shannon index of the eggnog families which is pretty right skewed but I'm going to move forward with the normal distribution for simplicity of these models and then I can come back to tweak this later if I think it is necessary. 
+
+main results here: for the functional metrics, it does not seem like temperature is related to shannon's diversity but it is realted to the PC's and observed gene families. Why is it not related to alpha diversity? Even though taxonomic shannon diversity may decrease at high temperatures, functional alpha diversity may be more resilient to this because many taxa have similar genes and similar functions? However, we don't see the same thing for observed gene families, could speak more to that there is still a decrease in number of functional annotations but the evenness is relatively stable in the community  
+
+```{r}
+
+com_coef <- list() 
+com_aic <- list()
+
+com_features <- colnames(m_model)[c(15:32)] # list of features to model
+
+############ loop  #################
+for (i in com_features) {
+      
+      formula_main <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + (1 | ID) + offset(log(reads))"))
+      formula_full <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + (1 | ID) + offset(log(reads))"))
+      
+      m_main <- lmer(formula_main, data = m_model)
+      m_full <- lmer(formula_full, data = m_model)
+    
+    # AICc
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+    
+    # extract taxa coef
+    coef <- round(summary(m_full)$coeff[8,1], 4)
+    
+    # extract se
+    std <- round(summary(m_full)$coeff[8,2], 4)
+    
+    # calc CI's
+    ci_95 <- data.frame(taxa_coef = coef, taxa_std = std, Lower_95 = coef - 1.96 * std, Upper_95 = coef + 1.96 * std)
+    
+    ci_50 <- data.frame(Lower_50 = coef - 0.6745 * std, Upper_50 = coef + 0.6745 * std)
+    
+    # bind data
+    df <- cbind(ci_95, ci_50) 
+    
+    #create data frames
+    aic_df <- data.frame(
+        metric = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3))
+    
+    results_df <- data.frame(
+        metric = i, 
+        coef = round(df$taxa_coef, 3),
+        std = round(df$taxa_std, 3),
+        low_ci_95 = round(df$Lower_95, 3),
+        high_ci_95 = round(df$Upper_95, 3),
+        low_ci_50 = round(df$Lower_50, 3),
+        high_ci_50 = round(df$Upper_50, 3))
+
+    # store results
+    com_aic[[i]] <- aic_df
+    com_coef[[i]] <- results_df
+
+}
+
+# combine results 
+com_aic <- do.call(rbind, com_aic)
+com_coef <- do.call(rbind, com_coef)
+
+
+#### plot ####
+
+plot_com_coef <- com_coef %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative")) %>%
+  arrange(desc(coef)) %>%
+  mutate(order = factor(metric, levels = metric)) #%>%
+  #filter(metric != "nog_observed") %>%
+  #filter(metric != "ko_observed")
+         
+p1 <- ggplot(plot_com_coef, aes(x = order, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(size = 3) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95), linewidth = 1) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50), linewidth = 1.5) +
+  scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "community features") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) 
+p1
+
+
+# Reshape data
+com_data_long <- com_aic %>%
+  select(metric, model, weight) %>%
+  spread(key = model, value = weight) %>%          
+  mutate(order = factor(metric, levels = levels(plot_com_coef$order))) %>%
+  arrange(order)
+
+
+# Plot model weights
+p2 <- ggplot(com_data_long, aes(y = order)) +
+  # Plot m_full (on the left side)
+  geom_bar(stat = "identity", aes(x = -m_full, fill = "m_full"), position = "identity", width = 0.4) +
+  # Plot m_main (on the right side)
+  geom_bar(stat = "identity", aes(x = m_main, fill = "m_main"), position = "identity", width = 0.4) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") +
+  scale_fill_manual(values = c("m_full" = "#bc80bd", "m_main" = "#fdb462")) +
+  scale_x_continuous(
+    breaks = c(-1, -0.5, 0, 0.5, 1),   
+    labels = c("1", "0.5", "0", "0.5", "1"),
+    expand = c(0.05, 0.05)) +
+  labs(x = "Model Weight", y= "", fill = "Model") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  annotate("text", x = -0.7, y = "PC1", label = "interaction model", color = "white", size = 5, fontface = "bold") +
+  annotate("text", x = 0.3, y = "PC1", label = "base model", color = "#fdb462", size = 5, fontface = "bold")
+p2  
+
+
+```
+
+
+
+# extra code
+
+hand build models for community features
+
+```{r}
+
+hist(m_model$ko_shannon) 
+hist(m_model$ko_observed) 
+hist(m_model$ko_PC1) 
+hist(m_model$ko_PC2)
+hist(m_model$ko_PC3)
+hist(m_model$ko_PC4)
+
+
+main <- lmer(ko_PC1 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + (1 | ID),
+                data = m_model)
+summary(main)
+
+full <- lmer(ko_PC1 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + temp_s + (1 | ID) + offset(log(reads)),
+                data = m_model)
+summary(full)
+
+AICctab(full, main, weights = TRUE)
+
+
+hist(m_model$path_shannon) 
+hist(m_model$path_observed) 
+hist(m_model$path_PC1) 
+hist(m_model$path_PC2)
+hist(m_model$path_PC3)
+hist(m_model$path_PC4)
+
+main <- lmer(path_shannon ~ group + age_s + sex + rain_s + fruit_s + residuals_s + (1 | ID) + offset(log(reads)),
+                data = m_model)
+summary(main)
+
+full <- lmer(path_shannon ~ group + age_s + sex + rain_s + fruit_s + residuals_s + temp_s + (1 | ID) + offset(log(reads)),
+                data = m_model)
+summary(full)
+
+AICctab(full, main, weights = TRUE)
+
+
+hist(m_model$nog_shannon)
+hist(m_model$nog_observed) 
+hist(m_model$nog_PC1) 
+hist(m_model$nog_PC2)
+hist(m_model$nog_PC3)
+hist(m_model$nog_PC4)
+
+main <- lmer(nog_PC4 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + (1 | ID) + offset(log(reads)),
+                data = m_model)
+summary(main)
+
+full <- lmer(nog_PC4 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + temp_s + (1 | ID) + offset(log(reads)),
+                data = m_model)
+summary(full)
+
+AICctab(full, main, weights = TRUE)
+
+```
+
+
