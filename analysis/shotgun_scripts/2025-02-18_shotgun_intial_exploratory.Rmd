@@ -20,10 +20,13 @@ library(ggpubr)
 library(factoextra)
 library(gridExtra)
 library(zCompositions)
+library(jsonlite)
 
 source("functions/my_scale.R")
 
 source("functions/inverse_scale.R")
+
+source("functions/kegg_parse_json.R")
 
 conflict_prefer("select", "dplyr")
 conflicts_prefer(dplyr::filter)
@@ -154,34 +157,36 @@ hold off on prev filtering for now... our filter for the 16s data "remove featur
 
 We are going to remove the UNMAPPED and UNGROUPED reads so that we can just compared the mapped reads for each sample. Removing the UNGROUPED reads because we can think of this as taxa with no phylum assignment. 
 
+Need to think about removing KO's that don't have any functional assignment (similar to the argument of removing ASV's with no phylum assignment)
+
 ```{r}
 
 # calculate many samples did each taxa appear at least once
-prev0 = apply(X = otu_table(path_physeq),
-                MARGIN = ifelse(taxa_are_rows(path_physeq), yes = 1, no = 2),
-                FUN = function(x){sum(x > 0)})
+#prev0 = apply(X = otu_table(path_physeq),
+ #               MARGIN = ifelse(taxa_are_rows(path_physeq), yes = 1, no = 2),
+  #              FUN = function(x){sum(x > 0)})
 
 # make a dataframe that shows the prevalence (how many sample did the taxa show up in) and total abundance (total reads of that taxa) with taxonomy 
-prevdf = data.frame(Prevalence = prev0,
-                      TotalAbundance = taxa_sums(path_physeq),
-                      tax_table(path_physeq))
+#prevdf = data.frame(Prevalence = prev0,
+#                      TotalAbundance = taxa_sums(path_physeq),
+ #                     tax_table(path_physeq))
 
 # define prevalence threshold
-prevalenceThreshold = 0.005 * nsamples(path_physeq)  
-prevalenceThreshold # must appear in at least two samples
+#prevalenceThreshold = 0.005 * nsamples(path_physeq)  
+#prevalenceThreshold # must appear in at least two samples
 
 # plot prevalence threshold
-ggplot(prevdf, aes(TotalAbundance, Prevalence)) +
-  geom_hline(yintercept = prevalenceThreshold, alpha = 0.5, linetype = 2) +
-  geom_point(size = 2, alpha = 0.7) +
-  scale_y_log10() + scale_x_log10() +
-  xlab("Total Abundance") +
-  theme_minimal()
+#ggplot(prevdf, aes(TotalAbundance, Prevalence)) +
+#  geom_hline(yintercept = prevalenceThreshold, alpha = 0.5, linetype = 2) +
+#  geom_point(size = 2, alpha = 0.7) +
+#  scale_y_log10() + scale_x_log10() +
+#  xlab("Total Abundance") +
+#  theme_minimal()
 
 ## summary stats ##
-asv_onesample <- nrow(prevdf[prevdf$Prevalence == 1,]) # number of ASV's present only in one sample
-total_asv <- nrow(prevdf)
-percent_onesample <- (asv_onesample/total_asv) * 100 # perent ASV's in only one sample
+#asv_onesample <- nrow(prevdf[prevdf$Prevalence == 1,]) # number of ASV's present only in one sample
+#total_asv <- nrow(prevdf)
+#percent_onesample <- (asv_onesample/total_asv) * 100 # perent ASV's in only one sample
 
 ## execute prevalence filter ##
 #ko_filtered <- prune_taxa((prev0 > prevalenceThreshold), ko_physeq) 
@@ -190,13 +195,13 @@ percent_onesample <- (asv_onesample/total_asv) * 100 # perent ASV's in only one 
 ####### remove UNMAPPED and UNGROUPED reads #######
 
 
-ko_filtered <- subset_taxa(ko_physeq, 
+ko_filtered <- subset_taxa(ko_physeq2, 
                                 !(grepl("UNMAPPED", gene_ko) | grepl("UNGROUPED", gene_ko)))
 
-path_filtered <- subset_taxa(path_physeq, 
+path_filtered <- subset_taxa(path_physeq2, 
                                 !(grepl("UNMAPPED", pathway) | grepl("UNINTEGRATED", pathway)))
 
-nog_filtered <- subset_taxa(nog_physeq, 
+nog_filtered <- subset_taxa(nog_physeq2, 
                                 !(grepl("UNMAPPED", gene_ko) | grepl("UNGROUPED", gene_ko)))
 
 ```
@@ -326,19 +331,19 @@ path_PC2 <- paste("PC2 ","(",round(sum(path_pca$sdev[2]^2)/path_d.mvar, 3)*100,"
 ko_df<-data.frame(ko_pca$x)
 ko_df$sample<-rownames(ko_df)
 ko_df_small <- ko_df %>% 
-  select(c(1:4,96)) %>%
+  select(c(1:4,88)) %>%
   rename_with(~paste0("ko_", .), starts_with("PC"))
 
 nog_df<-data.frame(nog_pca$x)
 nog_df$sample<-rownames(nog_df)
 nog_df_small <- nog_df %>% 
-  select(c(1:4,96)) %>%
+  select(c(1:4,88)) %>%
   rename_with(~paste0("nog_", .), starts_with("PC"))
 
 path_df<-data.frame(path_pca$x)
 path_df$sample<-rownames(path_df)
 path_df_small <- path_df %>% 
-  select(c(1:4,96)) %>%
+  select(c(1:4,88)) %>%
   rename_with(~paste0("path_", .), starts_with("PC"))
 
 # add to metadata
@@ -500,6 +505,185 @@ p2
 ```
 
 
+# 4. Data set up for DAA
+
+## a. Agglomeration at brite levels
+
+Agglomerate KO's at Brite level 2 and Pathway level from the Keg orthology database. Below are links of where to find the explanation of the database and the link to download the json file. Then the link to the github page with the code to parse the json file. 
+
+websie that explains KEG orthology database https://www.genome.jp/kegg/ko.html
+json download for KEG orthology assignment: https://www.genome.jp/kegg-bin/get_htext?ko00001.keg
+github page with function to clean json: https://gist.github.com/cmkobel/c2f76359eb17e0c00ddd4e83e90bdf99
+
+```{r}
+
+brite <- fromJSON("data/brite_map.json", flatten = F)
+
+brite_parsed <- kegg_parse_json(brite) %>%
+  rename(lvl1 = a_class,
+         lvl2 = b_class, 
+         lvl3 = pathway)
+
+#################### brite level2 ####################################
+
+brite_level2 <- brite_parsed[,c(2,5)]
+length(unique(brite_level2$b_class)) # 57 unique brite level 2
+
+# agglomerate at brite level 2
+lvl2_abund_ko <- ko_clr %>%
+  data.frame() %>%
+  rownames_to_column("sample") %>%
+  gather(key = "reaction_ko", value = "abundance", -sample) %>%
+  left_join(brite_level2, by = "reaction_ko", relationship = "many-to-many") %>%
+  mutate(lvl2 = replace_na(lvl2, "no_assignment"))
+
+length(unique(lvl2_abund_ko$b_class)) # 55 lvl2, 1 no_assignment
+
+unique_lvl2 <- unique(lvl2_abund_ko$lvl2)
+missing_lvl2 <- brite_level2[!(brite_level2$lvl2 %in% unique_lvl2), ]
+unique(missing_lvl2$lvl2) # missing two lvl2 in our dataset
+
+lvl2_abund <- lvl2_abund_ko %>%
+  group_by(sample, lvl2) %>%
+  summarise(clr_abundance = sum(abundance)) %>%
+  left_join(m_filtered, by = "sample") %>%
+  mutate(level = "lvl2")
+
+unique_lvl2 <- length(unique(lvl2_abund$lvl2))
+unique_samples <- length(unique(lvl2_abund$sample))
+(unique_lvl2 * unique_samples) == nrow(lvl2_abund) # check that each sample has a value for all lvls
+
+
+#################### brite level3 ####################################
+
+# pathways (brite level 3)
+brite_path <- brite_parsed[,c(3,5)]
+length(unique(brite_path$lvl3)) # 561 unique pathways 
+
+#agglomerate at pathway
+lvl3_abund_ko <- ko_clr %>%
+  data.frame() %>%
+  rownames_to_column("sample") %>%
+  gather(key = "reaction_ko", value = "abundance", -sample) %>%
+  left_join(brite_path, by = "reaction_ko", relationship = "many-to-many") %>%
+  mutate(lvl3 = replace_na(lvl3, "no_assignment"))
+
+length(unique(lvl3_abund_ko$lvl3)) # 511 total, 510 lvl3, 1 no_assignment
+
+unique_path <- unique(lvl3_abund_ko$lvl3)
+missing_path <- brite_path[!(brite_path$lvl3 %in% unique_path), ]
+length(unique(missing_path$lvl3)) # missing 51 pathways in our dataset
+
+lvl3_abund <- lvl3_abund_ko %>%
+  group_by(sample, lvl3) %>%
+  summarise(clr_abundance = sum(abundance)) %>%
+  left_join(m_filtered, by = "sample") %>%
+  mutate(level = "lvl3")
+
+unique_path <- length(unique(lvl3_abund$lvl3))
+unique_samples <- length(unique(lvl3_abund$sample))
+(unique_path * unique_samples) == nrow(lvl3_abund) # check that each sample has a value for all lvls
+
+```
+
+## b. Plot distribution 
+
+distribution of clr abundances looks kind of normal for the level 2 agglomerations, level 3 doesn't look great but we'll proceed with the normal distribution because I think it is the most appropriate for the clr abundances given that there are negative and positive values
+
+```{r}
+################## lvl2 ######################
+
+# plot ditribution 
+pdf("figures/lvl2_distributions.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(lvl2_abund$lvl2)) {
+  
+  data <- subset(lvl2_abund, lvl2 == i)
+  
+  p <- ggplot(data, aes(x = clr_abundance)) +
+    geom_histogram(bins = 15) +
+    theme_minimal() +
+    labs(title = paste("Distribution for", i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 3)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+################## lvl3 ######################
+
+# plot ditribution 
+pdf("figures/lvl3_distributions.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(lvl3_abund$lvl3)) {
+  
+  data <- subset(lvl3_abund, lvl3 == i)
+  
+  p <- ggplot(data, aes(x = clr_abundance)) +
+    geom_histogram(bins = 15) +
+    theme_minimal() +
+    labs(title = paste("Distribution for", i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 3)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```
+
+## c. Abundance filtering
+
+not sure how to do this with clr transformed values....... maybe I just shouldn't. Lets move on the the daa of the lvl2's and see how it goes
+
+```{r}
+
+```
+
+## d. Scale variables
+
+```{r}
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # extra code
 
@@ -563,4 +747,16 @@ AICctab(full, main, weights = TRUE)
 
 ```
 
+tesing agglomeration of lvls
+
+```{r}
+
+
+
+test <- abundance_with_brite %>% 
+  filter(sample_id == "001-494MAN-CIMI-CR-23-JL") %>%
+  filter(b_class == "09101 Carbohydrate metabolism") %>%
+  summarise(total = sum(abundance))
+
+```
 
