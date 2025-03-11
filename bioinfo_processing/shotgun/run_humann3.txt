@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Submit individual SBATCH jobs for each FASTQ file
+
+for i in /nfs/turbo/lsa-jlucore/output_cat/uniref50_run/*.fastq; do
+    # Extract the base name of the FASTQ file for unique job names
+    base=$(basename $i .fastq)
+
+    # Create an SBATCH script for each FASTQ file
+    cat <<EOT > ${base}_humann.sbatch
+#!/bin/bash
+
+#SBATCH --job-name=humann_uniref50_${base}
+#SBATCH --mail-type=ALL
+#SBATCH --nodes=1
+#SBATCH --mem-per-cpu=7G
+#SBATCH --cpus-per-task=6
+#SBATCH --time=24:00:00
+#SBATCH --account=jbeehner0
+#SBATCH --partition=standard 
+#SBATCH --error=/nfs/turbo/lsa-jlucore/output_cat/uniref50_run/error_scripts/${base}_error.err
+#SBATCH --output=/nfs/turbo/lsa-jlucore/output_cat/uniref50_run/out_scripts/${base}_output.out 
+
+# Load modules environment
+source ~/.bashrc 
+conda activate biobakery3
+
+# Navigate to folder containing concatenated fastq's:
+cd /nfs/turbo/lsa-jlucore/output_cat/uniref50_run
+
+# Run humann
+humann --input $i \
+        --output hmn_output \
+        --threads 6
+
+EOT
+
+    # Submit the SBATCH script
+    sbatch ${base}_humann.sbatch
+
+done
+
+
+
+ß

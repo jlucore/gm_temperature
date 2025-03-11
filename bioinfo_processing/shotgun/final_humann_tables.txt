@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#SBATCH --job-name=make_final_tables
+#SBATCH --mail-type=ALL
+#SBATCH --nodes=1
+#SBATCH --mem-per-cpu=8G
+#SBATCH --cpus-per-task=2
+#SBATCH --time=2:00:00
+#SBATCH --account=jbeehner0
+#SBATCH --partition=standard
+#SBATCH --error=/nfs/turbo/lsa-jlucore/output_cat/uniref50_run/maketables_error.err
+#SBATCH --output=/nfs/turbo/lsa-jlucore/output_cat/uniref50_run/maketables_output.out 
+
+# Load modules environment
+source ~/.bashrc
+conda activate biobakery3
+
+# Navigate to folder containing concatenated fastq's:
+cd /nfs/turbo/lsa-jlucore/output_cat/uniref50_run
+
+# Join all gene family and pathway abudance files
+humann_join_tables --input hmn_output/ --file_name pathabundance --output humann_pathabundance.tsv
+humann_join_tables --input hmn_output/ --file_name genefamilies --output humann_genefamilies.tsv
+
+# Generate stratified tables
+humann_split_stratified_table --input humann_pathabundance.tsv --output ./
+
+# Cleaning up file structure
+mkdir hmn_pathway_abundance_files
+mkdir hmn_genefamily_abundance_files
+
+mv *pathabundance* hmn_pathway_abundance_files/.
+mv *genefamilies* hmn_genefamily_abundance_files/.
+
+# Functional assignment
+cd /nfs/turbo/lsa-jlucore/output_cat/uniref50_run/hmn_genefamily_abundance_files
+
+humann_regroup_table --input humann_genefamilies.tsv \
+        --groups uniref90_ko \
+        --output humann_genefamilies_KO.tsv
+
+humann_regroup_table --input humann_genefamilies.tsv \
+        --groups uniref90_eggnog \
+        --output humann_genefamilies_eggnog.tsv

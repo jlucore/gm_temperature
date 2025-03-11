@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Define the source and destination directories
+src_dir="/nfs/turbo/lsa-jbeehner/jlucore/CAT_GM_seqs/shotgun"
+dst_dir="$src_dir/new_headers"
+
+# Unzip all gzipped FASTQ files in the source directory
+gunzip "$src_dir"/*.gz
+
+# Remove '001' from the file names after unzipping
+for file in "$src_dir"/*_R1_001.fastq "$src_dir"/*_R2_001.fastq; do
+    mv "$file" "${file/_001/}"
+done
+
+# Create the destination directory if it doesn't exist
+mkdir -p "$dst_dir"
+
+# Loop through all R1 and R2 FASTQ files in the source directory
+for file in "$src_dir"/*_R1.fastq; do
+    # Define the corresponding R2 file
+    file_R2="${file/_R1.fastq/_R2.fastq}"
+    
+    # Define the destination files
+    dest_file_R1="$dst_dir/$(basename "$file")"
+    dest_file_R2="$dst_dir/$(basename "$file_R2")"
+    
+    # Modify the headers for R1 files
+    sed 's/ 1:N:.*$/\/1/' "$file" > "$dest_file_R1"
+    
+    # Modify the headers for R2 files
+    sed 's/ 2:N:.*$/\/2/' "$file_R2" > "$dest_file_R2"
+    
+    echo "Processed $file and $file_R2"
+done

@@ -1,0 +1,240 @@
+---
+title: "Untitled"
+author: "Lucore"
+date: "2025-02-27"
+output: html_document
+---
+
+# Notes
+For gene groups umapped values represent the total abundance of reads that failed to align to any known gene sequences and ungrouped values represent reads that mapped to known gene sequences but could not be confidently assigned to a specific functional category. For the pathways data, the unintegrated value represents the total abundance of genes that did not contribute to a pathway. 
+
+The unmapped genes represent a single unknown gene of 1 kilobase but remember that many genes are longer than 1 kilobase so the percent_unmapped category may be inflated compared to the ungrouped and mapped categories. 
+
+COMPARISON: uniref 50 versus 90 has a more relaxed gene group assignment, therefore, more genes should be assigned when using the uniref 50 data. We see this in two ways 1. uniref 50 data has a greater proportion of ungrouped genes compared to uniref 90. This means that more genes have been moved from unmapped to ungrouped because of the more flexible assignment parameters. 2. There are slightly more mapped genes with the uniref 50 database compared to the unref 90 database, so more genes were able to match to a functional assignment. Basically, it doesn't look like there is a huge difference between the two databases except with the ungrouped category. The mapped categories only show a small increase when using the uniref50. We will move forward with the uniref50 database because it is what Katie uses and the difference between the two are small. I think it is better to use the database with more mapped genes even of the assignment is more flexible because most of the capuchin gut microbiome is unmapped anyways. 
+
+# 1. Load environment
+
+```{r}
+
+library(tidyverse)
+library(phyloseq)
+
+ko_physeq_u90 <- readRDS("phyloseq_objects/ko_phylo_u90.rds")
+
+nog_physeq_u90 <- readRDS("phyloseq_objects/eggnog_phylo_u90.rds")
+
+path_physeq_u90 <- readRDS("phyloseq_objects/pathway_phylo_u90.rds")
+
+ko_physeq_u50 <- readRDS("phyloseq_objects/ko_phylo_u50.rds")
+
+nog_physeq_u50 <- readRDS("phyloseq_objects/eggnog_phylo_u50.rds")
+
+path_physeq_u50 <- readRDS("phyloseq_objects/pathway_phylo_u50.rds")
+
+
+```
+
+
+# 2. Evaluate number of unmapped and ungrouped reads
+
+## a. KO's
+
+```{r}
+
+############### Wrangle ########################
+
+ko_90 <- as.data.frame(t(otu_table(ko_physeq_u90))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped90 = (UNMAPPED/total) *100,
+         percent_ungrouped90 = (UNGROUPED/total) *100,
+         percent_mapped90 = 100 - (percent_unmapped90 + percent_ungrouped90)) %>%
+  select(percent_unmapped90, percent_ungrouped90, percent_mapped90)
+
+ko1_90 <- ko_90 %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped90, percent_ungrouped90, percent_mapped90),
+               names_to = "Category",
+               values_to = "Percentage") %>%
+  mutate(database = "uniref90")
+
+ko_50 <- as.data.frame(t(otu_table(ko_physeq_u50))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped50 = (UNMAPPED/total) *100,
+         percent_ungrouped50 = (UNGROUPED/total) *100,
+         percent_mapped50 = 100 - (percent_unmapped50 + percent_ungrouped50)) %>%
+  select(percent_unmapped50, percent_ungrouped50, percent_mapped50)
+
+ko1_50 <- ko_50 %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped50, percent_ungrouped50, percent_mapped50),
+               names_to = "Category",
+               values_to = "Percentage") %>%
+  mutate(database = "uniref50") 
+
+ko_combined <- rbind(ko1_50, ko1_90)
+
+############### Plot ########################
+
+# combined
+
+ggplot(ko_combined, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~database, ncol = 2) +  
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# Single
+
+ggplot(ko1_90, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggplot(ko1_50, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+
+## b. Pathways
+
+```{r}
+
+############### Wrangle ########################
+
+path_90 <- as.data.frame(t(otu_table(path_physeq_u90))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped90 = (UNMAPPED/total) *100,
+         percent_ungrouped90 = (UNINTEGRATED/total) *100,
+         percent_mapped90 = 100 - (percent_unmapped90 + percent_ungrouped90)) %>%
+  select(percent_unmapped90, percent_ungrouped90, percent_mapped90)
+
+path1_90 <- path_90 %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped90, percent_ungrouped90, percent_mapped90),
+               names_to = "Category",
+               values_to = "Percentage") %>%
+  mutate(database = "uniref90") 
+
+path_50 <- as.data.frame(t(otu_table(path_physeq_u50))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped50 = (UNMAPPED/total) *100,
+         percent_ungrouped50 = (UNINTEGRATED/total) *100,
+         percent_mapped50 = 100 - (percent_unmapped50 + percent_ungrouped50)) %>%
+  select(percent_unmapped50, percent_ungrouped50, percent_mapped50)
+
+path1_50 <- path_50 %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped50, percent_ungrouped50, percent_mapped50),
+               names_to = "Category",
+               values_to = "Percentage") %>%
+  mutate(database = "uniref50") 
+
+
+path_combined <- rbind(path1_50, path1_90)
+
+############### Plot ########################
+
+ggplot(path_combined, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~database, ncol = 2) +  
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#single
+
+ggplot(path1_50, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggplot(path1_90, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+```
+
+
+## c. eggnog
+
+```{r}
+
+############### Wrangle ########################
+
+nog_90 <- as.data.frame(t(otu_table(nog_physeq_u90))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped90 = (UNMAPPED/total) *100,
+         percent_ungrouped90 = (UNGROUPED/total) *100,
+         percent_mapped90 = 100 - (percent_unmapped90 + percent_ungrouped90)) %>%
+  select(percent_unmapped90, percent_ungrouped90, percent_mapped90)
+
+nog1_90 <- nog_90 %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped90, percent_ungrouped90, percent_mapped90),
+               names_to = "Category",
+               values_to = "Percentage") %>%
+  mutate(database = "uniref90")
+
+nog_50 <- as.data.frame(t(otu_table(nog_physeq_u50))) %>%
+  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
+         total = rowSums(.), 
+         percent_unmapped50 = (UNMAPPED/total) *100,
+         percent_ungrouped50 = (UNGROUPED/total) *100,
+         percent_mapped50 = 100 - (percent_unmapped50 + percent_ungrouped50)) %>%
+  select(percent_unmapped50, percent_ungrouped50, percent_mapped50)
+
+nog1_50 <- nog_50 %>%
+  rownames_to_column("sample") %>%
+  pivot_longer(cols = c(percent_unmapped50, percent_ungrouped50, percent_mapped50),
+               names_to = "Category",
+               values_to = "Percentage") %>%
+  mutate(database = "uniref50") 
+
+nog_combined <- rbind(nog1_50, nog1_90)
+
+############### Plot ########################
+
+# combined
+
+ggplot(nog_combined, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~database, ncol = 2) +  
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+# Single
+
+ggplot(nog1_90, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggplot(nog1_50, aes(x = sample, y = Percentage, fill = Category)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Percentage", fill = "Category") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+
+
+
+

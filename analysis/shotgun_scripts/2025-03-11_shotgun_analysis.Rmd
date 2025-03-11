@@ -1,9 +1,17 @@
 ---
-title: "Untitled"
+title: "2025-03-11 shotgun analysis"
 author: "Lucore"
-date: "2025-02-18"
+date: "2025-03-11"
 output: html_document
 ---
+
+
+Notes: Most up to date analysis for the shotgun data. Have decided to use the uniref 50 data based on decisoins from the 2025-02-27_unmapped_reads scripts. We are also only going to work with the KO's for now since we have determiend that the databases are redunant with one another, you can't just combine them because the points aren't independent. 
+
+Here we are working on the DAA analysis and left this where the warning message won't update because four groups aren't converging but I can't figure out which ones they are. 
+
+Next up is to figure this out and then filter out the ones that haven't converged based on large CI's and then interpret the results. Then think about doing this for the lvl three groups and figuring out a good visualization. 
+
 
 # 1. Load environment
 
@@ -32,97 +40,13 @@ conflict_prefer("select", "dplyr")
 conflicts_prefer(dplyr::filter)
 
 
-ko_physeq <- readRDS("phyloseq_objects/ko_phylo.rds")
-
-nog_physeq <- readRDS("phyloseq_objects/eggnog_phylo.rds")
-
-path_physeq <- readRDS("phyloseq_objects/pathway_phylo.rds")
+ko_physeq_u50 <- readRDS("phyloseq_objects/ko_phylo_u50.rds")
 
 
 ```
 
 
-# 2. Evaluate number of unmapped and ungrouped reads
-
-For gene groups umapped values represent the total abundance of reads that failed to align to any known gene sequences and ungrouped values represent reads that mapped to known gene sequences but could not be confidently assigned to a specific functional category. For the pathways data, the unintegrated value represents the total abundance of genes that did not contribute to a pathway. 
-
-The unmapped genes represent a single unknown gene of 1 kilobase but remember that many genes are longer than 1 kilobase so the percent_unmapped category may be inflated ucompared to the ungrouped and mapped categories. 
-
-IMPORTANT: These are the values for for the uniref90 database, you will need to repeat with the uniref50 database to investigate if the mapped values improve. 
-
-```{r}
-
-################## KO ################################
-
-ko <- as.data.frame(t(otu_table(ko_physeq))) %>%
-  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
-         total = rowSums(.), 
-         percent_unmapped = (UNMAPPED/total) *100,
-         percent_ungrouped = (UNGROUPED/total) *100,
-         percent_mapped = 100 - (percent_unmapped + percent_ungrouped)) %>%
-  select(percent_unmapped, percent_ungrouped, percent_mapped)
-
-ko1 <- ko %>%
-  rownames_to_column("sample") %>%
-  pivot_longer(cols = c(percent_unmapped, percent_ungrouped, percent_mapped),
-               names_to = "Category",
-               values_to = "Percentage") 
-
-
-ggplot(ko1, aes(x = sample, y = Percentage, fill = Category)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Sample", y = "Percentage", fill = "Category") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
-################## EGGNOG ################################
-
-nog <- as.data.frame(t(otu_table(nog_physeq))) %>%
-  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
-         total = rowSums(.), 
-         percent_unmapped = (UNMAPPED/total) *100,
-         percent_ungrouped = (UNGROUPED/total) *100,
-         percent_mapped = 100 - (percent_unmapped + percent_ungrouped)) %>%
-  select(percent_unmapped, percent_ungrouped, percent_mapped)
-
-nog1 <- nog %>%
-  rownames_to_column("sample") %>%
-  pivot_longer(cols = c(percent_unmapped, percent_ungrouped, percent_mapped),
-               names_to = "Category",
-               values_to = "Percentage") 
-
-ggplot(nog1, aes(x = sample, y = Percentage, fill = Category)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Sample", y = "Percentage", fill = "Category") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
-################## PATHWAY ################################
-
-path <- as.data.frame(t(otu_table(path_physeq))) %>%
-  mutate(feature_sum = rowSums(select(., starts_with("K")), na.rm = TRUE),
-         total = rowSums(.), 
-         percent_unmapped = (UNMAPPED/total) *100,
-         percent_ungrouped = (UNINTEGRATED/total) *100,
-         percent_mapped = 100 - (percent_unmapped + percent_ungrouped)) %>%
-  select(percent_unmapped, percent_ungrouped, percent_mapped)
-
-path1 <- path %>%
-  rownames_to_column("sample") %>%
-  pivot_longer(cols = c(percent_unmapped, percent_ungrouped, percent_mapped),
-               names_to = "Category",
-               values_to = "Percentage") 
-
-ggplot(path1, aes(x = sample, y = Percentage, fill = Category)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Sample", y = "Percentage", fill = "Category") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
-
-```
-
-
-# 3. Data set up
+# 2. Data set up
 
 ## a. Filter metadata
 
@@ -130,7 +54,7 @@ decided to use the 87 samples that have feed data associated with them because I
 
 ```{r}
 
-m <- data.frame(sample_data(ko_physeq)) %>% # extract metadata 
+m <- data.frame(sample_data(ko_physeq_u50)) %>% # extract metadata 
   rownames_to_column("sample") %>%
   rename(temp = max_t_days15,
          rain = rain_days4,
@@ -139,69 +63,26 @@ m <- data.frame(sample_data(ko_physeq)) %>% # extract metadata
 
 m_filtered <- m[!is.na(m$fruit), ] # remove samples with no diet data, drops 8 samples
 
-# filter phylozeq objects to remove samples with no diet data 
-ko_physeq2 <- prune_samples(m_filtered$sample, ko_physeq) # filter physeq object
+# filter phyloseq objects to remove samples with no diet data 
+ko_physeq2 <- prune_samples(m_filtered$sample, ko_physeq_u50) # filter physeq object
 ko_physeq2 <- prune_taxa(taxa_sums(ko_physeq2) > 0, ko_physeq2) # remove ASV's with zero abundance
-
-nog_physeq2 <- prune_samples(m_filtered$sample, nog_physeq) # filter physeq object
-nog_physeq2 <- prune_taxa(taxa_sums(nog_physeq2) > 0, nog_physeq2) # remove ASV's with zero abundance
-
-path_physeq2 <- prune_samples(m_filtered$sample, path_physeq) # filter physeq object
-path_physeq2 <- prune_taxa(taxa_sums(path_physeq2) > 0, path_physeq2) # remove ASV's with zero abundance
 
 ```
 
-## b. Prevalence filtering 
+## b. Prevalence filtering
 
-hold off on prev filtering for now... our filter for the 16s data "remove features that are not present in at least 0.5% of total samples" doesn't remove anything here because that filter that the feature needs to be in at least one sample for this data.  
+hold off on prev filtering for now... our filter for the 16s data "remove features that are not present in at least 0.5% of total samples" doesn't remove anything here because that filter that the feature needs to be in at least one sample for this data. 
+
+Unapped values represent the total abundance of reads that failed to align to any known gene sequences and ungrouped values represent reads that mapped to known gene sequences but could not be confidently assigned to a specific functional category.
 
 We are going to remove the UNMAPPED and UNGROUPED reads so that we can just compared the mapped reads for each sample. Removing the UNGROUPED reads because we can think of this as taxa with no phylum assignment. 
-
 Need to think about removing KO's that don't have any functional assignment (similar to the argument of removing ASV's with no phylum assignment)
 
 ```{r}
 
-# calculate many samples did each taxa appear at least once
-#prev0 = apply(X = otu_table(path_physeq),
- #               MARGIN = ifelse(taxa_are_rows(path_physeq), yes = 1, no = 2),
-  #              FUN = function(x){sum(x > 0)})
-
-# make a dataframe that shows the prevalence (how many sample did the taxa show up in) and total abundance (total reads of that taxa) with taxonomy 
-#prevdf = data.frame(Prevalence = prev0,
-#                      TotalAbundance = taxa_sums(path_physeq),
- #                     tax_table(path_physeq))
-
-# define prevalence threshold
-#prevalenceThreshold = 0.005 * nsamples(path_physeq)  
-#prevalenceThreshold # must appear in at least two samples
-
-# plot prevalence threshold
-#ggplot(prevdf, aes(TotalAbundance, Prevalence)) +
-#  geom_hline(yintercept = prevalenceThreshold, alpha = 0.5, linetype = 2) +
-#  geom_point(size = 2, alpha = 0.7) +
-#  scale_y_log10() + scale_x_log10() +
-#  xlab("Total Abundance") +
-#  theme_minimal()
-
-## summary stats ##
-#asv_onesample <- nrow(prevdf[prevdf$Prevalence == 1,]) # number of ASV's present only in one sample
-#total_asv <- nrow(prevdf)
-#percent_onesample <- (asv_onesample/total_asv) * 100 # perent ASV's in only one sample
-
-## execute prevalence filter ##
-#ko_filtered <- prune_taxa((prev0 > prevalenceThreshold), ko_physeq) 
-#ko_filtered
-
 ####### remove UNMAPPED and UNGROUPED reads #######
 
-
 ko_filtered <- subset_taxa(ko_physeq2, 
-                                !(grepl("UNMAPPED", gene_ko) | grepl("UNGROUPED", gene_ko)))
-
-path_filtered <- subset_taxa(path_physeq2, 
-                                !(grepl("UNMAPPED", pathway) | grepl("UNINTEGRATED", pathway)))
-
-nog_filtered <- subset_taxa(nog_physeq2, 
                                 !(grepl("UNMAPPED", gene_ko) | grepl("UNGROUPED", gene_ko)))
 
 ```
@@ -226,40 +107,8 @@ ko_alpha <- as.data.frame(colSums(otu_table(ko_filtered) > 0)) %>%
 hist(ko_alpha$ko_shannon) 
 hist(ko_alpha$ko_observed) 
 
-#########################
-
-nog_shannon <- estimate_richness(nog_filtered, measures = "Shannon") %>%
-  rownames_to_column(var = "sample") %>%
-  rename(nog_shannon = Shannon) 
-
-nog_alpha <- as.data.frame(colSums(otu_table(nog_filtered) > 0)) %>%
-  rename(nog_observed = 'colSums(otu_table(nog_filtered) > 0)') %>%
-  rownames_to_column(var = "sample") %>%
-  full_join(nog_shannon, by = "sample")
-
-hist(nog_alpha$nog_shannon) 
-hist(nog_alpha$nog_observed) 
-
-#########################
-
-path_shannon <- estimate_richness(path_filtered, measures = "Shannon") %>%
-  rownames_to_column(var = "sample") %>%
-  rename(path_shannon = Shannon) 
-
-path_alpha <- as.data.frame(colSums(otu_table(path_filtered) > 0)) %>%
-  rename(path_observed = 'colSums(otu_table(path_filtered) > 0)') %>%
-  rownames_to_column(var = "sample") %>%
-  full_join(path_shannon, by = "sample")
-
-hist(path_alpha$path_shannon) 
-hist(path_alpha$path_observed)
-
-#########################
-
 m1 <- m_filtered %>% # add to metadata
-  left_join(ko_alpha, by = "sample") %>%
-  left_join(nog_alpha, by = "sample") %>%
-  left_join(path_alpha, by = "sample")
+  left_join(ko_alpha, by = "sample")
 
 ```
 
@@ -285,48 +134,7 @@ ko_d.mvar <- sum(ko_pca$sdev^2) # total variance
 ko_PC1 <- paste("PC1 ","(",round(sum(ko_pca$sdev[1]^2)/ko_d.mvar, 3)*100,"%",")",sep="") # PC1 30.8%
 ko_PC2 <- paste("PC2 ","(",round(sum(ko_pca$sdev[2]^2)/ko_d.mvar, 3)*100,"%",")",sep="") # PC2 12.5%
 
-############################################
-
-nog_table <- as.matrix(t(otu_table(nog_filtered)))
-nog_table[1:5,1:5] # rows are samples 
-
-nog_czm <- cmultRepl(nog_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
-nog_czm[1:5,1:5] # rows are samples 
-
-nog_clr <- t(apply(nog_czm, 1, function(x){log(x) - mean(log(x))})) # must transpose again
-nog_clr[1:5,1:5] # rows are samples 
-
-nog_pca <- prcomp(nog_clr) # calc pca
-plot(nog_pca$x[,1], nog_pca$x[,2]) # plot 
-
-nog_d.mvar <- sum(nog_pca$sdev^2) # total variance
-nog_PC1 <- paste("PC1 ","(",round(sum(nog_pca$sdev[1]^2)/nog_d.mvar, 3)*100,"%",")",sep="") # PC1 27.2%
-nog_PC2 <- paste("PC2 ","(",round(sum(nog_pca$sdev[2]^2)/nog_d.mvar, 3)*100,"%",")",sep="") # PC2 14.1%
-
-
-############################################
-
-path_table <- as.matrix(t(otu_table(path_filtered)))
-path_table[1:5,1:5] # rows are samples 
-
-path_czm <- cmultRepl(path_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
-path_czm[1:5,1:5] # rows are samples 
-
-path_clr <- t(apply(path_czm, 1, function(x){log(x) - mean(log(x))})) # must transpose again
-path_clr[1:5,1:5] # rows are samples 
-
-path_pca <- prcomp(path_clr) # calc pca
-plot(path_pca$x[,1], path_pca$x[,2]) # plot 
-
-path_d.mvar <- sum(path_pca$sdev^2) # total variance
-path_PC1 <- paste("PC1 ","(",round(sum(path_pca$sdev[1]^2)/path_d.mvar, 3)*100,"%",")",sep="") # PC1 26.7%
-path_PC2 <- paste("PC2 ","(",round(sum(path_pca$sdev[2]^2)/path_d.mvar, 3)*100,"%",")",sep="") # PC2 9.9%
-
-```
-
-## e. Add PCA values to metadata
-
-```{r}
+######### Add PCA values to metadata #########
 
 ko_df<-data.frame(ko_pca$x)
 ko_df$sample<-rownames(ko_df)
@@ -334,31 +142,15 @@ ko_df_small <- ko_df %>%
   select(c(1:4,88)) %>%
   rename_with(~paste0("ko_", .), starts_with("PC"))
 
-nog_df<-data.frame(nog_pca$x)
-nog_df$sample<-rownames(nog_df)
-nog_df_small <- nog_df %>% 
-  select(c(1:4,88)) %>%
-  rename_with(~paste0("nog_", .), starts_with("PC"))
-
-path_df<-data.frame(path_pca$x)
-path_df$sample<-rownames(path_df)
-path_df_small <- path_df %>% 
-  select(c(1:4,88)) %>%
-  rename_with(~paste0("path_", .), starts_with("PC"))
-
 # add to metadata
 m2 <- m1 %>%
-  left_join(ko_df_small, by = "sample") %>%
-  left_join(nog_df_small, by = "sample") %>%
-  left_join(path_df_small, by = "sample")
+  left_join(ko_df_small, by = "sample") 
 
 ```
 
 ## f. prep data for modeling
 
 scale variables and make categorical variables factors
-
-make all palmas sampels tenori, only 6 palmas samples not enough to estimate effect 
 
 ```{r}
 
@@ -379,16 +171,29 @@ m_model <- m2 %>%
 
 everything seems normally distributed enough to model with Gaussian except for the Shannon index of the eggnog families which is pretty right skewed but I'm going to move forward with the normal distribution for simplicity of these models and then I can come back to tweak this later if I think it is necessary. 
 
+Going to need to think about how the observed effect size is on a totally difference scale than the shannon diversity effect, which is makeing all of the other effects look quire small
+
 main results here: for the functional metrics, it does not seem like temperature is related to shannon's diversity but it is realted to the PC's and observed gene families. Why is it not related to alpha diversity? Even though taxonomic shannon diversity may decrease at high temperatures, functional alpha diversity may be more resilient to this because many taxa have similar genes and similar functions? However, we don't see the same thing for observed gene families, could speak more to that there is still a decrease in number of functional annotations but the evenness is relatively stable in the community  
 
 ```{r}
 
+####### histogranms ########
+
+hist(m_model$ko_shannon) 
+hist(m_model$ko_observed) 
+hist(m_model$ko_PC1)
+hist(m_model$ko_PC2)
+hist(m_model$ko_PC3)
+hist(m_model$ko_PC4)
+
+############ loop  #################
+
 com_coef <- list() 
 com_aic <- list()
 
-com_features <- colnames(m_model)[c(15:32)] # list of features to model
+com_features <- colnames(m_model)[c(15:20)] # list of features to model
 
-############ loop  #################
+
 for (i in com_features) {
       
       formula_main <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + (1 | ID) + offset(log(reads))"))
@@ -441,6 +246,11 @@ for (i in com_features) {
 com_aic <- do.call(rbind, com_aic)
 com_coef <- do.call(rbind, com_coef)
 
+```
+
+## b. plot results
+
+```{r}
 
 #### plot ####
 
@@ -504,7 +314,6 @@ p2
 
 ```
 
-
 # 4. Data set up for DAA
 
 ## a. Agglomeration at brite levels
@@ -514,6 +323,7 @@ Agglomerate KO's at Brite level 2 and Pathway level from the Keg orthology datab
 websie that explains KEG orthology database https://www.genome.jp/kegg/ko.html
 json download for KEG orthology assignment: https://www.genome.jp/kegg-bin/get_htext?ko00001.keg
 github page with function to clean json: https://gist.github.com/cmkobel/c2f76359eb17e0c00ddd4e83e90bdf99
+
 
 ```{r}
 
@@ -527,7 +337,7 @@ brite_parsed <- kegg_parse_json(brite) %>%
 #################### brite level2 ####################################
 
 brite_level2 <- brite_parsed[,c(2,5)]
-length(unique(brite_level2$b_class)) # 57 unique brite level 2
+length(unique(brite_level2$lvl2)) # 57 unique brite level 2
 
 # agglomerate at brite level 2
 lvl2_abund_ko <- ko_clr %>%
@@ -537,7 +347,7 @@ lvl2_abund_ko <- ko_clr %>%
   left_join(brite_level2, by = "reaction_ko", relationship = "many-to-many") %>%
   mutate(lvl2 = replace_na(lvl2, "no_assignment"))
 
-length(unique(lvl2_abund_ko$b_class)) # 55 lvl2, 1 no_assignment
+length(unique(lvl2_abund_ko$lvl2)) # 55 lvl2, 1 no_assignment
 
 unique_lvl2 <- unique(lvl2_abund_ko$lvl2)
 missing_lvl2 <- brite_level2[!(brite_level2$lvl2 %in% unique_lvl2), ]
@@ -586,11 +396,12 @@ unique_samples <- length(unique(lvl3_abund$sample))
 
 ```
 
-## b. Plot distribution 
+## b. Plot distribution
 
 distribution of clr abundances looks kind of normal for the level 2 agglomerations, level 3 doesn't look great but we'll proceed with the normal distribution because I think it is the most appropriate for the clr abundances given that there are negative and positive values
 
 ```{r}
+
 ################## lvl2 ######################
 
 # plot ditribution 
@@ -621,35 +432,6 @@ for (i in seq(1, length(plot_list), by = 3)) {
 
 dev.off()
 
-################## lvl3 ######################
-
-# plot ditribution 
-pdf("figures/lvl3_distributions.pdf", width = 8, height = 11)  
-
-plot_list <- list()
-
-# loop
-for (i in unique(lvl3_abund$lvl3)) {
-  
-  data <- subset(lvl3_abund, lvl3 == i)
-  
-  p <- ggplot(data, aes(x = clr_abundance)) +
-    geom_histogram(bins = 15) +
-    theme_minimal() +
-    labs(title = paste("Distribution for", i)) 
-  
-  plot_list[[i]] <- p
-}
-
-# save plots in groups of 3 per page
-for (i in seq(1, length(plot_list), by = 3)) {
-  
-  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
-  
-  grid.arrange(grobs = batch_plots, ncol = 1)
-}
-
-dev.off()
 
 ```
 
@@ -664,27 +446,127 @@ ex. not interested in:
 09190 Not Included in Pathway or Brite
 
 
-```{r}
-
-```
-
 ## d. Scale variables
 
+have to do this manually because scale function not working within the tidyverse mutate() command for some reason
+
 ```{r}
 
+# Scale variables
 
+lvl2_abund$temp_s <-  my_scale(lvl2_abund$temp) 
+lvl2_abund$rain_s <-  my_scale(lvl2_abund$rain)
+lvl2_abund$age_s <-  my_scale(lvl2_abund$age)
+lvl2_abund$fruit_s <-  my_scale(lvl2_abund$fruit)
 
+lvl2_abund <- lvl2_abund %>%
+  mutate(ID = as.factor(ID),
+         sex = as.factor(sex)) 
+
+length(unique(lvl2_abund$lvl2)) # 56 unique groups
 
 ```
 
 
+# 5. Temperature abundance testing
 
+my warning message isn't working, four of them aren't converging but the warning message isn't updating to tell me which four aren't converging
 
+```{r}
 
+coef <- list()
+aic <- list()
+model_results <- list()
 
+# loop
+for (i in unique(lvl2_abund$lvl2)) {
+  tryCatch({
+    
+    # subset based on taxa
+    data <- droplevels(subset(lvl2_abund, lvl2 == i))
+    
+    # convergence warning variable
+    warning_msg <- "No Warning"
+    
+    withCallingHandlers({
 
+      m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+               data = data)
 
+      m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+               data = data) 
+      
+    }, warning = function(w) {
+   
+      warning_msg <<- conditionMessage(w)
+  
+      if (grepl("boundary (singular) fit: see help('isSingular')", warning_msg)) {
+      warning_msg <<- "Convergence Warning"  # update warning variable
+      } 
+    })
+    
+    # AICc
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+    
+     # extract taxa coef
+    coef_value <- round(summary(m_full)$coefficient[7, 1], 4)
+    
+    # extract se
+    std_value <- round(summary(m_full)$coefficient[7, 2], 4)
+    
+    # calc CI's
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+      
+      #create data frames
+    aic_df <- data.frame(
+        lvl2 = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3),
+        Warning = warning_msg,
+        stringsAsFactors = FALSE)
+    
+    results_df <- data.frame(
+      lvl2 = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE)
+    
+  options(scipen = 999)  
 
+    model_results_df <- data.frame(
+      lvl2 = i,
+      Predictor = rownames(summary(m_full)$coefficients)[2:7],
+      Coefficient = round(summary(m_full)$coeff[c(2:7), 1], 4),
+      StdError = round(summary(m_full)$coeff[c(2:7), 2], 4),
+      stringsAsFactors = FALSE)
+  
+      # save results
+    aic[[i]] <- aic_df
+    coef[[i]] <- results_df
+    model_results[[i]] <- model_results_df
+      
+  }, error = function(e) {
+
+    message(paste("Error with Taxa:", i, "- Skipping."))  # skip to next taxa if error
+    
+  })
+}
+
+# combine results
+aic <- do.call(rbind, aic)
+coef <- do.call(rbind, coef)
+model_results <- do.call(rbind, model_results)
+
+```
 
 
 
@@ -694,76 +576,22 @@ ex. not interested in:
 
 # extra code
 
-hand build models for community features
-
 ```{r}
 
-hist(m_model$ko_shannon) 
-hist(m_model$ko_observed) 
-hist(m_model$ko_PC1) 
-hist(m_model$ko_PC2)
-hist(m_model$ko_PC3)
-hist(m_model$ko_PC4)
+ 
+t <- lvl2_abund %>% filter(lvl2 == '09122 Translation' | lvl2 == "09121 Transcription")
+
+t <- lvl2_abund %>% filter(lvl2 == "09121 Transcription")
+    
+
+m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+               data = t)
+
+m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+               data = t)
 
 
-main <- lmer(ko_PC1 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + (1 | ID),
-                data = m_model)
-summary(main)
-
-full <- lmer(ko_PC1 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + temp_s + (1 | ID) + offset(log(reads)),
-                data = m_model)
-summary(full)
-
-AICctab(full, main, weights = TRUE)
-
-
-hist(m_model$path_shannon) 
-hist(m_model$path_observed) 
-hist(m_model$path_PC1) 
-hist(m_model$path_PC2)
-hist(m_model$path_PC3)
-hist(m_model$path_PC4)
-
-main <- lmer(path_shannon ~ group + age_s + sex + rain_s + fruit_s + residuals_s + (1 | ID) + offset(log(reads)),
-                data = m_model)
-summary(main)
-
-full <- lmer(path_shannon ~ group + age_s + sex + rain_s + fruit_s + residuals_s + temp_s + (1 | ID) + offset(log(reads)),
-                data = m_model)
-summary(full)
-
-AICctab(full, main, weights = TRUE)
-
-
-hist(m_model$nog_shannon)
-hist(m_model$nog_observed) 
-hist(m_model$nog_PC1) 
-hist(m_model$nog_PC2)
-hist(m_model$nog_PC3)
-hist(m_model$nog_PC4)
-
-main <- lmer(nog_PC4 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + (1 | ID) + offset(log(reads)),
-                data = m_model)
-summary(main)
-
-full <- lmer(nog_PC4 ~ group + age_s + sex + rain_s + fruit_s + residuals_s + temp_s + (1 | ID) + offset(log(reads)),
-                data = m_model)
-summary(full)
-
-AICctab(full, main, weights = TRUE)
 
 ```
 
-tesing agglomeration of lvls
-
-```{r}
-
-
-
-test <- abundance_with_brite %>% 
-  filter(sample_id == "001-494MAN-CIMI-CR-23-JL") %>%
-  filter(b_class == "09101 Carbohydrate metabolism") %>%
-  summarise(total = sum(abundance))
-
-```
 

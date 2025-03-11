@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#SBATCH --job-name=concatenate
+#SBATCH --mail-type=ALL
+#SBATCH --nodes=1
+#SBATCH --mem-per-cpu=1G
+#SBATCH --cpus-per-task=1
+#SBATCH --time=5:00:00
+#SBATCH --account=jbeehner0
+#SBATCH --partition=standard 
+#SBATCH --error=concatenate.err
+#SBATCH --output=concatenate.out
+
+# Navigate to folder containing fastq files
+cd /nfs/turbo/lsa-jbeehner/jlucore/CAT_GM_seqs/shotgun/new_headers/kneaddata_out/paired_final
+
+# Concatenate files
+mkdir output_cat
+
+for name in *_kneaddata_paired_1.fastq; do
+    other="${name/_paired_1/_paired_2}"
+    cat "$name" "$other" > output_cat/"$name"
+done
+
+cd output_cat
+
+for file in *; do mv "${file}" "${file/_R1_kneaddata_paired_1/}"; done
