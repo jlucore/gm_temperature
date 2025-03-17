@@ -8,10 +8,13 @@ output: html_document
 
 Notes: Most up to date analysis for the shotgun data. Have decided to use the uniref 50 data based on decisoins from the 2025-02-27_unmapped_reads scripts. We are also only going to work with the KO's for now since we have determiend that the databases are redunant with one another, you can't just combine them because the points aren't independent. 
 
-Here we are working on the DAA analysis and left this where the warning message won't update because four groups aren't converging but I can't figure out which ones they are. 
+Here we are working on the DAA analysis. Left this where I ran the DAA analysis, found that the effect sizes aren't super reliable but the temp model fits best for the majority of lvl2 and lvl3 categories. Then found that GAM's aren't saying much here, most of the model weights are evenly split between the model with the temp spline and the model without the temp spline. Probably need to give up on the GAM's for this data but I would like to summarize them in a script for evidence that I did the compairson and it didn't work. 
 
-Next up is to figure this out and then filter out the ones that haven't converged based on large CI's and then interpret the results. Then think about doing this for the lvl three groups and figuring out a good visualization. 
+If we aren't going to be able to say much about individual KO direction of effects, might be a god idea to bring back in the pathway data for the community analysis and possible run a DAA analysis on that data? 
 
+finally, is there a way that makes sense to visualuze the results from the DAA? Even though the effect sizes aren't reliable, are there functional groups that are broadly negaitve and broadly positiev? Can we draw more conclusions from this data? I want to push this a bit more before giving up. 
+
+Finally, we will need to figure out how to incoporate the neopterin data. Is there an analysis we could do or a figure I could make to summarize the stratefied data? 
 
 # 1. Load environment
 
@@ -439,7 +442,7 @@ dev.off()
 
 not sure how to do this with clr transformed values....... maybe I just shouldn't. Lets move on the the daa of the lvl2's and see how it goes
 
-maybe instead of abundance filtering we only filter for the lvls we are interested in, we should probably remove unknowns and unnasigns, and not well described etc. 
+maybe instead of abundance filtering we only filter for the lvls we are interested in, we should probably remove unknowns and unnasigns, and not well described etc. and the assignmentsf from the human disease caetgory
 
 ex. not interested in: 
 
@@ -465,12 +468,30 @@ lvl2_abund <- lvl2_abund %>%
 
 length(unique(lvl2_abund$lvl2)) # 56 unique groups
 
+
+lvl3_abund$temp_s <-  my_scale(lvl3_abund$temp) 
+lvl3_abund$rain_s <-  my_scale(lvl3_abund$rain)
+lvl3_abund$age_s <-  my_scale(lvl3_abund$age)
+lvl3_abund$fruit_s <-  my_scale(lvl3_abund$fruit)
+
+lvl3_abund <- lvl3_abund %>%
+  mutate(ID = as.factor(ID),
+         sex = as.factor(sex)) 
+
+length(unique(lvl3_abund$lvl3)) # 526 unique groups
+
 ```
 
 
 # 5. Temperature abundance testing
 
-my warning message isn't working, four of them aren't converging but the warning message isn't updating to tell me which four aren't converging
+Only using lvl2 now but should probably also try lvl3. Think about removing the groups you are not interested in, like unnasigned and the drug/disease groups
+
+## a. run loop
+
+Had to change the way I track convergence errors for this loop because I'm using lmer insteatd of glmer. 
+
+two don't converge 
 
 ```{r}
 
@@ -478,58 +499,51 @@ coef <- list()
 aic <- list()
 model_results <- list()
 
-# loop
 for (i in unique(lvl2_abund$lvl2)) {
   tryCatch({
-    
-    # subset based on taxa
+
+    # Subset based on taxa
     data <- droplevels(subset(lvl2_abund, lvl2 == i))
-    
-    # convergence warning variable
+
+    # Default warning message
     warning_msg <- "No Warning"
-    
-    withCallingHandlers({
 
-      m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
-               data = data)
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
 
-      m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
-               data = data) 
-      
-    }, warning = function(w) {
-   
-      warning_msg <<- conditionMessage(w)
-  
-      if (grepl("boundary (singular) fit: see help('isSingular')", warning_msg)) {
-      warning_msg <<- "Convergence Warning"  # update warning variable
-      } 
-    })
-    
-    # AICc
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
     AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
     AICc$model <- rownames(AICc)
-    
-     # extract taxa coef
-    coef_value <- round(summary(m_full)$coefficient[7, 1], 4)
-    
-    # extract se
-    std_value <- round(summary(m_full)$coefficient[7, 2], 4)
-    
-    # calc CI's
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s", 1], 4)
+    std_value <- round(summary(m_full)$coefficients["temp_s", 2], 4)
+
+    # Calculate Confidence Intervals
     Lower_95 <- coef_value - 1.96 * std_value
     Upper_95 <- coef_value + 1.96 * std_value
     Lower_50 <- coef_value - 0.6745 * std_value
     Upper_50 <- coef_value + 0.6745 * std_value
-      
-      #create data frames
+
+    # Create data frames
     aic_df <- data.frame(
-        lvl2 = i, 
-        model = AICc$model,
-        dAICc = round(AICc$dAICc,3),
-        weight = round(AICc$weight, 3),
-        Warning = warning_msg,
-        stringsAsFactors = FALSE)
-    
+      lvl2 = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
     results_df <- data.frame(
       lvl2 = i, 
       coef = coef_value,
@@ -538,26 +552,22 @@ for (i in unique(lvl2_abund$lvl2)) {
       high_ci_95 = Upper_95,
       low_ci_50 = Lower_50,
       high_ci_50 = Upper_50,
-      stringsAsFactors = FALSE)
-    
-  options(scipen = 999)  
+      stringsAsFactors = FALSE
+    )
 
     model_results_df <- data.frame(
       lvl2 = i,
-      Predictor = rownames(summary(m_full)$coefficients)[2:7],
-      Coefficient = round(summary(m_full)$coeff[c(2:7), 1], 4),
-      StdError = round(summary(m_full)$coeff[c(2:7), 2], 4),
-      stringsAsFactors = FALSE)
-  
-      # save results
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
     aic[[i]] <- aic_df
     coef[[i]] <- results_df
     model_results[[i]] <- model_results_df
-      
-  }, error = function(e) {
 
-    message(paste("Error with Taxa:", i, "- Skipping."))  # skip to next taxa if error
-    
   })
 }
 
@@ -566,7 +576,229 @@ aic <- do.call(rbind, aic)
 coef <- do.call(rbind, coef)
 model_results <- do.call(rbind, model_results)
 
+
 ```
+
+## b. select taxa
+
+```{r}
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(aic$lvl2[aic$Warning == "Convergence Warning"]) # 2 do not converge
+length(convergence_warnings)
+
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- model_results %>% 
+  filter(StdError > 100) %>%
+  pull(lvl2) %>%
+  unique() 
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 5 do not converge
+
+
+# remove error taxa
+lvl2_abund2 <- lvl2_abund %>% filter(!lvl2 %in% errors)
+length(unique(lvl2_abund2$lvl2)) # 51 remaining 
+
+coef2 <- coef %>% filter(!lvl2 %in% errors)
+length(coef2$lvl2)
+
+aic2 <- aic %>% filter(!lvl2 %in% errors)
+length(aic2$lvl2) # 324/2 = 162
+
+# filter for taxa where full model fits best
+temp_filter <- aic2 %>%
+  group_by(lvl2) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl2) 
+length(unique(temp_filter)) # temp model fits best for all
+
+
+## only filter for ones where temp fits best
+#filtered_coef <- coef2 %>% filter(lvl2 %in% temp_filter)
+#length(filtered_coef$lvl3)
+
+#filtered_aic <- aic2 %>%filter(lvl3 %in% temp_filter)
+#length(filtered_aic$lvl3)
+
+```
+
+
+## c. coef plot
+
+results: for every lvl2 category the temp model fits better, over 85% of the model weight. 35 out of 16 cetgroies have a negative coefficient but none have reliable confidence intervals. Seem like termperature is important for abundance of functional genes but we don't have a lot of certainty about the direction. Still, the maximum likelihood is the best estimate and the majority of the effects are negative so it seems like there is a negative effect on both taxa abundances and abundances of functional genes 
+
+```{r}
+
+plot_coef <- coef2 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         lvl2 = reorder(lvl2, -coef))
+
+table(plot_coef$direction)
+         
+p1 <- ggplot(plot_coef, aes(x = lvl2, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) 
+p1
+
+# Reshape data
+aic_long <- aic2 %>%
+  select(lvl2, model, weight) %>%
+  spread(key = model, value = weight)
+
+# Plot model weights
+p2 <- ggplot(aic_long, aes(y = lvl2)) +
+  # Plot m_full (on the left side)
+  geom_bar(stat = "identity", aes(x = -m_full, fill = "m_full"), position = "identity", width = 0.4) +
+  # Plot m_main (on the right side)
+  geom_bar(stat = "identity", aes(x = m_main, fill = "m_main"), position = "identity", width = 0.4) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") +
+  scale_fill_manual(values = c("m_full" = "#bc80bd", "m_main" = "#fdb462")) +
+  scale_x_continuous(
+    breaks = c(-1, -0.5, 0, 0.5, 1),   
+    labels = c("1", "0.5", "0", "0.5", "1"),
+    expand = c(0.05, 0.05)) +
+  labs(x = "Model Weight", y= "", fill = "Model") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  annotate("text", x = -0.7, y = "no_assignment", label = "interaction model", color = "white", size = 5, fontface = "bold") +
+  annotate("text", x = 0.3, y = "no_assignment", label = "base model", color = "#fdb462", size = 5, fontface = "bold")
+p2  
+
+```
+
+
+# 6. Fit GAMS 
+
+do they have certain shapes over different temps? Try all first and then just the negative ones? 
+
+## a. AIC comparison
+
+There doesn't seem to be a purpose of doing this with the shotgun data. I out of 51 lvl2's the gAM fits SLIGHTLY etter and about 27 out of 441 of the lvl3 the gam fits slightly better. Not much certainty around this effect. Not sure if pursuing this is the right thing to do. 
+
+```{r}
+
+# filter abundance
+#smooth_abund <- lvl3_abund3 %>% filter(lvl3 %in% temp_filter)
+#length(unique(smooth_abund$lvl3))
+
+
+gam_results <- list()
+
+for (i in unique(lvl2_abund2$lvl2)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(lvl2_abund2, lvl2 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- gam(clr_abundance ~ age_s + s(temp_s) + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = data)
+    
+    m_main <- gam(clr_abundance ~ age_s + temp_s + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = data)
+
+  }, warning = function(w) {
+   
+      warning_msg <- conditionMessage(w)
+  
+      if (grepl("Fitting terminated with step failure", warning_msg)) {
+      warning_msg <<- "Convergence Warning"  # Update the warning message
+      } 
+    })
+
+    # compare with AICctab
+      AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+      AICc$model <- rownames(AICc)
+      
+      #create data frame
+      results_df <- data.frame(
+        lvl2 = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3),
+        Warning = warning_msg,
+        stringsAsFactors = FALSE
+      )
+  
+      # store results
+      gam_results[[i]] <- results_df
+}
+
+# combine results 
+gam_results <- do.call(rbind, gam_results)
+
+
+#Filter for taxa where m_full best fit
+gam_filter <- gam_results %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl2)
+length(gam_filter) # 36 taxa 
+  
+# filter abundance
+smooth_abund <- negtemp_abund %>% filter(Taxa %in% gam_filter)
+length(unique(smooth_abund$Taxa))
+
+
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+t <- lvl2_abund2 %>% filter(lvl2 == "09142 Cell motility")
+
+
+m_full <- gam(clr_abundance ~ age_s + s(temp_s) + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = t)
+    
+m_main <- gam(clr_abundance ~ age_s + temp_s + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = t)
+
+AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+      AICc$model <- rownames(AICc)   
+
+summary(m_full)
+
+plot(m_full, select = 1, rug = TRUE, shade = TRUE)
+
+```
+
+
+
+
+
+
+
+
+
 
 
 
@@ -581,7 +813,7 @@ model_results <- do.call(rbind, model_results)
  
 t <- lvl2_abund %>% filter(lvl2 == '09122 Translation' | lvl2 == "09121 Transcription")
 
-t <- lvl2_abund %>% filter(lvl2 == "09121 Transcription")
+t <- lvl2_abund %>% filter(lvl2 == "09191 Unclassified: metabolism")
     
 
 m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
@@ -589,6 +821,8 @@ m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s +
 
 m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
                data = t)
+
+
 
 
 
