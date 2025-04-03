@@ -200,12 +200,19 @@ eigenvalues <- pca$sdev^2  # square the standard deviations to get eigenvalues
 percent_explained <- 100 * eigenvalues / sum(eigenvalues) 
 
 # scree plot
-tibble(pe = percent_explained, axis = 1:length(percent_explained)) %>%
+pe_plot <- tibble(pe = percent_explained, axis = 1:length(percent_explained)) %>%
   ggplot(aes(x = axis, y = pe)) +
   geom_line() +
   geom_point() +
-  labs(x = "Principal Component (Axis)", y = "Percent Variance Explained") +
-  theme_minimal()
+  labs(x = "Principal component axis", y = "Percent variance explained") +
+  theme_minimal() +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_blank())
+
+ggsave("figures/supp/fig1S.pdf", pe_plot, width = 6, height = 6)
 
 df<-data.frame(pca$x)
 df$sample<-rownames(df)
@@ -241,15 +248,17 @@ show that temp and fruit are correlated, to be able to evaluate temp, need to co
 ```{r}
 
 # fruit ~ temp
-ggplot(m_model, aes(x = temp, y = fruit)) + 
+fruit_plot <- ggplot(m_model, aes(x = temp, y = fruit)) + 
   geom_point() + 
   geom_smooth(method = "lm", color = "blue") +
-  labs(y = "count fruit eaten", x = "temperature (°C)") +
+  labs(y = "Count of fruit eaten", x = "Temperature (°C)") +
   theme(axis.line = element_line(color = "black", linewidth = .28),
         axis.text = element_text(size = 12, color = "black"), 
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         panel.background = element_blank())
+
+ggsave("figures/supp/fig2S.pdf", fruit_plot, width = 6, height = 6)
 
 ```
 
@@ -378,17 +387,18 @@ p1 <- ggplot(plot_com_coef, aes(x = order, y = coef, color = direction)) +
   geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50), linewidth = 1.5) +
   scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
   coord_flip() +
-  labs(y = "Effect", x = "community features") +
+  labs(y = "Effect", x = "") +
   theme(axis.line = element_line(color = "black", linewidth = .28),
-        axis.text = element_text(size = 12, color = "black"), 
-        text = element_text(size = 10, color = "black", family = "sans"), 
+        axis.text = element_text(size = 18, color = "black"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.position = "none",
         panel.background = element_blank()) 
 p1
 
-ggsave("scripts/compiled/gm_outcome/figures/community_features_temp.pdf", p1, width = 8, height = 6)
+ggsave("figures/fig1.pdf", p1, width = 8, height = 6)
+
 
 ```
 
@@ -477,9 +487,9 @@ o_plot <- ggplot(pred_data, aes(x = temp_s, y = o_preds)) +
 
 # add plots together  
 
-combo <- ggarrange(s_plot, o_plot, ncol = 2, nrow = 1)
-ggsave("scripts/compiled/gm_outcome/figures/alpha_temp.pdf", combo, width = 14, height = 6)
+combo <- ggarrange(s_plot, o_plot, ncol = 2, nrow = 1, labels = c("A", "B"))
 
+ggsave("figures/fig2.pdf", combo, width =12, height = 6)
 
 ```
 
@@ -543,7 +553,7 @@ family_da <-psmelt(family_aggregated)
 # Extract variables of interest 
 genus_da1 <- genus_da %>% 
   mutate(Taxa = Genus) %>% # make genus the taxa values 
-  select(Taxa, Abundance, Sample, age, sex, ID, max_t_days15, rain_days4, fruit, group, total_3_day) %>% 
+  select(Taxa, Abundance, Sample, age, sex, ID, max_t_days15, rain_days4, fruit, group, total_3_day, Phylum) %>% 
   rename(sample = Sample,
          temp = max_t_days15,
          rain = rain_days4,
@@ -554,7 +564,7 @@ genus_da1 <- genus_da %>%
 
 family_da1 <- family_da %>% 
   mutate(Taxa = Family) %>% # make family the taxa values 
-  select(Taxa, Abundance, Sample, age, sex, ID, max_t_days15, rain_days4, fruit, group, total_3_day) %>%
+  select(Taxa, Abundance, Sample, age, sex, ID, max_t_days15, rain_days4, fruit, group, total_3_day, Phylum) %>%
   rename(sample = Sample,
          temp = max_t_days15,
          rain = rain_days4,
@@ -608,7 +618,7 @@ da4 <- rbind(genus_da3, family_da3)
 
 ## d. Scale variables
 
-scale, combine tenori and palmas, 211 total taxa for daa 
+scale, combine tenori and palmas, 211 total taxa for data 
 
 ```{r}
 
@@ -621,6 +631,73 @@ da5 <- da4 %>%
                            TRUE ~ group)))
 
 length(unique(da5$Taxa)) # 211 taxa total
+length(unique(da5$ID))
+
+```
+
+## phylum barplot
+
+```{r}
+
+phylum_aggregated <- suppressMessages(phyloseq::tax_glom(phylo_filtered2, "Phylum"))
+  
+phylum_otu_table <- as.data.frame(otu_table(phylum_aggregated))
+phylum_tax_table <- as.data.frame(tax_table(phylum_aggregated))
+
+phylum_otu_ids <- rownames(phylum_otu_table)
+phylum_tax_ids <- rownames(phylum_tax_table)
+
+phylum_names <- phylum_tax_table[phylum_otu_ids, "Phylum"]
+
+rownames(phylum_otu_table) <- phylum_names
+
+
+# by sample
+phylum_otu_table2 <- phylum_otu_table %>%
+  rownames_to_column("Phylum") %>%
+  pivot_longer(-Phylum, names_to = "sample", values_to = "Count") %>%
+  left_join(reads_filtered, by = "sample") %>%
+  group_by(sample) %>%
+  mutate(RelativeAbundance = Count / sum(Count),
+          Phylum_grouped = case_when(
+           str_detect(Phylum, "Firmicutes") ~ "Firmicutes",  
+           RelativeAbundance > 0.01 ~ Phylum,  
+           TRUE ~ "Less than 1% rel abund"  
+         )) %>%
+  ungroup()
+
+ggplot(phylum_otu_table2 , aes(x = sample, y = RelativeAbundance, fill = Phylum_grouped)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Sample", y = "Relative Abundance", fill = "Phylum") +
+  theme_minimal() +
+  scale_y_continuous(labels = scales::percent) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+# across samples
+df_total <- phylum_otu_table2 %>%
+  mutate(Phylum_grouped = case_when(
+    str_detect(Phylum, "Firmicutes") ~ "Firmicutes",  
+    TRUE ~ Phylum)) %>%
+  group_by(Phylum_grouped) %>%
+  summarise(TotalCount = sum(Count)) %>%
+  ungroup() %>%
+  mutate(RelativeAbundance = TotalCount / sum(TotalCount)) %>%
+  mutate(Phylum_grouped = case_when(RelativeAbundance > 0.01 ~ Phylum_grouped, 
+                                    TRUE ~ "Less than 1% rel abund")) %>%
+  group_by(Phylum_grouped) %>%
+  summarise(RA = sum(RelativeAbundance)) %>%
+  ungroup() %>%
+  mutate(RA = 100*RA,
+         Phylum_grouped = fct_reorder(Phylum_grouped, RA))
+                                    
+
+ggplot(df_total, aes(x = Phylum_grouped, y = RA, fill = Phylum_grouped)) +
+  geom_bar(stat = "identity") +
+  labs(x = "", y = "Relative Abundance (%)", fill = "Phylum") +
+  theme_minimal() +
+  coord_flip() 
 
 ```
 
@@ -782,6 +859,7 @@ length(filtered_aic$Taxa)
 ```{r}
 
 # get level info
+
 levels <- da6 %>%
   select(Taxa, level) %>%
   unique()
@@ -818,6 +896,48 @@ p1
 ggsave("scripts/compiled/gm_outcome/figures/taxa_temp_coef.pdf", p1, width = 8, height = 16)
 
 ```
+
+## phylum analysis
+
+seeing a decrease across almost all phyla, different from what the literature shows on other species with a decrease in firmicutes and an increase in proteo bacteria across species (moeller review) and the increase in bacteroidota shown in meerkats. 
+
+```{r}
+
+phyla <- da6 %>% select(Taxa, Phylum) %>%
+  unique()
+
+length(phyla$Taxa)
+
+filtered_coef2 <- filtered_coef %>% left_join(phyla, by = "Taxa")
+
+plot_phyla_coef <- filtered_coef2 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         Taxa = reorder(Taxa, -coef))
+
+table(plot_phyla_coef$Phylum)
+table(plot_taxa_coef$direction)
+
+ggplot(plot_phyla_coef, aes(x = Taxa, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  facet_wrap(~Phylum, nrow = 5, ncol = 2)
+
+```
+
 
 ## d. tree plot
 
@@ -1093,7 +1213,16 @@ predicted_wide <- predicted_wide %>%
   select(-temp_s) # remove the temp_s column for correlation calculation and positive taxa
 
 # elbow method
-fviz_nbclust(predicted_wide, kmeans, method = "wss", k.max = 10) + theme_minimal() 
+clust_plot <- fviz_nbclust(predicted_wide, kmeans, method = "wss", k.max = 10) + 
+  theme_minimal() +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_blank()) +
+  labs(x = "Number of clusters", y = "Within-cluster sum of squares", title = "")
+
+ggsave("figures/supp/fig3S.pdf", clust_plot, width = 6, height = 6)
 
 # set number of clusters
 k=3
@@ -1102,9 +1231,11 @@ k=3
 clus.distance = as.dist(1 - cor(predicted_wide, use = "pa")) # create distance matrix
 
 h.clust = hclust(clus.distance,method='complete') # calculate clusters 
-plot(h.clust, cex = 0.6) # plot dendogram
-rect.hclust(h.clust, k = k, border = 2:6) # add clusters 
 
+pdf("figures/supp/fig5S.pdf", width = 10, height = 6)
+dendogram <- plot(h.clust, cex = 0.6, main = "", xlab = "", ylab = "") # plot dendogram
+rect.hclust(h.clust, k = k, border = 2:6) # add clusters 
+dev.off()
 
 # Separate temp-relationships into k clusters 
 clusters <- cutree(h.clust, k = k)
@@ -1143,6 +1274,19 @@ cluster_plot <- ggarrange(p1, p2,
                           labels = c("A", "B"))
 ```
 
+phylum check 
+
+```{r}
+
+gam_phyla <- c1 %>%
+  select(Taxa) %>%
+  distinct() %>%
+  left_join(phyla, by = "Taxa")
+
+
+```
+
+
 ## e. plot 
 
 Plot predictions
@@ -1155,13 +1299,13 @@ sd_temp <- sd(smooth_abund$temp)
 gam_plot <- ggplot(c1, aes(x = temp_s, y = preds, color = Taxa)) + 
   geom_line() +
   theme_minimal() +
-  labs(y = "predicted log abundance", x = "temperature (°C)") +
+  labs(y = "Predicted log abundance", x = "Temperature (°C)") +
   scale_x_continuous(
    breaks = seq(min(c1$temp_s), max(c1$temp_s), length.out = 6), 
    labels = inverse_scale) + 
   theme(axis.line = element_line(color = "black", linewidth = .28),
-        axis.text = element_text(size = 12, color = "black"), 
-        text = element_text(size = 10, color = "black", family = "sans"), 
+        axis.text = element_text(size = 16, color = "black"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.position = "none",
@@ -1169,7 +1313,26 @@ gam_plot <- ggplot(c1, aes(x = temp_s, y = preds, color = Taxa)) +
 
 gam_plot
 
-ggsave("scripts/compiled/gm_outcome/figures/gam_temp.pdf", gam_plot, width = 10, height = 7)
+ggsave("figures/fig4.pdf", gam_plot, width =6, height = 6)
+
+
+
+```
+
+## phyla plot
+
+8 out of 24 of these are firmicutes but 6 are bacteroidta so I don't think there is a strong phylum trend here
+
+```{r}
+
+length(unique(c1$Taxa))
+
+c1_taxa <- c1 %>%
+  select(Taxa) %>%
+  unique() %>%
+  left_join(phyla, by = "Taxa") %>%
+  group_by(Phylum) %>%
+  summarise(phyla_count = n())
 
 ```
 
@@ -1202,7 +1365,6 @@ for (j in seq(1, length(unique(smooth_abund$Taxa)), by = 4)) {
         plot(gam_m, select = 1, rug = TRUE, shade = TRUE, main = paste(i, "- Smooth for temp"))
     }
 }
-
 
 # Close device
 dev.off()
@@ -1337,10 +1499,10 @@ p1 <- ggplot(plot_com_coef, aes(x = order, y = coef, color = direction)) +
   geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50), linewidth = 1.5) +
   scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
   coord_flip() +
-  labs(y = "Effect", x = "Community Features") +
+  labs(y = "Effect", x = "") +
   theme(axis.line = element_line(color = "black", linewidth = .28),
-        axis.text = element_text(size = 12, color = "black"), 
-        text = element_text(size = 10, color = "black", family = "sans"), 
+        axis.text = element_text(size = 18, color = "black"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.position = "none",
@@ -1369,21 +1531,21 @@ p2 <- ggplot(com_data_long, aes(y = order)) +
     expand = c(0.05, 0.05)) +
   labs(x = "Model Weight", y= "", fill = "Model") +
   theme(axis.line = element_line(color = "black", linewidth = .28),
-        axis.text = element_text(size = 12, color = "black"), 
-        text = element_text(size = 10, color = "black", family = "sans"), 
+        axis.text = element_text(size = 18, color = "black"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.position = "none",
         panel.background = element_blank(),
         axis.text.y = element_blank()) +
-  annotate("text", x = -0.7, y = "PC1", label = "interaction model", color = "white", size = 5, fontface = "bold") +
+  annotate("text", x = -0.5, y = "PC1", label = "interaction model", color = "white", size = 5, fontface = "bold") +
   annotate("text", x = 0.3, y = "PC1", label = "base model", color = "#fdb462", size = 5, fontface = "bold")
 p2  
 
 # add plots together  
-combo_com <- ggarrange(p1, p2, ncol = 2, nrow = 1)
+combo_com <- ggarrange(p1, p2, ncol = 2, nrow = 1, labels = c("A", "B"))
 
-ggsave("scripts/compiled/gm_outcome/figures/com_features_interaction.pdf", combo_com, width = 14, height = 7)
+ggsave("figures/fig5.pdf", combo_com, width =12, height = 6)
 
 ```
 
@@ -1527,7 +1689,7 @@ neo_filter <- neo_aic2 %>%
   group_by(Taxa) %>%
   filter(model == "m_full" & weight > 0.5) %>%
   pull(Taxa) 
-length(neo_filter) # 24 taxa
+length(neo_filter) # 21 taxa
 
 # filter abundances for temp taxa
 neo_abund <- temp_abund2 %>% filter(Taxa %in% neo_filter)
@@ -1537,9 +1699,22 @@ filtered_neo_coef <- neo_coef2 %>% filter(Taxa %in% neo_filter)
 length(filtered_neo_coef$Taxa)
 
 filtered_neo_aic <- neo_aic2 %>% filter(Taxa %in% neo_filter)
-length(filtered_neo_aic$Taxa)
+length(filtered_neo_aic$Taxa) 
 
 ```
+
+look at phylum 
+
+```{r}
+
+phyla_neo <- filtered_neo_coef %>% left_join(phyla, by = "Taxa") %>%
+  mutate(Phylum_grouped = case_when(str_detect(Phylum, "Firmicutes") ~ "Firmicutes",
+         TRUE ~ Phylum)) %>%
+  group_by(Phylum_grouped) %>%
+  summarize(count = n())
+
+```
+
 
 ### iii. plot 
 
@@ -1560,10 +1735,10 @@ p1 <- ggplot(plot_neo_coef, aes(x = order, y = coef, color = direction)) +
   geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50), linewidth = 1.5) +
   scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
   coord_flip() +
-  labs(y = "Effect", x = "Taxa") +
+  labs(y = "Effect", x = "") +
   theme(axis.line = element_line(color = "black", linewidth = .28),
-        axis.text = element_text(size = 12, color = "black"), 
-        text = element_text(size = 10, color = "black", family = "sans"), 
+        axis.text = element_text(size = 18, color = "black"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.position = "none",
@@ -1593,24 +1768,21 @@ p2 <- ggplot(aic_long, aes(y = order)) +
   labs(x = "Model Weight", y= "", fill = "Model") +
   theme(axis.line = element_line(color = "black", linewidth = .28),
         axis.text = element_text(size = 12, color = "black"), 
-        text = element_text(size = 10, color = "black", family = "sans"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.position = "none",
         panel.background = element_blank(),
         axis.text.y = element_blank()) +
-  annotate("text", x = -0.75, y = "Alistipes_A_871400", label = "interaction model", color = "white", size = 5, fontface = "bold") +
-  annotate("text", x = 0.2, y = "Alistipes_A_871400", label = "base model", color = "#fdb462", size = 5, fontface = "bold")
+  annotate("text", x = -0.75, y = "Alistipes_A_871400", label = "interaction model", color = "white", size = 4, fontface = "bold") +
+  annotate("text", x = 0.2, y = "Alistipes_A_871400", label = "base model", color = "#fdb462", size =4, fontface = "bold")
 p2  
 
 # add plots together  
-combo_taxa <- ggarrange(p1, p2, ncol = 2, nrow = 1)
+combo_taxa <- ggarrange(p1, p2, ncol = 2, nrow = 1, labels = c("A", "B"))
 
-ggsave("scripts/compiled/gm_outcome/figures/taxa_features_interaction.pdf", combo, width = 14, height = 10)
+ggsave("figures/fig6.pdf", combo_taxa, width =15, height = 7)
 
-combo <- ggarrange(combo_com, combo_taxa, ncol = 1, nrow = 2) 
-
-ggsave("scripts/compiled/gm_outcome/figures/interaction_all.pdf", combo, width = 18, height = 14)
 
 ```
 
@@ -1701,7 +1873,7 @@ Plot with the CI's for each taxa for the supplement
 
 ```{r}
 
-pdf("scripts/compiled/gm_outcome/figures/taxa_interaction.pdf", width = 8, height = 11)  
+pdf("figures/taxa_interaction.pdf", width = 8, height = 11)  
 
 plot_list <- list()
 
@@ -1956,7 +2128,8 @@ combined_plot <- ggarrange(pos_plot, neg_pos_plot, neg_plot,
                            labels = c("A", "B", "C"))
 combined_plot
 
-ggsave("scripts/compiled/gm_outcome/figures/taxa_interaction_coplot.pdf", combined_plot, width = 12, height = 12)
+ggsave("figures/fig7.pdf", combined_plot, width =13, height = 9)
+
 
 ```
 
@@ -2274,6 +2447,28 @@ tree_plot +
   geom_nodepoint(aes(color = node_temp_sensitive), size = 1.5) + 
   scale_color_manual(values = c("no" = "#80b1d3", "yes" = "#fb8072")) +  
   theme_tree()
+
+```
+
+
+```{r}
+
+
+# 21 phylum
+
+## add togther firmicutes ## 
+
+firmicutes_values <- phylum_otu_table %>%
+  rownames_to_column(var = "Phylum")  %>%
+  filter(grepl("Firmicutes", Phylum)) %>%
+  summarise(across(where(is.numeric), sum)) %>%
+  mutate(Phylum = "Firmicutes")  # Add taxon label
+
+phylum_otu <- phylum_otu_table %>%
+  rownames_to_column(var = "Phylum") %>%
+  filter(!str_detect(Phylum, "Firmicutes")) 
+  
+phylum_otu2 <- rbind(phylum_otu, firmicutes_values)
 
 ```
 
