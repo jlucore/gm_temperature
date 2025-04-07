@@ -88,12 +88,15 @@ prevalenceThreshold = 0.005 * nsamples(physeq2)
 prevalenceThreshold # must appear in at least two samples
 
 # plot prevalence threshold
-ggplot(prevdf, aes(TotalAbundance, Prevalence)) +
+prev_fig <- ggplot(prevdf, aes(TotalAbundance, Prevalence)) +
   geom_hline(yintercept = prevalenceThreshold, alpha = 0.5, linetype = 2) +
-  geom_point(size = 2, alpha = 0.7) +
+  geom_point(size = 2, alpha = 0.5) +
   scale_y_log10() + scale_x_log10() +
   xlab("Total Abundance") +
+  ylab("Prevalence (# of samples)") +
   theme_minimal()
+
+ggsave("figures/supp/figS_prev.pdf", prev_fig, width = 6, height = 4)
 
 ## summary stats ##
 asv_onesample <- nrow(prevdf[prevdf$Prevalence == 1,]) # number of ASV's present only in one sample
@@ -1925,26 +1928,10 @@ neo_reverse(3.26)
 
 
 neo_preds2 <- neo_preds %>% mutate(direction = ifelse(coef > 0, "positive", "negative"),
-                                       direction = case_when(Taxa == "JC017"~ "neg_pos",
-                                                             Taxa == "CAG-317_146760"~ "neg_pos",
-                                                             Taxa == "Eubacterium_I"~ "neg_pos",
-                                                             Taxa == "Marinilabiliaceae"~ "neg_pos",
+                                       direction = case_when(Taxa == "Traorella"~ "neg_pos",
+                                                             Taxa == "CAG-317_146760" ~ "neg_pos",
+                                                             Taxa == "Eubacterium_I" ~ "neg_pos",
                                                              Taxa == "Erysipelotrichaceae"~ "neg_pos",
-                                                             Taxa == "Traorella"~ "neg_pos",
-                                                             TRUE ~ direction),
-                                      bin = case_when(bin == "neopterin_avg1" ~ "neopterin: 108-1464 (nmol/L)",
-                                                   bin == "neopterin_avg2" ~ "neopterin: 1464-2818 (nmol/L)",
-                                                   bin == "neopterin_avg3" ~ "neopterin: 2818-4164 (nmol/L)",
-                                                   bin == "neopterin_avg4" ~ "neopterin: 4164-5525 (nmol/L)")) 
-
-
-neo_preds2 <- neo_preds %>% mutate(direction = ifelse(coef > 0, "positive", "negative"),
-                                       direction = case_when(Taxa == "JC017"~ "neg_pos",
-                                         Taxa == "Erysipelotrichaceae"~ "neg_pos",
-                                                             Taxa == "Marinilabiliaceae"~ "neg_pos",
-                                                             Taxa == "Pseudoflavonifractor_80958"~ "neg_pos",
-                                                             Taxa == "Coprocola"~ "neg_pos",
-                                                             Taxa == "Traorella"~ "neg_pos",
                                                              TRUE ~ direction),
                                       bin = case_when(bin == "neopterin_avg1" ~ "neopterin: 108-1464 (nmol/L)",
                                                    bin == "neopterin_avg2" ~ "neopterin: 1464-2818 (nmol/L)",
@@ -2123,7 +2110,7 @@ neg_plot
 
 ######## combine ##########
 
-combined_plot <- ggarrange(pos_plot, neg_pos_plot, neg_plot, 
+combined_plot <- ggarrange(neg_plot, pos_plot, neg_pos_plot, 
                            nrow = 3, ncol = 1, 
                            labels = c("A", "B", "C"))
 combined_plot
