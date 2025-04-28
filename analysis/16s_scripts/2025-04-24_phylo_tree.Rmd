@@ -1,0 +1,711 @@
+---
+title: "Untitled"
+author: "Lucore"
+date: "2025-04-24"
+output: html_document
+--
+
+####################### CURRENT CODE #########################
+# Data prep
+
+extract the necessary metadata and filter the phyloseq object for all genera included in the DA temp analysis. Then extract the tree.
+
+```{r}
+
+# get list of taxa with ne
+direction <- filtered_coef %>% 
+  mutate(effect_direction = ifelse(coef > 0, "positive", "negative")) %>%
+  select(Taxa, effect_direction)
+
+# add temp information to da table
+da7 <- da6 %>%
+  mutate(taxa_temp_sensitive = ifelse(Taxa %in% temp_filter, "sensitive", "nuetral")) %>%
+  left_join(direction, by = "Taxa") %>%
+  mutate(effect_direction = case_when(
+    is.na(effect_direction) ~ "neutral",
+    TRUE ~ effect_direction))
+  
+# get genus names
+genus_names <- da7 %>%
+  filter(level == "Genus") %>%
+  pull(Taxa) %>%
+  unique()
+
+# aggregate by taxa
+genus_aggregated <- suppressMessages(phyloseq::tax_glom(phylo_filtered, "Genus"))
+
+# filter phyloseq object by taxa 
+tree_taxa <- taxa_names(genus_aggregated)[tax_table(genus_aggregated)[, "Genus"] %in% genus_names]
+temp_genus_phylo <- prune_taxa(tree_taxa, genus_aggregated)
+
+# extract the tree
+genus_tree <- phy_tree(temp_genus_phylo)
+genus_tax <- as.data.frame(tax_table(temp_genus_phylo))
+
+# prep final tree metadata 
+genus_meta <- da7 %>%
+  filter(level == "Genus") %>%
+  select(Taxa, taxa_temp_sensitive, effect_direction) %>%
+  distinct() %>%
+  left_join(taxa_aic2 %>% filter(model == "m_full") %>% select(Taxa, weight), by = "Taxa")
+
+# create phylum groups for clade labels
+phylum_groups <- genus_tax %>%
+  rownames_to_column("OTU") %>%
+  mutate(Genus = as.character(Genus), Phylum = as.character(Phylum)) %>%
+  filter(!is.na(Phylum), !is.na(Genus)) %>%
+  group_by(Phylum) %>%
+  summarise(genus_list = list(Genus)) %>%
+  unnest_longer(genus_list, values_to = "Genus")
+
+```
+
+
+# assign tip labels
+
+First assign the tip labels as genus names instead of otu numbers. Add the metadata for temp sensitivity and change the tip labels to the model weight varible
+
+```{r}
+
+# tip labels are still otu numbers
+head(genus_tree$tip.label)
+
+# get genus names for tip labels
+tip_labels <- as.character(tax_table(temp_genus_phylo)[, "Genus"])
+
+# assign labels 
+genus_tree$tip.label <- tip_labels
+head(genus_tree$tip.label) # check tip labels
+  
+# look a tree data 
+tree_plot <- ggtree(genus_tree)
+tree_data <- tree_plot$data
+tree_data <- tree_data %>% mutate(Taxa = label)
+
+# check that Taxa and tip labels match
+all(genus_meta$Taxa %in% genus_tree$tip.label) 
+
+# add metadata to tree data
+tree_data <- tree_data %>% left_join(genus_meta, by = "Taxa") 
+tip_data <- tree_data %>% filter(isTip == "TRUE")
+
+# add phylum node assignment to tree data
+tree_data <- left_join(tree_data, phylum_nodes, by = "node")
+
+# now make tip labels the model weight
+genus_tree$tip.label <- tip_data$weight
+head(genus_tree$tip.label)
+
+```
+
+# ancestral state reconstruction
+
+reconstruction returns the maximum likelihood estimates of the model weights for each node, assumes brownian motion. Higher weights are more temperature sensitive than lower weights. 
+
+```{r}
+
+# run ace function
+ace_result <- ace(tip_data$weight, genus_tree, type = "continuous")
+
+# extract node probs
+node_df <- data.frame(
+  node = as.numeric(names(ace_result$ace)),
+  ace_weight = ace_result$ace) # ignore warning will fix in next step
+
+# assign node probs to node
+node_df$node <- (Ntip(genus_tree) + 1):(Ntip(genus_tree) + Nnode(genus_tree))  # Node numbers
+
+tree_data <- left_join(tree_data, node_df, by = "node") %>%
+  mutate(ace_weight = ifelse(isTip, weight, ace_weight)) # assign weights to tips for plotting branch color
+
+```
+
+
+# Plot tree
+
+```{r}
+
+tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
+  geom_tree(aes(color = ace_weight), size = 1) +
+  
+  scale_x_continuous(
+  expand = expansion(mult = c(0, 0)),
+  limits = c(NA, 45)  # or whatever max x value you need
+) +
+  
+  scale_color_gradient2(low = "#7570b3", mid = "grey90", high = "#d95f02", midpoint = 0.5, name = "Model weight") +
+  
+  ggnewscale::new_scale_color() + # add a new color scale for the tip circles
+  
+  geom_tiplab(aes(label = Taxa), size = 3.5, offset = 0.5) +
+  
+  geom_point2(aes(subset = isTip, color = effect_direction), shape = 19, size = 4, stroke = 0, show.legend = FALSE) +
+
+  scale_color_manual(values = c("positive" = "#1f78b4", "negative" = "#e41a1c", "neutral"  = "#666666"), name = "Effect direction") +
+  
+  geom_text2(aes(subset = isTip, label = case_when(effect_direction == "positive" ~ "+", effect_direction == "negative" ~ "–")),
+  size = 3.6, vjust = 0.4, hjust = 0.5, color = "white") +
+  
+  theme_tree2() + 
+  
+  theme(legend.position = c(0.02, 0.98),
+        legend.justification = c(0, 1),
+    axis.line.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank()) +
+  
+  # Direction effect legend
+  annotate("text", x = 1.2, y = 82, label = "Effect direction", size = 3.7, hjust = 0) +
+  
+  annotate("point", x = 1.5, y = 80.2, shape = 19, size = 4, color = "#1f78b4") +
+  annotate("text", x = 2.1, y = 80.25, label = "positive", size = 3.3, hjust = 0) +
+  annotate("text", x = 1.5, y = 80.3, label = "+", size = 4, color = "white") +
+  
+  annotate("point", x = 1.5, y = 78.4, shape = 19, size = 4, color = "#e41a1c") +
+  annotate("text", x = 2.1, y = 78.45, label = "negative", size = 3.3, hjust = 0) +
+  annotate("text", x = 1.5, y = 78.5, label = "–", size = 4, color = "white") +
+  
+  annotate("point", x = 1.5, y = 76.6, shape = 19, size = 4, color = "#666666") +
+  annotate("text", x = 2.1, y = 76.65, label = "no effect", size = 3.3, hjust = 0) +
+  
+  # Bacteroidota
+  annotate("segment", x = 32.5, xend = 32.5, y = 31, yend = 43, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 31, yend = 31, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 43, yend = 43, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 37, label = "Bacteroidota", size = 5.5, hjust = 0) +
+  
+  annotate("segment", x = 32.5, xend = 31, y = 1, yend = 1, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 1, label = "Bacteroidota", size = 5.5, hjust = 0) +
+  
+  # Proteobacteria
+  annotate("segment", x = 32.5, xend = 32.5, y = 7, yend = 30, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 7, yend = 7, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 30, yend = 30, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 18, label = "Proteobacteria", size = 5.5, hjust = 0) +
+  
+  # Cyanobacteria
+  annotate("segment", x = 32.5, xend = 32.5, y = 2, yend = 5, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 2, yend = 2, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 5, yend = 5, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 3.5, label = "Cyanobacteria", size = 5.5, hjust = 0) +
+  
+  #Fusobacteriota
+  annotate("segment", x = 32.5, xend = 32.5, y = 50, yend = 52, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 50, yend = 50, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 52, yend = 52, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 51, label = "Fusobacteriota", size = 5.5, hjust = 0) +
+  
+  #Actinobacteriota
+  annotate("segment", x = 32.5, xend = 32.5, y = 47, yend = 49, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 47, yend = 47, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 49, yend = 49, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 48, label = "Actinobacteriota", size = 5.5, hjust = 0) +
+  
+  annotate("segment", x = 32.5, xend = 32.5, y = 67, yend = 65, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 67, yend = 67, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 65, yend = 65, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 66, label = "Actinobacteriota", size = 5.5, hjust = 0) +
+  
+  #Firmicutes
+  annotate("segment", x = 32.5, xend = 32.5, y = 68, yend = 97, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 68, yend = 68, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 97, yend = 97, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 82.5, label = "Firmicutes", size = 5.5, hjust = 0) +
+  
+  annotate("segment", x = 32.5, xend = 32.5, y = 53, yend = 64, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 53, yend = 53, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 64, yend = 64, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 59.5, label = "Firmicutes", size = 5.5, hjust = 0) +
+  
+  #Desulfobacterota
+  annotate("segment", x = 32.5, xend = 32.5, y = 45, yend = 46, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 45, yend = 45, color = "black", size = 0.6) +
+  annotate("segment", x = 32.5, xend = 31, y = 46, yend = 46, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 45.5, label = "Desulfobacterota", size = 5.5, hjust = 0) + 
+  
+  #Spirochaetota
+  annotate("segment", x = 32.5, xend = 31, y = 44, yend = 44, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 44, label = "Spirochaetota", size = 5.5, hjust = 0)  +
+  
+  #Campylobacterota
+  annotate("segment", x = 32.5, xend = 31, y = 6, yend = 6, color = "black", size = 0.6) +
+  annotate("text", x = 33, y = 6, label = "Campylobacterota", size = 5.5, hjust = 0) 
+  
+tree
+
+ggsave("figures/tree.pdf", tree, width =8, height = 12.5)
+
+
+```
+
+
+
+
+################ OLD CODE ###############
+### i. data prep
+
+extract the necessary metadata and filter the phyloseq object for all genera included in the DA temp analysis. Then extract the tree. 
+
+```{r}
+
+# get list of taxa with ne
+direction <- filtered_coef %>% 
+  mutate(effect_direction = ifelse(coef > 0, "positive", "negative")) %>%
+  select(Taxa, effect_direction)
+
+# add temp information to da table
+da7 <- da6 %>%
+  mutate(taxa_temp_sensitive = ifelse(Taxa %in% temp_filter, "sensitive", "nuetral")) %>%
+  left_join(direction, by = "Taxa") %>%
+  mutate(effect_direction = case_when(
+    is.na(effect_direction) ~ "neutral",
+    TRUE ~ effect_direction))
+  
+# get genus names
+genus_names <- da7 %>%
+  filter(level == "Genus") %>%
+  pull(Taxa) %>%
+  unique()
+
+# aggregate by taxa
+genus_aggregated <- suppressMessages(phyloseq::tax_glom(phylo_filtered, "Genus"))
+
+# filter phyloseq object by taxa 
+tree_taxa <- taxa_names(genus_aggregated)[tax_table(genus_aggregated)[, "Genus"] %in% genus_names]
+temp_genus_phylo <- prune_taxa(tree_taxa, genus_aggregated)
+
+# extract the tree
+genus_tree <- phy_tree(temp_genus_phylo)
+genus_tax <- as.data.frame(tax_table(temp_genus_phylo))
+
+# prep final tree metadata 
+genus_meta <- da7 %>%
+  filter(level == "Genus") %>%
+  select(Taxa, taxa_temp_sensitive, effect_direction) %>%
+  distinct() %>%
+  left_join(taxa_aic2 %>% filter(model == "m_full") %>% select(Taxa, weight), by = "Taxa")
+
+```
+
+
+### ii. compile tree info
+
+# assign tip labels
+
+First assign the tip labels as genus names instead of otu numbers. Add the metadata for temp sensitivity and change the tip labels to the model weight varible
+
+```{r}
+
+# tip labels are still otu numbers
+head(genus_tree$tip.label)
+
+# get genus names for tip labels
+tip_labels <- as.character(tax_table(temp_genus_phylo)[, "Genus"])
+
+# assign labels 
+genus_tree$tip.label <- tip_labels
+head(genus_tree$tip.label) # check tip labels
+
+# create phylum groups for node labels
+phylum_groups <- genus_tax %>%
+  rownames_to_column("OTU") %>%
+  mutate(Genus = as.character(Genus), Phylum = as.character(Phylum)) %>%
+  filter(!is.na(Phylum), !is.na(Genus)) %>%
+  group_by(Phylum) %>%
+  summarise(genus_list = list(Genus)) %>%
+  unnest_longer(genus_list, values_to = "Genus")
+
+# group together firmicutes 
+phylum_groups <- phylum_groups %>%
+  mutate(Phylum_Grouped = case_when(
+    grepl("Firmicutes", Phylum) ~ "Firmicutes",
+    TRUE ~ Phylum
+  )) %>%
+  group_by(Phylum_Grouped) %>%
+  summarise(genus_list = list(unique(unlist(genus_list)))) 
+  #unnest_longer(genus_list, values_to = "Genus") # two phyla Campylobacterota and Spirochaetota only have one genus so there is no node assignment 
+  
+# calcultae phylum node
+phylum_nodes <- phylum_groups %>%
+  mutate(node = purrr::map(genus_list, ~ getMRCA(genus_tree, .x))) %>%
+  filter(Phylum != "Campylobacterota" & Phylum != "Spirochaetota") %>%
+  mutate(node = as.integer(node)) %>%
+  select(Phylum, node)
+  
+# look a tree data 
+tree_plot <- ggtree(genus_tree)
+tree_data <- tree_plot$data
+tree_data <- tree_data %>% mutate(Taxa = label)
+
+# check that Taxa and tip labels match
+all(genus_meta$Taxa %in% genus_tree$tip.label) 
+
+# add metadata to tree data
+tree_data <- tree_data %>% left_join(genus_meta, by = "Taxa") 
+tip_data <- tree_data %>% filter(isTip == "TRUE")
+
+# add phylum node assignment to tree data
+tree_data <- left_join(tree_data, phylum_nodes, by = "node")
+
+# now make tip labels the model weight
+genus_tree$tip.label <- tip_data$weight
+head(genus_tree$tip.label)
+
+```
+
+# ancestral state reconstruction
+
+reconstruction returns the maximum likelihood estimates of the model weights for each node, assumes brownian motion. Higher weights are more temperature sensitive than lower weights. 
+
+```{r}
+
+# run ace function
+ace_result <- ace(tip_data$weight, genus_tree, type = "continuous")
+
+# extract node probs
+node_df <- data.frame(
+  node = as.numeric(names(ace_result$ace)),
+  ace_weight = ace_result$ace) # ignore warning will fix in next step
+
+# assign node probs to node
+node_df$node <- (Ntip(genus_tree) + 1):(Ntip(genus_tree) + Nnode(genus_tree))  # Node numbers
+
+tree_data <- left_join(tree_data, node_df, by = "node")
+
+
+```
+
+# plot tree
+
+```{r}
+
+library(ggnewscale)
+
+tree_data <- tree_data %>%
+  mutate(ace_weight = ifelse(isTip, weight, ace_weight))
+
+```
+
+
+
+```{r}
+
+tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
+  geom_tree(aes(color = ace_weight), size = 1) +
+  
+  scale_color_gradient(low = "#bc80bd", high = "#fdb462", name = "Model weight") +
+  
+  ggnewscale::new_scale_color() + # add a new color scale for the tip circles
+  
+  geom_tiplab(aes(label = Taxa), size = 3.5, offset = 0.5) +
+  
+  geom_point2(aes(subset = isTip, color = effect_direction), shape = 19, size = 4, stroke = 0, show.legend = FALSE) +
+
+  scale_color_manual(values = c("positive" = "#80b1d3", "negative" = "#fb8072", "neutral"  = "grey60"), name = "Effect direction") +
+  
+  geom_text2(aes(subset = isTip, label = case_when(effect_direction == "positive" ~ "+", effect_direction == "negative" ~ "–")),
+  size = 3.6, vjust = 0.4, hjust = 0.5, color = "white") +
+  
+  theme_tree2() +
+  
+  theme(legend.position = c(0, 1),
+    axis.line.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.title.x = element_blank()) +
+  
+  # Bacteroidota
+  annotate("segment", x = 39, xend = 39, y = 31, yend = 43, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 31, yend = 31, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 43, yend = 43, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 37, label = "Bacteroidota", size = 5.5, hjust = 0) +
+  
+  annotate("segment", x = 39, xend = 37.5, y = 1, yend = 1, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 1, label = "Bacteroidota", size = 5.5, hjust = 0) +
+  
+  # Proteobacteria
+  annotate("segment", x = 39, xend = 39, y = 7, yend = 30, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 7, yend = 7, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 30, yend = 30, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 18, label = "Proteobacteria", size = 5.5, hjust = 0) +
+  
+  # Cyanobacteria
+  annotate("segment", x = 39, xend = 39, y = 2, yend = 5, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 2, yend = 2, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 5, yend = 5, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 3.5, label = "Cyanobacteria", size = 5.5, hjust = 0) +
+  
+  #Fusobacteriota
+  annotate("segment", x = 39, xend = 39, y = 50, yend = 52, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 50, yend = 50, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 52, yend = 52, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 51, label = "Fusobacteriota", size = 5.5, hjust = 0) +
+  
+  #Actinobacteriota
+  annotate("segment", x = 39, xend = 39, y = 47, yend = 49, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 47, yend = 47, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 49, yend = 49, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 48, label = "Actinobacteriota", size = 5.5, hjust = 0) +
+  
+  annotate("segment", x = 39, xend = 39, y = 67, yend = 65, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 67, yend = 67, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 65, yend = 65, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 66, label = "Actinobacteriota", size = 5.5, hjust = 0) +
+  
+  #Firmicutes
+  annotate("segment", x = 39, xend = 39, y = 68, yend = 97, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 68, yend = 68, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 97, yend = 97, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 82.5, label = "Firmicutes", size = 5.5, hjust = 0) +
+  
+  annotate("segment", x = 39, xend = 39, y = 53, yend = 64, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 53, yend = 53, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 64, yend = 64, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 59.5, label = "Firmicutes", size = 5.5, hjust = 0) +
+  
+  #Desulfobacterota
+  annotate("segment", x = 39, xend = 39, y = 45, yend = 46, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 45, yend = 45, color = "black", size = 0.6) +
+  annotate("segment", x = 39, xend = 37.5, y = 46, yend = 46, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 45.5, label = "Desulfobacterota", size = 5.5, hjust = 0) + 
+  
+  #Spirochaetota
+  annotate("segment", x = 39, xend = 37.5, y = 44, yend = 44, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 44, label = "Spirochaetota", size = 5.5, hjust = 0)  +
+  
+  #Campylobacterota
+  annotate("segment", x = 39, xend = 37.5, y = 6, yend = 6, color = "black", size = 0.6) +
+  annotate("text", x = 40, y = 6, label = "Campylobacterota", size = 5.5, hjust = 0) 
+  
+tree
+
+ggsave("figures/tree.pdf", tree, width =9, height = 12.5)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+color branch color by avg reconstructed model weight of parent and child nodes. I am averaging so that I don't have to choose a node color for the branch. Alternative would be to color branch by the parent node value
+
+```{r}
+
+edge_df <- tree_data %>%
+  select(Taxa, isTip, node, x, y, parent, ace_weight, effect_direction, Phylum) %>%
+  rename(child_node = node, child_x = x, child_y = y, child_weight = ace_weight) %>%
+  left_join(
+    tree_data %>%
+      select(node, x, y, ace_weight) %>%
+      rename(parent = node, parent_x = x, parent_y = y, parent_weight = ace_weight),
+    by = "parent"
+  ) %>%
+  mutate(mid_weight = rowMeans(cbind(parent_weight, child_weight), na.rm = TRUE))
+
+```
+
+
+
+```{r}
+
+
+plot <- ggplot(edge_df) +
+  geom_segment(aes(x = parent_x, y = parent_y,
+                   xend = child_x, yend = child_y,
+                   color = mid_weight), size = 1.2) +
+  scale_color_gradient(low = "grey60", high = "red", name = "Model weight") +
+  
+  geom_point(
+    data = edge_df %>% filter(isTip == TRUE),
+    aes(x = child_x, y = child_y, fill = effect_direction),
+    size = 2.5, shape = 21, stroke = 0.3, color = "black") +
+    
+  geom_text(data = edge_df %>% filter(!is.na(Phylum)), 
+            aes(x = child_x, y = child_y, label = Phylum),
+            size = 2.5, hjust = -0.05) + 
+  
+  geom_text(data = edge_df %>% filter(isTip == TRUE),
+    aes(x = child_x, y = child_y, label = Taxa),
+    size = 2.5, hjust = -0.2, color = "black") +
+  
+  scale_fill_manual(
+    values = c(
+      "positive" = "forestgreen",
+      "negative" = "firebrick",
+      "neutral"  = "grey60"
+    ),
+    name = "Effect direction"
+  ) +
+  theme_tree2() +
+  coord_cartesian(clip = "off")
+
+
+plot
+```
+
+
+
+
+
+
+# uncertainty histogram
+
+deepest nodes have widest confidence intervals
+
+```{r}
+
+# Width of the 95% confidence interval per node
+ci_width <- ace_result$CI95[, 2] - ace_result$CI95[, 1]
+
+# Create a dataframe
+ci_df <- data.frame(
+  node = (Ntip(genus_tree) + 1):(Ntip(genus_tree) + Nnode(genus_tree)),
+  ci_lower = ace_result$CI95[, 1],
+  ci_upper = ace_result$CI95[, 2],
+  ci_width = ci_width
+)
+
+ggplot(ci_df, aes(x = ci_width)) +
+  geom_histogram(binwidth = 0.05, fill = "blue", color = "white", alpha = 0.9) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "95% Confidence Interval Width for Ancestral Nodes",
+    x = "CI Width",
+    y = "Number of Internal Nodes") 
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### ii. compile tree info
+
+Here we compile the data for the tree and run the ancestral state reconstruction. First assign the tip labels as genus names instead of otu numbers. Then, add the metadata for temp sensitivity and change the tip labels to the temp sensitivity varible. Run ace() to do ancestral reconstruction and add node probability to data. Set node as "temp sensitive" is "yes" probability is greater than "no" probability. Branches are colored by node probabiliy and branch tips are colors by taxa sensitivity. 
+
+```{r}
+
+library(ggtree)
+library(tidytree)
+library(ape)
+
+# get genus names for tip labels
+tip_labels <- as.character(tax_table(temp_genus_phylo)[, "Genus"])
+
+# assign labels 
+genus_tree$tip.label <- tip_labels
+head(genus_tree$tip.label) # check tip labels
+
+# look a tree data 
+tree_plot <- ggtree(genus_tree)
+tree_data <- tree_plot$data
+tree_data <- tree_data %>% mutate(Taxa = label)
+
+# check that Taxa and tip labels match
+all(genus_meta$Taxa %in% genus_tree$tip.label) 
+
+# add metadata to tree data
+tree_data <- tree_data %>% left_join(genus_meta, by = "Taxa") 
+tip_data <- tree_data %>% filter(isTip == "TRUE")
+
+# now make tip labels the temp variable
+genus_tree$tip.label <- tip_data$taxa_temp_sensitive
+head(genus_tree$tip.label)
+
+# run ace function
+ace_result <- ace(tip_data$taxa_temp_sensitive, genus_tree, type = "discrete")
+
+# extract node probs
+node_probs <- as.data.frame(ace_result$lik.anc) 
+
+# assign node probs to node
+node_probs$node <- (Ntip(genus_tree) + 1):(Ntip(genus_tree) + Nnode(genus_tree))  # Node numbers
+
+# add the node probabilities
+tree_data <- left_join(tree_data, node_probs, by = "node") %>%
+  mutate(node_temp_sensitive = ifelse(yes > no, "yes", "no"),
+         branch_colors = case_when(
+           is.na(node_temp_sensitive) ~ taxa_temp_sensitive,
+           TRUE ~ node_temp_sensitive))
+
+# update tree plot with new data
+tree_plot$data <- tree_data
+
+```
+
+### iii. plot tree
+
+```{r}
+tree_plot + 
+  geom_tree(aes(color = branch_colors), size = 1) +
+  geom_tiplab(size = 3) +
+  scale_color_manual(values = c("no" = "#80b1d3", "yes" = "#fb8072")) +  
+  theme_tree()
+
+```
+
+
+
+
+
+
+
+
+
+# data prep
+
+```{r}
+
+# compile data
+
+tree_coef <- taxa_coef2 %>%
+  select(Taxa, coef) %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         status = if_else(Taxa %in% temp_filter, "sensitive", "neutral"))
+
+tree_aic <- taxa_aic2 %>%
+  filter(model == "m_full") %>%
+  select(Taxa, weight)
+
+tree_data <- tree_aic %>% left_join(tree_coef, by = "Taxa")
+
+
+# filter and extract tree
+
+# filter phyloseq object by taxa 
+tree_taxa <- taxa_names(genus_aggregated)[tax_table(genus_aggregated)[, "Genus"] %in% genus_names]
+pruned_tree <- prune_taxa(tree_taxa, genus_aggregated)
+
+# extract the tree
+genus_tree <- phy_tree(temp_genus_phylo)
+
+
+```
+
+

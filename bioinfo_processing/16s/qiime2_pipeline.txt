@@ -60,4 +60,13 @@ qiime taxa filter-table
 		--o-filtered-table table_dada2_nomito_nochloro.qza
 
 
+# 6. PHYLOGENETIC TREE
+
+qiime fragment-insertion sepp 
+                --i-representative-sequences rep-seqs4.qza
+                --i-reference-database sepp-refs-gg-13-8.qza
+                --o-tree sepp_inserted_tree.qza 
+                --o-placements sepp_insertion_placements.qza
+
+
 
