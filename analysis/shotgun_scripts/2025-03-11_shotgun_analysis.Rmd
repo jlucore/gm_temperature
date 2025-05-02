@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-Notes: Most up to date analysis for the shotgun data. Have decided to use the uniref 50 data based on decisoins from the 2025-02-27_unmapped_reads scripts. We are also only going to work with the KO's for now since we have determiend that the databases are redunant with one another, you can't just combine them because the points aren't independent. 
+Notes: Most up to date analysis for the shotgun data. Have decided to use the uniref 50 data based on decisoins from the 2025-02-27_unmapped_reads scripts. We are also only going to work with the KO's for now since we have determined that the databases are redundant with one another, you can't just combine them because the points aren't independent. 
 
 Here we are working on the DAA analysis. Left this where I ran the DAA analysis, found that the effect sizes aren't super reliable but the temp model fits best for the majority of lvl2 and lvl3 categories. Then found that GAM's aren't saying much here, most of the model weights are evenly split between the model with the temp spline and the model without the temp spline. Probably need to give up on the GAM's for this data but I would like to summarize them in a script for evidence that I did the compairson and it didn't work. 
 

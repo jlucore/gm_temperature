@@ -135,7 +135,7 @@ asign_genus <- 100-(((sum(is.na(tax_table(phylo_filtered2)[, "Genus"])))/1159)*1
 
 ```
 
-##  b. Calc alpha diversity
+##  c. Calc alpha diversity
 
 calculate alpha diversity metrics, Shannon and observed with the filtered phyloseq object. The results are the same if you calculate before the filtering
 
@@ -1710,11 +1710,21 @@ look at phylum
 
 ```{r}
 
+
+
 phyla_neo <- filtered_neo_coef %>% left_join(phyla, by = "Taxa") %>%
   mutate(Phylum_grouped = case_when(str_detect(Phylum, "Firmicutes") ~ "Firmicutes",
          TRUE ~ Phylum)) %>%
   group_by(Phylum_grouped) %>%
   summarize(count = n())
+
+
+level <- da6 %>%
+  select(Taxa, level, Phylum) %>%
+  distinct()
+
+neo_taxa_level <- filtered_neo_coef %>%
+  left_join(level, by = "Taxa")
 
 ```
 

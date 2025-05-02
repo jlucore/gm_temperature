@@ -1,0 +1,43 @@
+---
+title: "Untitled"
+author: "Lucore"
+date: "2025-04-28"
+output: html_document
+---
+
+
+Notes: There does not seem to be enough taxonomic overlap between the 16s and shotgun data to be able to infer function for the taxa that show up with the neopterin temp interaction effect. There are only three overlapping genera (Alistipes, Parabateroides, and Eubactrium). I don't think it is worth it to develop a whole new analysis for three taxa. Below I pull in the stratified sheets and pull out the genera to compare to the interaction taxa. 
+
+# PATHWAYS
+
+```{r}
+
+x <- read_tsv("/Users/Jordan/Desktop/research_repos/tables_shotgun/uniref_50/humann_pathabundance_stratified.tsv") %>%
+  select('# Pathway') %>%
+  separate('# Pathway', into = c("pathway", "taxonomy"), sep = "\\|") %>%
+  separate(taxonomy, into = c("genus", "species"), sep = "\\.s_")
+
+taxa <- x %>%
+  select(genus, species) %>%
+  filter(!is.na(species)) %>%
+  distinct()
+  
+```
+
+
+# KO's
+
+```{r}
+
+y <- read_tsv("/Users/Jordan/Desktop/research_repos/tables_shotgun/uniref_50/humann_genefamilies_KO_stratified.tsv") %>%
+  select('# Gene Family') %>%
+  separate('# Gene Family', into = c("pathway", "taxonomy"), sep = "\\|") %>%
+  separate(taxonomy, into = c("genus", "species"), sep = "\\.s_")
+
+taxa <- y %>%
+  select(genus, species) %>%
+  filter(!is.na(species)) %>%
+  distinct()
+
+```
+

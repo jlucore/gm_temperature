@@ -1,0 +1,2706 @@
+---
+title: "2025-03-11 shotgun analysis"
+author: "Lucore"
+date: "2025-03-11"
+output: html_document
+---
+
+
+Overall notes: There are a ton of things in this script. essentially it goes through testing bot the KO's and the pathways on different hiararchical levesl. The community level data is congruent for both, PCA's show an effect and so does total obs number but shannon does not. The DAA data is a different story. For the KO's essentially everything is related to temperature (on both lvl 2 and lvl3) and this is true for the interaction effect. Since everything is related, you can't really say much about effects of temp. Also the CI's are huge so you can't say anything about direction of effect. Surpringsingly, Pathways tell a difference story, only some of them are related to temp and realted to the interaction effect. I tried with individual patheays and agglomerated on lvl2 of the pathays. The CI's for the individual pathways are unsprisingly more reliable. Further, then I tried the GAM's on the individual pathways and it's shoing two main clusters, one that is steady until 18degress and then declines and one that increases at 28 decres. Indiation of shift in metabolic profile with temp. This data is pretty overwhelming but I need to look at other papers and how they have shown these results. I think the main difference between the patheays and the KO's is that the patheays are more speciifc, they've taken the genes and clustered them into the different functional groups whereas the grouping of the KO's into functional groups is less precise. I just added up all the KO's associated with one level, much more error involved I think. I am going to move just the patheay analysis to a new sheet becaue that is what we are going to move forward with. 
+
+NEW DISCOVERY: PATHWAYS are showing a relationship with temp unlike KO's. 
+
+NOTES ON KO's
+thinking about giving up on this since the DAA isn't showing anything with much certainty except that temp matters, but it's not really showing in what direction it matters, I think I need to use the stratefied data to provide some functional context for the interaction effect and that would be a more efficient way to use the data since I already have so many 16s result. (update: little overlapping taxa in stratefieid data so can't do this).
+
+Could add in some very general conclusions from the results, unlike taxa alpha diversity, functional shannon diversity does not seem to be affected by temperature. However, there is strong evidence that temperature can affect the abundnace of functional pathways across diverse groups (all lvl2's fit bettr with temp in the model and only 64 lvl3 where the temp model does not fit best) spans numerous functions. Importance of temperature for the microbial profile of the gut but more research neded to understand specific effects. 
+
+Have further refined this to include only samples that have have a neopterin value and ran the interacion model. Found very similar results to the temp model, that the interaction model fits the best for all of the lvl2 and most of the lvl3 but not suire about the direction or magnitude of the effect. Unclear whether I should pick out the ones with reliable CI's and focus on those? 
+
+Remember: 
+
+-Have decided to use the uniref 50 data based on decisoins from the 2025-02-27_unmapped_reads scripts. We are also only going to work with the KO's for now since we have determined that the databases are redundant with one another, you can't just combine them because the points aren't independent. 
+
+-GAM's aren't saying much here, most of the model weights are evenly split between the model with the temp spline and the model without the temp spline. Can find this analysis in 2025-03-11_shotgun_analysis
+
+# 1. Load environment
+
+```{r}
+
+library(tidyverse)
+library(phyloseq)
+library(lme4)
+library(conflicted)
+library(mgcv)
+library(gratia)
+library(bbmle)
+library(ggpubr)
+library(factoextra)
+library(gridExtra)
+library(zCompositions)
+library(jsonlite)
+library(file2meco)
+
+source("functions/my_scale.R")
+
+source("functions/inverse_scale.R")
+
+source("functions/kegg_parse_json.R")
+
+conflict_prefer("select", "dplyr")
+conflicts_prefer(dplyr::filter)
+
+
+ko_physeq_u50 <- readRDS("phyloseq_objects/ko_phylo_u50.rds")
+path_physeq_u50 <- readRDS("phyloseq_objects/pathway_phylo_u50.rds")
+
+```
+
+
+# 2. Data set up
+
+## a. Filter metadata
+
+decided to use the 71 samples that have feed data and neopterin associated with them because I felt like I couldn't run the models without fruit since there is such a strong relationship between fruit consumption and temperature
+
+```{r}
+
+m <- data.frame(sample_data(ko_physeq_u50)) %>% # extract metadata 
+  rownames_to_column("sample") %>%
+  rename(temp = max_t_days15,
+         rain = rain_days4,
+         neo = total_3_day) %>%
+  select(sample, ID, time, date, group, sex, age, repro, temp, rain, neo, fruit, residuals, neo, reads)
+
+m_filtered <- m[!is.na(m$fruit), ] # remove samples with no diet data, drops 8 samples
+
+m_filtered <- m_filtered[!is.na(m_filtered$neo), ] # down to 71 samples
+
+
+# filter phyloseq objects to remove samples with no diet data 
+ko_physeq2 <- prune_samples(m_filtered$sample, ko_physeq_u50) # filter physeq object
+ko_physeq2 <- prune_taxa(taxa_sums(ko_physeq2) > 0, ko_physeq2) # remove ASV's with zero abundance
+
+path_physeq2 <- prune_samples(m_filtered$sample, path_physeq_u50) # filter physeq object
+path_physeq2 <- prune_taxa(taxa_sums(path_physeq2) > 0, path_physeq2) # remove ASV's with zero abundance
+
+```
+
+## b. Prevalence filtering
+
+hold off on prev filtering for now... our filter for the 16s data "remove features that are not present in at least 0.5% of total samples" doesn't remove anything here because that filter that the feature needs to be in at least one sample for this data. 
+
+Unapped values represent the total abundance of reads that failed to align to any known gene sequences and ungrouped values represent reads that mapped to known gene sequences but could not be confidently assigned to a specific functional category.
+
+We are going to remove the UNMAPPED and UNGROUPED reads so that we can just compared the mapped reads for each sample. Removing the UNGROUPED reads because we can think of this as taxa with no phylum assignment. 
+Need to think about removing KO's that don't have any functional assignment (similar to the argument of removing ASV's with no phylum assignment)
+
+```{r}
+
+####### remove UNMAPPED and UNGROUPED reads #######
+
+ko_filtered <- subset_taxa(ko_physeq2, 
+                                !(grepl("UNMAPPED", gene_ko) | grepl("UNGROUPED", gene_ko)))
+
+path_filtered <- subset_taxa(path_physeq2, 
+                                !(grepl("UNMAPPED", pathway) | grepl("UNINTEGRATED", pathway)))
+
+```
+
+## c. alpha diversity
+
+going to calculate this on the raw RPK's and add an offset for seq depth, use the number of paired reads from the kneaddata file
+
+ignore the warning, it is upset because the data is not in counts. Have to calculate the observed metric manually because `estimate_richness()` only takes count data
+
+```{r}
+
+ko_shannon <- estimate_richness(ko_filtered, measures = "Shannon") %>%
+  rownames_to_column(var = "sample") %>%
+  rename(ko_shannon = Shannon) 
+
+ko_alpha <- as.data.frame(colSums(otu_table(ko_filtered) > 0)) %>%
+  rename(ko_observed = 'colSums(otu_table(ko_filtered) > 0)') %>%
+  rownames_to_column(var = "sample") %>%
+  full_join(ko_shannon, by = "sample")
+
+hist(ko_alpha$ko_shannon) 
+hist(ko_alpha$ko_observed) 
+
+path_shannon <- estimate_richness(path_filtered, measures = "Shannon") %>%
+  rownames_to_column(var = "sample") %>%
+  rename(path_shannon = Shannon) 
+
+path_alpha <- as.data.frame(colSums(otu_table(path_filtered) > 0)) %>%
+  rename(path_observed = 'colSums(otu_table(path_filtered) > 0)') %>%
+  rownames_to_column(var = "sample") %>%
+  full_join(path_shannon, by = "sample")
+
+hist(path_alpha$path_shannon) 
+hist(path_alpha$path_observed)
+
+m1 <- m_filtered %>% # add to metadata
+  left_join(ko_alpha, by = "sample") %>%
+  left_join(path_alpha, by = "sample")
+
+```
+
+## d. CLR transformation
+
+doing the CLR transformation on the RPK abundances 
+
+```{r}
+
+ko_table <- as.matrix(t(otu_table(ko_filtered)))
+ko_table[1:5,1:5] # rows are samples 
+
+ko_czm <- cmultRepl(ko_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
+ko_czm[1:5,1:5] # rows are samples 
+
+ko_clr <- t(apply(ko_czm, 1, function(x){log(x) - mean(log(x))})) # must transpose again
+ko_clr[1:5,1:5] # rows are samples 
+
+ko_pca <- prcomp(ko_clr) # calc pca
+plot(ko_pca$x[,1], ko_pca$x[,2]) # plot 
+
+ko_d.mvar <- sum(ko_pca$sdev^2) # total variance
+ko_PC1 <- paste("PC1 ","(",round(sum(ko_pca$sdev[1]^2)/ko_d.mvar, 3)*100,"%",")",sep="") # PC1 30.8%
+ko_PC2 <- paste("PC2 ","(",round(sum(ko_pca$sdev[2]^2)/ko_d.mvar, 3)*100,"%",")",sep="") # PC2 12.5%
+
+
+path_table <- as.matrix(t(otu_table(path_filtered)))
+path_table[1:5,1:5] # rows are samples 
+
+path_czm <- cmultRepl(path_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
+path_czm[1:5,1:5] # rows are samples 
+
+path_clr <- t(apply(path_czm, 1, function(x){log(x) - mean(log(x))})) # must transpose again
+path_clr[1:5,1:5] # rows are samples 
+
+path_pca <- prcomp(path_clr) # calc pca
+plot(path_pca$x[,1], path_pca$x[,2]) # plot 
+
+path_d.mvar <- sum(path_pca$sdev^2) # total variance
+path_PC1 <- paste("PC1 ","(",round(sum(path_pca$sdev[1]^2)/path_d.mvar, 3)*100,"%",")",sep="") # PC1 24.4%
+path_PC2 <- paste("PC2 ","(",round(sum(path_pca$sdev[2]^2)/path_d.mvar, 3)*100,"%",")",sep="") # PC2 10.9%
+
+######### Add PCA values to metadata #########
+
+ko_df<-data.frame(ko_pca$x)
+ko_df$sample<-rownames(ko_df)
+ko_df_small <- ko_df %>% 
+  select(c(1:4,72)) %>%
+  rename_with(~paste0("ko_", .), starts_with("PC"))
+
+
+path_df<-data.frame(path_pca$x)
+path_df$sample<-rownames(path_df)
+path_df_small <- path_df %>% 
+  select(c(1:4,72)) %>%
+  rename_with(~paste0("pathway_", .), starts_with("PC"))
+
+# add to metadata
+m2 <- m1 %>%
+  left_join(ko_df_small, by = "sample") %>%
+  left_join(path_df_small, by = "sample")
+
+```
+
+## f. prep data for modeling
+
+scale variables and make categorical variables factors
+
+```{r}
+
+table(m2$ID)
+
+# scale variables
+m_model <- m2 %>%
+  mutate(across(c(age, temp, rain, fruit, neo, residuals), my_scale, .names = "{.col}_s")) %>%
+  mutate(group = as.factor(group),
+         ID = as.factor(ID))
+
+```
+
+
+# 3. Community features analysis
+
+## a. model community features
+
+everything seems normally distributed enough to model with Gaussian except for the Shannon index of the eggnog families which is pretty right skewed but I'm going to move forward with the normal distribution for simplicity of these models and then I can come back to tweak this later if I think it is necessary. 
+
+Going to need to think about how the observed effect size is on a totally difference scale than the shannon diversity effect, which is makeing all of the other effects look quire small
+
+main results here: for the functional metrics, it does not seem like temperature is related to shannon's diversity but it is realted to the PC's and observed gene families. Why is it not related to alpha diversity? Even though taxonomic shannon diversity may decrease at high temperatures, functional alpha diversity may be more resilient to this because many taxa have similar genes and similar functions? However, we don't see the same thing for observed gene families, could speak more to that there is still a decrease in number of functional annotations but the evenness is relatively stable in the community  
+
+```{r}
+
+####### histogranms ########
+
+hist(m_model$ko_shannon) 
+hist(m_model$ko_observed) 
+hist(m_model$ko_PC1)
+hist(m_model$ko_PC2)
+hist(m_model$ko_PC3)
+hist(m_model$ko_PC4)
+
+hist(m_model$path_shannon) 
+hist(m_model$path_observed) 
+hist(m_model$pathway_PC1)
+hist(m_model$pathway_PC2)
+hist(m_model$pathway_PC3)
+hist(m_model$pathway_PC4)
+
+############ loop  #################
+
+com_coef <- list() 
+com_aic <- list()
+
+com_features <- colnames(m_model)[c(15:25)] # list of features to model
+
+
+for (i in com_features) {
+      
+      formula_main <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + (1 | ID) + offset(log(reads))"))
+      formula_full <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + (1 | ID) + offset(log(reads))"))
+      
+      m_main <- lmer(formula_main, data = m_model)
+      m_full <- lmer(formula_full, data = m_model)
+    
+    # AICc
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+    
+    # extract taxa coef
+    coef <- round(summary(m_full)$coeff[8,1], 4)
+    
+    # extract se
+    std <- round(summary(m_full)$coeff[8,2], 4)
+    
+    # calc CI's
+    ci_95 <- data.frame(taxa_coef = coef, taxa_std = std, Lower_95 = coef - 1.96 * std, Upper_95 = coef + 1.96 * std)
+    
+    ci_50 <- data.frame(Lower_50 = coef - 0.6745 * std, Upper_50 = coef + 0.6745 * std)
+    
+    # bind data
+    df <- cbind(ci_95, ci_50) 
+    
+    #create data frames
+    aic_df <- data.frame(
+        metric = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3))
+    
+    results_df <- data.frame(
+        metric = i, 
+        coef = round(df$taxa_coef, 3),
+        std = round(df$taxa_std, 3),
+        low_ci_95 = round(df$Lower_95, 3),
+        high_ci_95 = round(df$Upper_95, 3),
+        low_ci_50 = round(df$Lower_50, 3),
+        high_ci_50 = round(df$Upper_50, 3))
+
+    # store results
+    com_aic[[i]] <- aic_df
+    com_coef[[i]] <- results_df
+
+}
+
+# combine results 
+com_aic <- do.call(rbind, com_aic)
+com_coef <- do.call(rbind, com_coef)
+
+```
+
+## b. plot results
+
+```{r}
+
+#### plot ####
+
+plot_com_coef <- com_coef %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative")) %>%
+  arrange(desc(coef)) %>%
+  mutate(order = factor(metric, levels = metric)) #%>%
+  #filter(metric != "nog_observed") %>%
+  #filter(metric != "ko_observed")
+         
+p1 <- ggplot(plot_com_coef, aes(x = order, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(size = 3) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95), linewidth = 1) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50), linewidth = 1.5) +
+  scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "community features") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) 
+p1
+
+
+# Reshape data
+com_data_long <- com_aic %>%
+  select(metric, model, weight) %>%
+  spread(key = model, value = weight) %>%          
+  mutate(order = factor(metric, levels = levels(plot_com_coef$order))) %>%
+  arrange(order)
+
+
+# Plot model weights
+p2 <- ggplot(com_data_long, aes(y = order)) +
+  # Plot m_full (on the left side)
+  geom_bar(stat = "identity", aes(x = -m_full, fill = "m_full"), position = "identity", width = 0.4) +
+  # Plot m_main (on the right side)
+  geom_bar(stat = "identity", aes(x = m_main, fill = "m_main"), position = "identity", width = 0.4) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") +
+  scale_fill_manual(values = c("m_full" = "#bc80bd", "m_main" = "#fdb462")) +
+  scale_x_continuous(
+    breaks = c(-1, -0.5, 0, 0.5, 1),   
+    labels = c("1", "0.5", "0", "0.5", "1"),
+    expand = c(0.05, 0.05)) +
+  labs(x = "Model Weight", y= "", fill = "Model") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  annotate("text", x = -0.7, y = "PC1", label = "interaction model", color = "white", size = 5, fontface = "bold") +
+  annotate("text", x = 0.3, y = "PC1", label = "base model", color = "#fdb462", size = 5, fontface = "bold")
+p2  
+
+```
+
+## c. loop for interaction effect
+
+```{r}
+
+com_coef_int <- list() 
+com_aic_int <- list()
+
+for (i in com_features) {
+      
+      formula_main <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + (1 | ID) + offset(log(reads))"))
+      formula_full <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s * neo_s + (1 | ID) + offset(log(reads))"))
+      
+      m_main <- lmer(formula_main, data = m_model)
+      m_full <- lmer(formula_full, data = m_model)
+    
+    # AICc
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+    
+    # extract taxa coef
+    coef <- round(summary(m_full)$coeff[10,1], 4)
+    
+    # extract se
+    std <- round(summary(m_full)$coeff[10,2], 4)
+    
+    # calc CI's
+    ci_95 <- data.frame(taxa_coef = coef, taxa_std = std, Lower_95 = coef - 1.96 * std, Upper_95 = coef + 1.96 * std)
+    
+    ci_50 <- data.frame(Lower_50 = coef - 0.6745 * std, Upper_50 = coef + 0.6745 * std)
+    
+    # bind data
+    df <- cbind(ci_95, ci_50) 
+    
+    #create data frames
+    aic_df <- data.frame(
+        metric = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3))
+    
+    results_df <- data.frame(
+        metric = i, 
+        coef = round(df$taxa_coef, 3),
+        std = round(df$taxa_std, 3),
+        low_ci_95 = round(df$Lower_95, 3),
+        high_ci_95 = round(df$Upper_95, 3),
+        low_ci_50 = round(df$Lower_50, 3),
+        high_ci_50 = round(df$Upper_50, 3))
+
+    # store results
+    com_aic_int[[i]] <- aic_df
+    com_coef_int[[i]] <- results_df
+
+}
+
+# combine results 
+com_aic_int <- do.call(rbind, com_aic_int)
+com_coef_int <- do.call(rbind, com_coef_int)
+
+```
+
+## d. plot interaction effect
+
+same resutls as temp results, full model fitx best for everything except shannon
+
+```{r}
+
+#### plot ####
+
+plot_com_coef_int <- com_coef_int %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative")) %>%
+  arrange(desc(coef)) %>%
+  mutate(order = factor(metric, levels = metric)) #%>%
+  #filter(metric != "nog_observed") %>%
+  #filter(metric != "ko_observed")
+         
+p1 <- ggplot(plot_com_coef_int, aes(x = order, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(size = 3) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95), linewidth = 1) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50), linewidth = 1.5) +
+  scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "community features") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) 
+p1
+
+
+# Reshape data
+com_data_long_int <- com_aic_int %>%
+  select(metric, model, weight) %>%
+  spread(key = model, value = weight) %>%          
+  mutate(order = factor(metric, levels = levels(plot_com_coef$order))) %>%
+  arrange(order)
+
+
+# Plot model weights
+p2 <- ggplot(com_data_long_int, aes(y = order)) +
+  # Plot m_full (on the left side)
+  geom_bar(stat = "identity", aes(x = -m_full, fill = "m_full"), position = "identity", width = 0.4) +
+  # Plot m_main (on the right side)
+  geom_bar(stat = "identity", aes(x = m_main, fill = "m_main"), position = "identity", width = 0.4) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") +
+  scale_fill_manual(values = c("m_full" = "#bc80bd", "m_main" = "#fdb462")) +
+  scale_x_continuous(
+    breaks = c(-1, -0.5, 0, 0.5, 1),   
+    labels = c("1", "0.5", "0", "0.5", "1"),
+    expand = c(0.05, 0.05)) +
+  labs(x = "Model Weight", y= "", fill = "Model") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+  annotate("text", x = -0.7, y = "PC1", label = "interaction model", color = "white", size = 5, fontface = "bold") +
+  annotate("text", x = 0.3, y = "PC1", label = "base model", color = "#fdb462", size = 5, fontface = "bold")
+p2  
+
+
+```
+
+# 4. Data set up for DAA
+
+## a. Agglomeration at brite levels
+
+Agglomerate KO's at Brite level 2 and Pathway level from the Keg orthology database. Below are links of where to find the explanation of the database and the link to download the json file. Then the link to the github page with the code to parse the json file. 
+
+website that explains KEG orthology database https://www.genome.jp/kegg/ko.html
+json download for KEG orthology assignment: https://www.genome.jp/kegg-bin/get_htext?ko00001.keg
+github page with function to clean json: https://gist.github.com/cmkobel/c2f76359eb17e0c00ddd4e83e90bdf99
+
+```{r}
+
+brite <- fromJSON("data/brite_map.json", flatten = F)
+
+brite_parsed <- kegg_parse_json(brite) %>%
+  rename(lvl1 = a_class,
+         lvl2 = b_class, 
+         lvl3 = pathway)
+
+```
+
+
+# 5. LVL 2 WORKFLOW
+
+results: seems like there is a small negative effect for organismal systems and cellular processes. Genetic information seems to trend positive but metbolisms is all over the place, both negative and positive effects. The CI's are huge and even though the models fit better with the temp model I don't think we can conclude much from this 
+
+results: for every lvl2 category the temp model fits better, over 85% of the model weight. 35 out of 16 cetgroies have a negative coefficient but none have reliable confidence intervals. Seem like termperature is important for abundance of functional genes but we don't have a lot of certainty about the direction. Still, the maximum likelihood is the best estimate and the majority of the effects are negative so it seems like there is a negative effect on both taxa abundances and abundances of functional genes 
+
+############# lvl2 workflow ######################
+
+## A. agglomerate levels
+
+```{r}
+
+brite_level2 <- brite_parsed[,c(2,5)]
+length(unique(brite_level2$lvl2)) # 57 unique brite level 2
+
+# agglomerate at brite level 2
+lvl2_abund_ko <- ko_clr %>%
+  data.frame() %>%
+  rownames_to_column("sample") %>%
+  gather(key = "reaction_ko", value = "abundance", -sample) %>%
+  left_join(brite_level2, by = "reaction_ko", relationship = "many-to-many") %>%
+  mutate(lvl2 = replace_na(lvl2, "no_assignment"))
+
+length(unique(lvl2_abund_ko$lvl2)) # 55 lvl2, 1 no_assignment
+
+unique_lvl2 <- unique(lvl2_abund_ko$lvl2)
+missing_lvl2 <- brite_level2[!(brite_level2$lvl2 %in% unique_lvl2), ]
+unique(missing_lvl2$lvl2) # missing two lvl2 in our dataset
+
+lvl2_abund <- lvl2_abund_ko %>%
+  group_by(sample, lvl2) %>%
+  summarise(clr_abundance = sum(abundance)) %>%
+  left_join(m_filtered, by = "sample") %>%
+  mutate(level = "lvl2") 
+
+unique_lvl2 <- length(unique(lvl2_abund$lvl2))
+unique_samples <- length(unique(lvl2_abund$sample))
+(unique_lvl2 * unique_samples) == nrow(lvl2_abund) # check that each sample has a value for all lvls
+
+```
+
+## B. Abundance filtering
+
+Remove categories that you are not interested in including lvls that are not assigned or poorly characterized and human diseases
+
+```{r}
+
+# extract and adjust lvl 1 categories
+
+lvl1 <- brite_parsed %>% select(lvl1, lvl2) %>%
+  distinct() %>%
+  filter(lvl2 != "09194 Poorly characterized" &
+           lvl2 != "no_assignment") %>%
+  mutate(lvl1 = case_when(lvl2 == "09192 Unclassified: genetic information processing" ~ "09120 Genetic Information Processing",
+                          lvl2 == "09193 Unclassified: signaling and cellular processes" ~ "09140 Cellular Processes",
+                          lvl2 == "09191 Unclassified: metabolism" ~ "09100 Metabolism",
+                          TRUE ~ lvl1)) # remove the unclassified lvl1 for simplicity
+  
+
+length(unique(lvl2_abund$lvl2)) # 56 starting 
+
+lvl2_abund <- lvl2_abund %>% left_join(lvl1, by = "lvl2") %>%
+  filter(lvl1 != "09160 Human Diseases") %>%
+  filter(lvl2 != "09194 Poorly characterized" &
+           lvl2 != "no_assignment") 
+
+length(unique(lvl2_abund$lvl2)) # 42, removed 14 lvl2's
+
+```
+
+
+## C. Scale variables
+
+have to do this manually because scale function not working within the tidyverse mutate() command for some reason
+
+```{r}
+
+# Scale variables
+
+lvl2_abund$temp_s <-  my_scale(lvl2_abund$temp) 
+lvl2_abund$rain_s <-  my_scale(lvl2_abund$rain)
+lvl2_abund$age_s <-  my_scale(lvl2_abund$age)
+lvl2_abund$fruit_s <-  my_scale(lvl2_abund$fruit)
+lvl2_abund$neo_s <-  my_scale(lvl2_abund$neo)
+
+lvl2_abund <- lvl2_abund %>%
+  mutate(ID = as.factor(ID),
+         sex = as.factor(sex)) 
+
+length(unique(lvl2_abund$lvl2)) 
+
+```
+
+
+## D. run loop
+
+Had to change the way I track convergence errors for this loop because I'm using lmer insteatd of glmer. 
+
+two don't converge 
+
+```{r}
+
+coef <- list()
+aic <- list()
+model_results <- list()
+
+for (i in unique(lvl2_abund$lvl2)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(lvl2_abund, lvl2 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s", 1], 4)
+    std_value <- round(summary(m_full)$coefficients["temp_s", 2], 4)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      lvl2 = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      lvl2 = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      lvl2 = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    aic[[i]] <- aic_df
+    coef[[i]] <- results_df
+    model_results[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+aic <- do.call(rbind, aic)
+coef <- do.call(rbind, coef)
+model_results <- do.call(rbind, model_results)
+
+
+```
+
+## D. select taxa
+
+of the 38 final lvl2 groups, the temp model fits best for ALL of them
+
+```{r}
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(aic$lvl2[aic$Warning == "Convergence Warning"]) # 2 do not converge
+length(convergence_warnings)
+
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- model_results %>% 
+  filter(StdError > 100) %>%
+  pull(lvl2) %>%
+  unique() 
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 5 do not converge
+
+
+# remove error taxa
+lvl2_abund2 <- lvl2_abund %>% filter(!lvl2 %in% errors)
+length(unique(lvl2_abund2$lvl2)) # 38 remaining 
+
+coef2 <- coef %>% filter(!lvl2 %in% errors)
+length(coef2$lvl2)
+
+aic2 <- aic %>% filter(!lvl2 %in% errors)
+length(aic2$lvl2) # 76/2 = 38
+
+# filter for taxa where full model fits best
+temp_filter <- aic2 %>%
+  group_by(lvl2) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl2) 
+length(unique(temp_filter)) # temp model fits best for all
+
+```
+
+## E. plot loop
+
+loop for coefficient plots by lvl1 catgeory
+
+results: seems like there is a small negative effect for organismal systems and cellular processes. Genetic information seems to trend positive but metbolisms is all over the place, both negative and positive effects. The CI's are huge and even though the models fit better with the temp model I don't think we can conclude much from this 
+
+```{r}
+
+plot_coef <- coef2 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         lvl2 = reorder(lvl2, -coef)) %>%
+  left_join(lvl1, by = "lvl2")
+
+# plot ditribution 
+pdf("figures/lvl2_KO_DAA.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef$lvl1)) {
+  
+  data <- subset(plot_coef, lvl1 == i)
+  
+  p <- ggplot(data, aes(x = lvl2, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste("Distribution for", i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 3)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+
+
+```
+
+## F. Interaction effect
+
+```{r}
+
+coef_int <- list()
+aic_int <- list()
+model_results_int <- list()
+
+for (i in unique(lvl2_abund2$lvl2)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(lvl2_abund, lvl2 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s * neo_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 1], 6)
+    std_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 2], 6)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      lvl2 = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      lvl2 = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      lvl2 = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    aic_int[[i]] <- aic_df
+    coef_int[[i]] <- results_df
+    model_results_int[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+aic_int <- do.call(rbind, aic_int)
+coef_int <- do.call(rbind, coef_int)
+model_results_int <- do.call(rbind, model_results_int)
+
+```
+
+
+## G. select interaction groups
+
+Interaction model fits best for all lvl 2's
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(aic_int$lvl2[aic_int$Warning == "Convergence Warning"]) # 0 do not converge
+length(convergence_warnings)
+
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- model_results_int %>% 
+  filter(StdError > 100) %>%
+  pull(lvl2) %>%
+  unique() 
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 4 do not converge
+
+
+# remove error taxa
+lvl2_abund3 <- lvl2_abund2 %>% filter(!lvl2 %in% errors)
+length(unique(lvl2_abund3$lvl2)) # 33 remaining 
+
+coef_int2 <- coef_int %>% filter(!lvl2 %in% errors)
+length(coef_int2$lvl2)
+
+aic_int2 <- aic_int %>% filter(!lvl2 %in% errors)
+length(aic_int2$lvl2) # 76/2 = 38
+
+# filter for taxa where full model fits best
+temp_filter <- aic_int2 %>%
+  group_by(lvl2) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl2) 
+length(unique(temp_filter)) # interaction model fits best for all
+
+
+```
+
+
+## H Plot interaction
+
+Similar to temp modeling, super wide CI's, not a lot of certainty of effect
+
+```{r}
+
+plot_coef_int <- coef_int2 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         lvl2 = reorder(lvl2, -coef)) %>%
+  left_join(lvl1, by = "lvl2")
+
+# plot ditribution 
+pdf("figures/lvl2_KO_interaction_DAA.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef_int$lvl1)) {
+  
+  data <- subset(plot_coef_int, lvl1 == i)
+  
+  p <- ggplot(data, aes(x = lvl2, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste("Distribution for", i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 3)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+
+```
+
+
+# 6. LVL 3 WORKFLOW
+
+## A. agglomerate levels
+
+```{r}
+
+# pathways (brite level 3)
+brite_path <- brite_parsed[,c(3,5)]
+length(unique(brite_path$lvl3)) # 561 unique pathways 
+
+#agglomerate at pathway
+lvl3_abund_ko <- ko_clr %>%
+  data.frame() %>%
+  rownames_to_column("sample") %>%
+  gather(key = "reaction_ko", value = "abundance", -sample) %>%
+  left_join(brite_path, by = "reaction_ko", relationship = "many-to-many") %>%
+  mutate(lvl3 = replace_na(lvl3, "no_assignment"))
+
+length(unique(lvl3_abund_ko$lvl3)) # 511 total, 510 lvl3, 1 no_assignment
+
+unique_path <- unique(lvl3_abund_ko$lvl3)
+missing_path <- brite_path[!(brite_path$lvl3 %in% unique_path), ]
+length(unique(missing_path$lvl3)) # missing 51 pathways in our dataset
+
+lvl3_abund <- lvl3_abund_ko %>%
+  group_by(sample, lvl3) %>%
+  summarise(clr_abundance = sum(abundance)) %>%
+  left_join(m_filtered, by = "sample") %>%
+  mutate(level = "lvl3")
+
+unique_path <- length(unique(lvl3_abund$lvl3))
+unique_samples <- length(unique(lvl3_abund$sample))
+(unique_path * unique_samples) == nrow(lvl3_abund) # check that each sample has a value for all lvls
+
+```
+
+## B. Abundance filtering
+
+Remove categories that you are not interested in including lvls that are not assigned or poorly characterized and human diseases
+
+```{r}
+
+# extract and adjust lvl 1 categories
+
+lvl1 <- brite_parsed %>% select(lvl1, lvl2, lvl3) %>%
+  distinct() 
+
+length(unique(lvl3_abund$lvl3)) # 526 starting 
+
+lvl3_abund <- lvl3_abund %>% left_join(lvl1, by = "lvl3") %>%
+  filter(lvl1 != "09160 Human Diseases") %>%
+  filter(lvl3 != "no_assignment" &
+           lvl3 != "99997 Function unknown" &
+           lvl3 != "99999 Others") 
+
+length(unique(lvl3_abund$lvl3)) # 430, removed 96 lvl2's
+
+```
+
+## C. Scale variables
+
+have to do this manually because scale function not working within the tidyverse mutate() command for some reason
+
+```{r}
+
+# Scale variables
+
+lvl3_abund$temp_s <-  my_scale(lvl3_abund$temp) 
+lvl3_abund$rain_s <-  my_scale(lvl3_abund$rain)
+lvl3_abund$age_s <-  my_scale(lvl3_abund$age)
+lvl3_abund$fruit_s <-  my_scale(lvl3_abund$fruit)
+lvl3_abund$neo_s <-  my_scale(lvl3_abund$neo)
+
+lvl3_abund <- lvl3_abund %>%
+  mutate(ID = as.factor(ID),
+         sex = as.factor(sex)) 
+
+length(unique(lvl3_abund$lvl3)) 
+
+```
+
+
+## D. run loop
+
+Had to change the way I track convergence errors for this loop because I'm using lmer insteatd of glmer. 
+
+```{r}
+
+coef <- list()
+aic <- list()
+model_results <- list()
+
+for (i in unique(lvl3_abund$lvl3)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(lvl3_abund, lvl3 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s", 1], 4)
+    std_value <- round(summary(m_full)$coefficients["temp_s", 2], 4)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      lvl3 = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      lvl3 = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      lvl3 = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    aic[[i]] <- aic_df
+    coef[[i]] <- results_df
+    model_results[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+aic <- do.call(rbind, aic)
+coef <- do.call(rbind, coef)
+model_results <- do.call(rbind, model_results)
+
+
+```
+
+## E. select taxa
+
+temp model fits best for 342 of them (52 where temp model doesn't fit best)
+
+```{r}
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(aic$lvl3[aic$Warning == "Convergence Warning"]) # 35 do not converge
+length(convergence_warnings)
+
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- model_results %>% 
+  filter(StdError > 100) %>%
+  pull(lvl3) %>%
+  unique() 
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 36 do not converge
+
+# remove error taxa
+lvl3_abund2 <- lvl3_abund %>% filter(!lvl3 %in% errors)
+length(unique(lvl3_abund2$lvl3)) # 394 remaining 
+
+coef2 <- coef %>% filter(!lvl3 %in% errors)
+length(coef2$lvl3)
+
+aic2 <- aic %>% filter(!lvl3 %in% errors)
+length(aic2$lvl3) 
+
+# filter for taxa where full model fits best
+temp_filter <- aic2 %>%
+  group_by(lvl3) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl3) 
+length(unique(temp_filter)) # temp model fits best for 342 
+
+# filter df's for where temp model fits best 
+lvl3_abund3 <- lvl3_abund2 %>% filter(lvl3 %in% temp_filter)
+length(unique(lvl3_abund3$lvl3))  
+
+coef3 <- coef2 %>% filter(lvl3 %in% temp_filter)
+length(coef3$lvl3)
+
+aic3 <- aic2 %>% filter(lvl3 %in% temp_filter)
+length(aic3$lvl3)
+
+```
+
+## F. coef plot loop
+
+loop for coefficient plots by lvl3 catgeory
+
+results: moST OF THE 50% CI's cross zero and their doesn't seem to be a large trend by either lvl1 or lvl2 groups
+
+```{r}
+
+plot_coef <- coef3 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         lvl3 = reorder(lvl3, -coef)) %>%
+  left_join(lvl1, by = "lvl3")
+
+table(plot_coef$lvl2)
+
+# plot ditribution 
+pdf("figures/lvl3_KO_DAA.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef$lvl2)) {
+  
+  data <- subset(plot_coef, lvl2 == i)
+  
+  p <- ggplot(data, aes(x = lvl3, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste("Distribution for", i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 2)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```
+
+
+## F. Interaction effect
+
+```{r}
+
+coef_int <- list()
+aic_int <- list()
+model_results_int <- list()
+
+for (i in unique(lvl3_abund3$lvl3)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(lvl3_abund3, lvl3 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s * neo_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 1], 6)
+    std_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 2], 6)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      lvl3 = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      lvl3 = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      lvl3 = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    aic_int[[i]] <- aic_df
+    coef_int[[i]] <- results_df
+    model_results_int[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+aic_int <- do.call(rbind, aic_int)
+coef_int <- do.call(rbind, coef_int)
+model_results_int <- do.call(rbind, model_results_int)
+
+```
+
+
+## G. select interaction groups
+
+only 11 where interaction model does not fit best
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(aic_int$lvl3[aic_int$Warning == "Convergence Warning"]) # 4 do not converge
+length(convergence_warnings)
+
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- model_results_int %>% 
+  filter(StdError > 100) %>%
+  pull(lvl3) %>%
+  unique() 
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 5 do not converge
+
+
+# remove error taxa
+lvl3_abund4 <- lvl3_abund3 %>% filter(!lvl3 %in% errors)
+length(unique(lvl3_abund4$lvl3)) # 337 remaining 
+
+coef_int2 <- coef_int %>% filter(!lvl3 %in% errors)
+length(coef_int2$lvl3)
+
+aic_int2 <- aic_int %>% filter(!lvl3 %in% errors)
+length(aic_int2$lvl3) 
+
+# filter for taxa where full model fits best
+temp_filter <- aic_int2 %>%
+  group_by(lvl3) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl3) 
+length(unique(temp_filter)) # 326 interaction model fits best for all
+
+
+```
+
+
+## H Plot interaction
+
+Similar to temp modeling, super wide CI's, not a lot of certainty of effect
+
+```{r}
+
+plot_coef_int <- coef_int2 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         lvl3 = reorder(lvl3, -coef)) %>%
+  left_join(lvl1, by = "lvl3")
+
+# plot ditribution 
+pdf("figures/lvl3_KO_interaction_DAA.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef_int$lvl2)) {
+  
+  data <- subset(plot_coef_int, lvl2 == i)
+  
+  p <- ggplot(data, aes(x = lvl3, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste("Distribution for", i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 3)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+
+```
+
+
+# 7. PATHWAY WORKFLOW
+
+
+## A. Prep data
+
+ARG-POLYAMINE-SYN does not have level assignments 
+
+```{r}
+
+# wrangle pathway levels
+
+pathway_levels <- as.data.frame(MetaCyc_pathway_map) %>%
+  rownames_to_column("path_id") %>%
+  rename(lvl1 = Superclass1,
+         lvl2 = Superclass2) %>%
+  select(lvl1, lvl2, pathway, path_id)
+
+# wrangle clr abundances
+
+path_abund <- path_clr %>%
+  data.frame() %>%
+  rownames_to_column("sample") %>%
+  gather(key = "pathway", value = "clr_abundance", -sample) %>%
+  left_join(m_filtered, by = "sample") %>%
+  mutate(pathway = str_remove(pathway, "^X")) %>% 
+  separate(pathway, into = c("path_id", "pathway_name"), sep = "\\.\\.", extra = "merge") %>%
+  mutate(path_id = str_replace_all(path_id, "\\.", "-")) %>%
+  left_join(pathway_levels, by = "path_id") %>%
+  rename(path_name = pathway) %>%
+  select(sample, path_id, path_name, lvl1, lvl2, clr_abundance:reads)
+  
+
+length(unique(path_abund$path_id)) # 548 pathways
+table(path_abund$sample) # each sample has 548 instances
+
+# scale variables
+
+path_abund$temp_s <-  my_scale(path_abund$temp) 
+path_abund$rain_s <-  my_scale(path_abund$rain)
+path_abund$age_s <-  my_scale(path_abund$age)
+path_abund$fruit_s <-  my_scale(path_abund$fruit)
+path_abund$neo_s <-  my_scale(path_abund$neo)
+
+path_abund <- path_abund %>%
+  mutate(ID = as.factor(ID),
+         sex = as.factor(sex),
+         group = as.factor(group))
+
+
+```
+
+## B. run loop
+
+```{r}
+
+path_coef <- list()
+path_aic <- list()
+path_model_results <- list()
+
+for (i in unique(path_abund$path_id)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund, path_id == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s", 1], 4)
+    std_value <- round(summary(m_full)$coefficients["temp_s", 2], 4)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      path_id = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      path_id = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      path_id = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    path_aic[[i]] <- aic_df
+    path_coef[[i]] <- results_df
+    path_model_results[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+path_aic <- do.call(rbind, path_aic)
+path_coef <- do.call(rbind, path_coef)
+path_model_results <- do.call(rbind, path_model_results)
+
+
+```
+
+## C. select taxa
+
+165 do not converge so we tested 373 total (started with 538)
+
+Temp model fits best for 169 pathways which means that it doesn't fit best for 214... different from the KO's, might actually have some functional significance here
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(path_aic$path_id[path_aic$Warning == "Convergence Warning"]) # 165 do not converge
+length(convergence_warnings)
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- path_model_results %>% 
+  filter(StdError > 100) %>%
+  pull(path_id) %>%
+  unique() # no huge SE's
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 165 do not converge
+
+# remove error taxa
+path_abund2 <- path_abund %>% filter(!path_id %in% errors)
+length(unique(path_abund2$path_id)) # 383 remaining 
+
+path_coef2 <- path_coef %>% filter(!path_id %in% errors)
+length(path_coef2$path_id)
+
+path_aic2 <- path_aic %>% filter(!path_id %in% errors)
+length(path_aic2$path_id) 
+
+# filter for taxa where full model fits best
+temp_filter <- path_aic2 %>%
+  group_by(path_id) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(path_id) 
+length(unique(temp_filter)) # temp model fits best for 169 pathways
+
+# filter df's for where temp model fits best 
+path_abund3 <- path_abund2 %>% filter(path_id %in% temp_filter)
+length(unique(path_abund3$path_id))  
+
+path_coef3 <- path_coef2 %>% filter(path_id %in% temp_filter)
+length(path_coef3$path_id)
+
+path_aic3 <- path_aic2 %>% filter(path_id %in% temp_filter)
+length(path_aic3$path_id)
+
+```
+
+## D. coef plot loop
+
+```{r}
+
+plot_coef <- path_coef3 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         path_id = reorder(path_id, -coef)) %>%
+  left_join(pathway_levels, by = "path_id")
+
+# plot ditribution 
+pdf("figures/pathway_DAA.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef$lvl2)) {
+  
+  data <- subset(plot_coef, lvl2 == i)
+  
+  p <- ggplot(data, aes(x = pathway, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste(i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 4)) {
+  
+  batch_plots <- plot_list[i:min(i + 4, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```
+
+## GAM's 
+
+19 pathways with non-linear relationship... 
+
+```{r}
+
+gam_results <- list()
+
+for (i in unique(path_abund3$path_id)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund3, path_id == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- gam(clr_abundance ~ age_s + s(temp_s) + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = data)
+    
+    m_main <- gam(clr_abundance ~ age_s + temp_s + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = data)
+
+  }, warning = function(w) {
+   
+      warning_msg <- conditionMessage(w)
+  
+      if (grepl("Fitting terminated with step failure", warning_msg)) {
+      warning_msg <<- "Convergence Warning"  # Update the warning message
+      } 
+    })
+
+    # compare with AICctab
+      AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+      AICc$model <- rownames(AICc)
+      
+      #create data frame
+      results_df <- data.frame(
+        path_id = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3),
+        Warning = warning_msg,
+        stringsAsFactors = FALSE
+      )
+  
+      # store results
+      gam_results[[i]] <- results_df
+}
+
+# combine results 
+gam_results <- do.call(rbind, gam_results)
+
+
+#Filter for taxa where m_full best fit
+gam_filter <- gam_results %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(path_id)
+length(gam_filter) # 19 
+  
+# filter abundance
+smooth_abund <- path_abund3 %>% filter(path_id %in% gam_filter) %>%
+  filter(path_id != "NA")
+length(unique(smooth_abund$path_id)) 
+
+```
+
+
+## c. Generate GAM preds
+
+
+```{r}
+
+# Initialize an empty list to store results for all taxa
+gam_preds <- list()
+
+# Define the range of temp_s values for prediction
+temp_seq <- seq(from = min(smooth_abund$temp_s, na.rm = TRUE), 
+                to = max(smooth_abund$temp_s, na.rm = TRUE), length.out = 100)
+
+
+# Iterate over unique values in final_temp_abund$path_id
+for (i in unique(smooth_abund$path_id)) {
+    
+    # Subset your data based on current value of i
+    data <- droplevels(subset(smooth_abund, path_id == i))
+    
+    # run model 
+    gam_m <- gam(clr_abundance ~ age_s + s(temp_s) + rain_s + fruit_s + group + sex, data = data)
+    
+    # Generate predictions over the specified range of temp_s
+    pred_data <- data.frame(
+      age_s = mean(data$age_s, na.rm = TRUE),
+      temp_s = temp_seq,
+      rain_s = mean(data$rain_s, na.rm = TRUE),
+      fruit_s = mean(data$fruit_s, na.rm = TRUE),
+      group = factor("Tenori", levels = levels(data$group)), # assuming group is a factor
+      sex = "M" # assuming sex is a factor
+    )
+    
+    # Predict abundance values
+    predicted_values <- predict(gam_m, newdata = pred_data)
+    
+    # Store the predicted values along with temperature sequence and Taxa label
+    df <- data.frame(
+      path_id = i,
+      temp_s = temp_seq,
+      preds = predicted_values
+    )
+    
+    # Store the results in the list
+    gam_preds[[i]] <- df
+    
+}
+
+# Combine all results into a single dataframe
+gam_preds <- do.call(rbind, gam_preds)
+row.names(gam_preds) <- NULL # clean up row names
+
+length(unique(gam_preds$path_id))
+```
+
+## GAM cluster
+
+```{r}
+
+# Create a wide format dataframe
+predicted_wide <- reshape(gam_preds, idvar = "temp_s", timevar = "path_id", direction = "wide")
+
+# clean data
+predicted_wide <- predicted_wide %>% 
+  rename_with(~ str_replace(., "^preds.", ""), everything()) %>% # clean column names 
+  select(-temp_s) # remove the temp_s column for correlation calculation and positive taxa
+
+# elbow method
+clust_plot <- fviz_nbclust(predicted_wide, kmeans, method = "wss", k.max = 10) + 
+  theme_minimal() +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 12, color = "black"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_blank()) +
+  labs(x = "Number of clusters", y = "Within-cluster sum of squares", title = "")
+clust_plot
+
+# set number of clusters
+k=4
+
+# distnce matrix
+clus.distance = as.dist(1 - cor(predicted_wide, use = "pa")) # create distance matrix
+
+h.clust = hclust(clus.distance,method='complete') # calculate clusters 
+
+dendogram <- plot(h.clust, cex = 0.6, main = "", xlab = "", ylab = "") # plot dendogram
+rect.hclust(h.clust, k = k, border = 2:6) # add clusters 
+
+
+# Separate temp-relationships into k clusters 
+clusters <- cutree(h.clust, k = k)
+
+# Add cluster assignments to the original data
+gam_preds$Cluster <- clusters[match(gam_preds$path_id, names(clusters))]
+
+### Plot clusters ###
+
+# clean data
+clean_preds <- gam_preds %>% mutate(Cluster = as.factor(Cluster))
+
+# by cluster 
+c1 <- clean_preds %>% filter(Cluster == 1)
+c2 <- clean_preds %>% filter(Cluster == 2)
+c3 <- clean_preds %>% filter(Cluster == 3)
+c4 <- clean_preds %>% filter(Cluster == 4)
+
+p1 <- ggplot(c1, aes(x = temp_s, y = preds, color = path_id)) + 
+  geom_line() +
+  theme_minimal()
+p1
+
+p2 <- ggplot(c2, aes(x = temp_s, y = preds, color = path_id)) + 
+  geom_line() +
+  theme_minimal()
+p2
+
+p3 <- ggplot(c3, aes(x = temp_s, y = preds, color = path_id)) + 
+  geom_line() +
+  theme_minimal()
+p3
+
+p4 <- ggplot(c4, aes(x = temp_s, y = preds, color = path_id)) + 
+  geom_line() +
+  theme_minimal()
+p4
+
+# Arrange the plots in a 2x2 layout
+cluster_plot <- ggarrange(p1, p2,
+                           ncol = 1, nrow = 2,
+                          labels = c("A", "B"))
+```
+
+
+# plot two main clusters 
+
+```{r}
+
+mean_temp <- mean(smooth_abund$temp)
+sd_temp <- sd(smooth_abund$temp) 
+
+cluster1 <- ggplot(c1, aes(x = temp_s, y = preds, color = path_id)) + 
+  geom_line() +
+  theme_minimal() +
+  labs(y = "Predicted log abundance", x = "Temperature (°C)") +
+  scale_x_continuous(
+   breaks = seq(min(c1$temp_s), max(c1$temp_s), length.out = 6), 
+   labels = inverse_scale) + 
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 16, color = "black"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) 
+
+cluster2 <- ggplot(c2, aes(x = temp_s, y = preds, color = path_id)) + 
+  geom_line() +
+  theme_minimal() +
+  labs(y = "Predicted log abundance", x = "Temperature (°C)") +
+  scale_x_continuous(
+   breaks = seq(min(c1$temp_s), max(c1$temp_s), length.out = 6), 
+   labels = inverse_scale) + 
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 16, color = "black"), 
+        text = element_text(size = 20, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) 
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## E. interaction effect
+
+```{r}
+
+path_coef_int <- list()
+path_aic_int <- list()
+path_model_results_int <- list()
+
+for (i in unique(path_abund3$path_id)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund3, path_id == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s * neo_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 1], 6)
+    std_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 2], 6)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      path_id = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      path_id = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      path_id = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    path_aic_int[[i]] <- aic_df
+    path_coef_int[[i]] <- results_df
+    path_model_results_int[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+path_aic_int <- do.call(rbind, path_aic_int)
+path_coef_int <- do.call(rbind, path_coef_int)
+path_model_results_int <- do.call(rbind, path_model_results_int)
+
+```
+
+
+## F. select interaction taxa
+
+tested 169, 53 of those didn't converge so tested 116
+
+out of 116 the interaction model first best for 65 of them 
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(path_aic_int$path_id[path_aic_int$Warning == "Convergence Warning"]) # 53 do not converge
+length(convergence_warnings)
+
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- path_model_results_int %>% 
+  filter(StdError > 100) %>%
+  pull(path_id) %>%
+  unique() # no big SE's
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 53 do not converge
+
+
+# remove error taxa
+path_abund4 <- path_abund3 %>% filter(!path_id %in% errors)
+length(unique(path_abund4$path_id)) # 116 remaining 
+
+path_coef_int2 <- path_coef_int %>% filter(!path_id%in% errors)
+length(path_coef_int2$path_id)
+
+path_aic_int2 <- path_aic_int %>% filter(!path_id %in% errors)
+length(path_aic_int2$path_id) 
+
+# filter for taxa where full model fits best
+temp_filter <- path_aic_int2 %>%
+  group_by(path_id) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(path_id) 
+length(unique(temp_filter)) # 65 interaction model fits best for all
+
+# filter df's for where temp model fits best 
+path_abund5 <- path_abund4 %>% filter(path_id %in% temp_filter)
+length(unique(path_abund5$path_id))  
+
+path_coef_int3 <- path_coef_int2 %>% filter(path_id %in% temp_filter)
+length(path_coef_int3$path_id)
+
+path_aic_int2 <- path_aic_int2 %>% filter(path_id %in% temp_filter)
+length(path_aic_int2$path_id)
+
+```
+
+
+## G. plot interaction
+
+```{r}
+
+plot_coef <- path_coef_int3 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         path_id = reorder(path_id, -coef)) %>%
+  left_join(pathway_levels, by = "path_id")
+
+# plot ditribution 
+pdf("figures/pathway_interaction_DAA.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef$lvl2)) {
+  
+  data <- subset(plot_coef, lvl2 == i)
+  
+  p <- ggplot(data, aes(x = pathway, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste(i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 4)) {
+  
+  batch_plots <- plot_list[i:min(i + 4, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```
+
+
+# 8. Pathways again but at lvl2 hierarchy
+
+## A. data set up
+
+```{r}
+
+# wrangle pathway levels
+
+pathway_levels <- as.data.frame(MetaCyc_pathway_map) %>%
+  rownames_to_column("path_id") %>%
+  rename(lvl1 = Superclass1,
+         lvl2 = Superclass2) %>%
+  select(lvl1, lvl2, pathway, path_id)
+
+# wrangle clr abundances
+
+path_abund <- path_clr %>%
+  data.frame() %>%
+  rownames_to_column("sample") %>%
+  gather(key = "pathway", value = "clr_abundance", -sample) %>%
+  mutate(pathway = str_remove(pathway, "^X")) %>% 
+  separate(pathway, into = c("path_id", "pathway_name"), sep = "\\.\\.", extra = "merge") %>%
+  mutate(path_id = str_replace_all(path_id, "\\.", "-")) %>%
+  left_join(pathway_levels, by = "path_id") %>%
+  rename(path_name = pathway) %>%
+  select(sample, path_id, path_name, lvl1, lvl2, clr_abundance) %>%
+  filter(path_id != "ARG-POLYAMINE-SYN") # remove path with no characterization
+  
+
+length(unique(path_abund$path_id)) # 547 pathways
+length(unique(path_abund$lvl2)) # 81 lvl2's
+table(path_abund$sample) # each sample has 547 instances
+
+path_abund <- path_abund %>%
+  group_by(sample, lvl2) %>%
+  summarise(clr_abundance = sum(clr_abundance)) %>%
+  left_join(m_filtered, by = "sample") %>%
+  filter(lvl2 != "NA") # remove NA's
+
+length(unique(path_abund$lvl2)) # 80
+table(path_abund$sample)
+
+# scale variables
+
+path_abund$temp_s <-  my_scale(path_abund$temp) 
+path_abund$rain_s <-  my_scale(path_abund$rain)
+path_abund$age_s <-  my_scale(path_abund$age)
+path_abund$fruit_s <-  my_scale(path_abund$fruit)
+path_abund$neo_s <-  my_scale(path_abund$neo)
+
+path_abund <- path_abund %>%
+  mutate(ID = as.factor(ID),
+         sex = as.factor(sex))
+
+```
+
+
+## B. run loop
+
+```{r}
+
+path_coef <- list()
+path_aic <- list()
+path_model_results <- list()
+
+for (i in unique(path_abund$lvl2)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund, lvl2 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s", 1], 4)
+    std_value <- round(summary(m_full)$coefficients["temp_s", 2], 4)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      lvl2 = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      lvl2 = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      lvl2 = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    path_aic[[i]] <- aic_df
+    path_coef[[i]] <- results_df
+    path_model_results[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+path_aic <- do.call(rbind, path_aic)
+path_coef <- do.call(rbind, path_coef)
+path_model_results <- do.call(rbind, path_model_results)
+
+
+```
+
+## C. select taxa
+
+26 do not converge so we tested 54 total (started with 80)
+
+Temp model fits best for 169 pathways which means that it doesn't fit best for 214... different from the KO's, might actually have some functional significance here
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(path_aic$lvl2[path_aic$Warning == "Convergence Warning"]) # 26 do not converge
+length(convergence_warnings)
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- path_model_results %>% 
+  filter(StdError > 100) %>%
+  pull(lvl2) %>%
+  unique() # no huge SE's
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 26 do not converge
+
+# remove error taxa
+path_abund2 <- path_abund %>% filter(!lvl2 %in% errors)
+length(unique(path_abund2$lvl2)) # 54 remaining 
+
+path_coef2 <- path_coef %>% filter(!lvl2 %in% errors)
+length(path_coef2$lvl2)
+
+path_aic2 <- path_aic %>% filter(!lvl2 %in% errors)
+length(path_aic2$lvl2) 
+
+# filter for taxa where full model fits best
+temp_filter <- path_aic2 %>%
+  group_by(lvl2) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl2) 
+length(unique(temp_filter)) # temp model fits best for 32 pathways
+
+# filter df's for where temp model fits best 
+path_abund3 <- path_abund2 %>% filter(lvl2 %in% temp_filter)
+length(unique(path_abund3$lvl2))  
+
+path_coef3 <- path_coef2 %>% filter(lvl2 %in% temp_filter)
+length(path_coef3$lvl2)
+
+path_aic3 <- path_aic2 %>% filter(lvl2 %in% temp_filter)
+length(path_aic3$lvl2)
+
+```
+
+## D. coef plot loop
+
+```{r}
+
+plot_coef <- path_coef3 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         path_id = reorder(lvl2, -coef)) %>%
+  left_join(pathway_levels, by = "lvl2")
+
+# plot ditribution 
+pdf("figures/pathway_DAA_lvl2.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef$lvl1)) {
+  
+  data <- subset(plot_coef, lvl1 == i)
+  
+  p <- ggplot(data, aes(x = lvl2, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste(i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 1)) {
+  
+  batch_plots <- plot_list[i:min(i, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```
+
+## GAM's 
+
+6 lvl2's that have a non-linear relationship... and no real trend when you plot them. I think I should keep this simple and leave out the gams
+
+```{r}
+
+gam_results <- list()
+
+for (i in unique(path_abund3$lvl2)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund3, lvl2 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- gam(clr_abundance ~ age_s + s(temp_s) + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = data)
+    
+    m_main <- gam(clr_abundance ~ age_s + temp_s + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = data)
+
+  }, warning = function(w) {
+   
+      warning_msg <- conditionMessage(w)
+  
+      if (grepl("Fitting terminated with step failure", warning_msg)) {
+      warning_msg <<- "Convergence Warning"  # Update the warning message
+      } 
+    })
+
+    # compare with AICctab
+      AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+      AICc$model <- rownames(AICc)
+      
+      #create data frame
+      results_df <- data.frame(
+        lvl2 = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3),
+        Warning = warning_msg,
+        stringsAsFactors = FALSE
+      )
+  
+      # store results
+      gam_results[[i]] <- results_df
+}
+
+# combine results 
+gam_results <- do.call(rbind, gam_results)
+
+
+#Filter for taxa where m_full best fit
+gam_filter <- gam_results %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl2)
+length(gam_filter) # 36 taxa 
+  
+# filter abundance
+smooth_abund <- path_abund3 %>% filter(lvl2 %in% gam_filter)
+length(unique(smooth_abund$lvl2))
+
+```
+
+
+## predict GAM's and plot
+
+no real trend
+
+```{r}
+
+test <- smooth_abund %>% filter(lvl2 == "Secondary Metabolite Biosynthesis")
+
+
+gam <- gam(clr_abundance ~ age_s + s(temp_s) + rain_s + fruit_s + group + sex + s(ID, bs = "re"), data = test)
+
+summary(gam)
+
+plot(gam, select = 1, rug = TRUE, shade = TRUE)
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## E. interaction effect
+
+```{r}
+
+path_coef_int <- list()
+path_aic_int <- list()
+path_model_results_int <- list()
+
+for (i in unique(path_abund3$lvl2)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund3, lvl2 == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s * neo_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 1], 6)
+    std_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 2], 6)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      lvl2 = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      lvl2 = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      lvl2 = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    path_aic_int[[i]] <- aic_df
+    path_coef_int[[i]] <- results_df
+    path_model_results_int[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+path_aic_int <- do.call(rbind, path_aic_int)
+path_coef_int <- do.call(rbind, path_coef_int)
+path_model_results_int <- do.call(rbind, path_model_results_int)
+
+```
+
+
+## F. select interaction taxa
+
+tested 28 total, started with 32 and four did not converge 
+
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(path_aic_int$lvl2[path_aic_int$Warning == "Convergence Warning"]) # 4 do not converge
+length(convergence_warnings)
+
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- path_model_results_int %>% 
+  filter(StdError > 100) %>%
+  pull(lvl2) %>%
+  unique() # no big SE's
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 4 do not converge
+
+
+# remove error taxa
+path_abund4 <- path_abund3 %>% filter(!lvl2 %in% errors)
+length(unique(path_abund4$lvl2)) # 28 remaining 
+
+path_coef_int2 <- path_coef_int %>% filter(!lvl2%in% errors)
+length(path_coef_int2$lvl2)
+
+path_aic_int2 <- path_aic_int %>% filter(!lvl2 %in% errors)
+length(path_aic_int2$lvl2) 
+
+# filter for taxa where full model fits best
+temp_filter <- path_aic_int2 %>%
+  group_by(lvl2) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(lvl2) 
+length(unique(temp_filter)) # 25 interaction model fits best for all
+
+# filter df's for where temp model fits best 
+path_abund5 <- path_abund4 %>% filter(lvl2 %in% temp_filter)
+length(unique(path_abund5$lvl2))  
+
+path_coef_int3 <- path_coef_int2 %>% filter(lvl2 %in% temp_filter)
+length(path_coef_int3$lvl2)
+
+path_aic_int2 <- path_aic_int2 %>% filter(lvl2 %in% temp_filter)
+length(path_aic_int2$lvl2)
+
+```
+
+
+## G. plot interaction
+
+```{r}
+
+plot_coef <- path_coef_int3 %>% 
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         lvl2 = reorder(lvl2, -coef)) %>%
+  left_join(pathway_levels, by = "lvl2")
+
+# plot ditribution 
+pdf("figures/pathway_interaction_DAA_lvl2.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(plot_coef$lvl1)) {
+  
+  data <- subset(plot_coef, lvl1 == i)
+  
+  p <- ggplot(data, aes(x = lvl2, y = coef, color = direction)) +
+  geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+  geom_point(position = position_dodge(width = 0.3), size = 1) +
+  geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                 position = position_dodge(width = 0.3), linewidth = .35) +
+  geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                 position = position_dodge(width = 0.3), linewidth = .55) +
+  scale_color_manual(values = c("#bc80bd", "#fdb462"), breaks = c("positive", "negative")) + 
+  coord_flip() +
+  labs(y = "Effect", x = "Taxa") +
+  theme(axis.line = element_line(color = "black", linewidth = .28),
+        axis.text = element_text(size = 8, color = "black"), 
+        text = element_text(size = 10, color = "black", family = "sans"), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.position = "none",
+        panel.background = element_blank()) +
+    labs(title = paste(i)) 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 1)) {
+  
+  batch_plots <- plot_list[i:min(i, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```

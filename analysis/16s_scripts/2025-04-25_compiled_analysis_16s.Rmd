@@ -182,6 +182,7 @@ library(zCompositions)
 otu_table <- as.matrix(t(otu_table(phylo_filtered)))
 otu_table[1:5,1:5] # rows are samples 
 
+set.seed(123)
 czm <- cmultRepl(otu_table,label=0, method="CZM", z.warning = 0.90, z.delete = 0.90)
 czm[1:5,1:5] # rows are samples 
 
@@ -1844,6 +1845,13 @@ phyla_neo <- filtered_neo_coef %>% left_join(phyla, by = "Taxa") %>%
          TRUE ~ Phylum)) %>%
   group_by(Phylum_grouped) %>%
   summarize(count = n())
+
+level <- da6 %>%
+  select(Taxa, level, Phylum) %>%
+  distinct()
+
+neo_taxa_level <- filtered_neo_coef %>%
+  left_join(level, by = "Taxa")
 
 ```
 
