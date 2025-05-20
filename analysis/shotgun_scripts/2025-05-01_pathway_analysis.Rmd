@@ -5,7 +5,7 @@ date: "2025-05-01"
 output: html_document
 ---
 
-Notes: This is the shotgun analysis that only uses the pathway (metacyc) data. Decided to forgo the KO data because it wasn't showing much (see script 2024-04-28 shotgun analysis)
+Notes: This is the shotgun analysis that only uses the pathway (metacyc) data. Decided to forgo the KO data because it wasn't showing much (see script 2024-04-28 shotgun analysis). This analysis follows the same steps as the 16s analysis. We use 71 samples that have neo and feeding data associated with them. 
 
 Have decided to use the uniref 50 data based on decisoins from the 2025-02-27_unmapped_reads scripts.
 
@@ -85,7 +85,7 @@ path_filtered <- subset_taxa(path_physeq2,
 
 going to calculate this on the raw RPK's and add an offset for seq depth, use the number of paired reads from the kneaddata file
 
-ignore the warning, it is upset because the data is not in counts. Have to calculate the observed metric manually because `estimate_richness()` only takes count data
+ignore the warning, it is upset because the data is not in counts. Have to calculate the observed metric manually because `estimate_richness()` only takes count data, gives you exactly the same values as if you calculated it with vegan
 
 ```{r}
 
@@ -93,13 +93,19 @@ path_shannon <- estimate_richness(path_filtered, measures = "Shannon") %>%
   rownames_to_column(var = "sample") %>%
   rename(path_shannon = Shannon) 
 
+path_simpson <- estimate_richness(path_filtered, measures = "Simpson") %>%
+  rownames_to_column(var = "sample") %>%
+  rename(path_simpson = Simpson) 
+
 path_alpha <- as.data.frame(colSums(otu_table(path_filtered) > 0)) %>%
   rename(path_observed = 'colSums(otu_table(path_filtered) > 0)') %>%
   rownames_to_column(var = "sample") %>%
-  full_join(path_shannon, by = "sample")
+  full_join(path_shannon, by = "sample") %>%
+  full_join(path_simpson, by = "sample")
 
 hist(path_alpha$path_shannon) 
 hist(path_alpha$path_observed)
+hist(path_alpha$path_simpson)
 
 m1 <- m_filtered %>% # add to metadata
   left_join(path_alpha, by = "sample")
@@ -166,17 +172,18 @@ m_model <- m2 %>%
 
 ## a. model community features
 
-normally distributed enough to model with Gaussian (PC1 and shannon are most concerning)
+normally distributed enough to model with Gaussian (PC1, shannon, and simpson are most concerning)
 
-main results here: based on model weight temp is not related to shannon diversity but it is realted observed paths and to the PC's. Wehn we look at the coefficient plot the CI for observed PC's is wide so we don't have a lot of certainty about the direction of the effect. 
+main results here: based on model weight temp is not related to shannon or simpson diversity but it is related observed paths and to the PC's. When we look at the coefficient plot the CI for observed PC's is wide so we don't have a lot of certainty about the direction of the effect. 
 
-Why isn't temp realted to shannon? - Even though taxonomic shannon diversity may decrease at high temperatures, functional alpha diversity may be more resilient to this because many taxa have similar genes and similar functions? However, we don't see the same thing for observed gene families, could speak more to that there is still a decrease in number of functional annotations but the evenness is relatively stable in the community  
+Why isn't temp related to shannon or simpson? - temperature does not substantialy change how evenly distributed patheays are. It is likely that low abundance patheays decrease with rising temperature due to the negative effect of temperature on observed number of pathways, but those decreases are likely in low abundant paths that don't affect the overall distribution of pathway in the community. Influences functional diversity but not the emphasis on priotiy functions. Even though taxonomic shannon diversity may decrease at high temperatures, functional alpha diversity may be more resilient to this because many taxa have similar genes and similar functions? 
 
 ```{r}
 
 ####### histogranms ########
 
 hist(m_model$path_shannon) 
+hist(m_model$path_simpson)
 hist(m_model$path_observed) 
 hist(m_model$pathway_PC1)
 hist(m_model$pathway_PC2)
@@ -188,7 +195,7 @@ hist(m_model$pathway_PC4)
 com_coef <- list() 
 com_aic <- list()
 
-com_features <- colnames(m_model)[c(15:20)] # list of features to model
+com_features <- colnames(m_model)[c(15:21)] # list of features to model
 
 for (i in com_features) {
       
@@ -370,7 +377,7 @@ com_coef_int <- do.call(rbind, com_coef_int)
 
 ## d. plot interaction effect
 
-same resutls as temp results, full model fits best for everything except shannon
+same results as temp results, full model fits best for everything except shannon and simpson
 
 ```{r}
 
@@ -617,6 +624,166 @@ path_aic3 <- path_aic2 %>% filter(path_id %in% temp_filter)
 length(path_aic3$path_id)
 
 ```
+
+## d. plot figure
+
+```{r}
+
+# data prep
+groupings <- read.csv("data/path_group_assignment.csv")
+
+temp_path_info <- path_coef3 %>%
+  left_join(pathway_levels, by = "path_id") %>%
+  select(path_id, pathway, coef:high_ci_50) %>% 
+  left_join(groupings, by = "pathway") %>%
+  filter(!is.na(group)) %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         path_id = reorder(path_id, -coef),
+         pathway = str_remove_all(pathway, " \\(.*?\\)"),
+         pathway = str_replace_all(pathway, "&beta;", "β"),
+         pathway = case_when(pathway == "pyruvate fermentation to acetate and-lactate I" ~ "pyruvate fermentation to acetate and (S)-lactate I",
+                             pathway == "superpathway of2-lipid A biosynthesis" ~ "superpathway of (Kdo)2-lipid A biosynthesis",
+                             pathway == "fatty acid elongation -- saturated" ~ "fatty acid elongation",
+                             pathway == "palmitoleate biosynthesis I-dodec-5-enoate)" ~ "palmitoleate biosynthesis I",
+                             TRUE ~pathway))
+
+# order for immune groups
+subgroup_order <- c("increased anti-inflammatory signals", "decreased inflammatory signals", "decrease anti-inflammatory signals")
+
+immune <- temp_path_info %>% filter(group == "immune regulation") %>% arrange(desc(coef)) %>%
+  mutate(subgroup = factor(subgroup, levels = subgroup_order)) %>%
+  arrange(subgroup, desc(coef)) %>%
+  mutate(pathway = factor(pathway, levels = unique(pathway)))
+
+# make other functional groups
+redox <- temp_path_info %>% filter(group == "redox maintenance") %>% arrange(desc(coef)) 
+lipid <- temp_path_info %>% filter(group == "lipid catabolism and remodeling") %>% arrange(desc(coef)) 
+nucleotide <- temp_path_info %>% filter(group == "nucleotide mobilization") %>% arrange(desc(coef)) 
+oxygen <- temp_path_info %>% filter(group == "oxygen-driven metabolism") %>% arrange(desc(coef)) 
+
+
+
+# write function
+# remmeber to add text size to this
+
+make_coef_plot <- function(data) {
+  ggplot(data, aes(x = fct_reorder(pathway, coef, .desc = TRUE), y = coef, color = direction)) +
+    geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+    geom_point(position = position_dodge(width = 0.3), size = 1) +
+    geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                   position = position_dodge(width = 0.3), linewidth = .35) +
+    geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                   position = position_dodge(width = 0.3), linewidth = .55) +
+    scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
+    coord_flip(clip = "off") +
+    ylim(-5, 5) +
+    labs(x = NULL, y = NULL) +  
+    theme(axis.line = element_line(color = "black", linewidth = .28),
+          axis.text.y = element_text(size = 8, color = "black"), 
+          text = element_text(size = 10, color = "black", family = "sans"), 
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank(),
+          legend.position = "none",
+          panel.background = element_blank(),
+          plot.margin = margin(t = 5, r = 110, b = 5, l = 5))
+}
+
+
+# plot
+redox_p <- make_coef_plot(redox) +
+  ggtitle("A. Redox maintenance") +
+  annotate("segment", x = "assimilatory sulfate reduction IV",  xend = "L-methionine biosynthesis IV", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "superpathway of methylglyoxal degradation", y = 4.85, label = "reduced redox\nmaintenance", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "tetrapyrrole biosynthesis I",  xend = "L-ascorbate degradation I", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "pentose phosphate pathway I", y = 4.85, label = "increased redox\nmaintenance", hjust = 0, size = 5, color = "#80b1d3") +
+  theme(axis.text.x = element_blank())
+redox_p
+  
+nucleotide_p <- make_coef_plot(nucleotide) +
+ggtitle("B. Nucleotide mobilization") +
+  annotate("segment", x = "pyrimidine deoxyribonucleosides salvage",  xend = "adenosine nucleotides degradation I", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "UMP biosynthesis III", y = 4.85, label = "increased synthesis\nand salvage", hjust = 0, size = 5, color = "#80b1d3") +
+  theme(axis.text.x = element_blank())
+nucleotide_p 
+
+oxygen_p <- make_coef_plot(oxygen) +
+  ggtitle("E. Oxygen-driven metabolism") +
+  ylab("Effect size") +
+  annotate("segment", x = "superpathway of glycolysis, pyruvate dehydrogenase, TCA, and glyoxylate bypass",  xend = "glyoxylate cycle", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "superpathway of glycol metabolism and degradation", y = 4.85, label = "decreased aerobic\nmetabolism", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "pyruvate fermentation to acetate and (S)-lactate I",  xend = "formaldehyde assimilation II", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "glycogen degradation II", y = 4.85, label = "increased anerobic\nmetabolism", hjust = 0, size = 5, color = "#80b1d3") +
+   theme(axis.text.x = element_text(size = 10, color = "black"))
+oxygen_p
+
+lipid_p <- make_coef_plot(lipid) +
+  ggtitle("D. Lipid metabolism") +
+  ylab("Effect size") +
+  annotate("segment", x = "superpathway of glyoxylate cycle and fatty acid degradation",  xend = "9-cis, 11-trans-octadecadienoyl-CoA degradation", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "fatty acid salvage", y = 4.85, label = "decreased catabolism\nand recycling", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "stearate biosynthesis II",  xend = "petroselinate biosynthesis", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "gondoate biosynthesis", y = 4.85, label = "increased synthesis\nand remodeling", hjust = 0, size = 5, color = "#80b1d3") +
+   theme(axis.text.x = element_text(size = 10, color = "black"))
+lipid_p
+
+
+immune_p <- ggplot(immune, aes(x = pathway, y = coef, color = direction)) +
+    geom_hline(yintercept = 0, linetype = "dashed", size = .5, color = "grey") +
+    geom_point(position = position_dodge(width = 0.3), size = 1) +
+    geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95),
+                   position = position_dodge(width = 0.3), linewidth = .35) +
+    geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50),
+                   position = position_dodge(width = 0.3), linewidth = .55) +
+    scale_color_manual(values = c("#80b1d3", "#fb8072"), breaks = c("positive", "negative")) + 
+    coord_flip(clip = "off") +
+    ylim(-5, 5) +
+    labs(y = "Effect size", x = NULL) +  # suppress axis labels
+    theme(axis.line = element_line(color = "black", linewidth = .28),
+          axis.text.x = element_text(size = 10, color = "black"),               
+          axis.text.y = element_text(size = 10, color = "black"), 
+          text = element_text(size = 10, color = "black", family = "sans"), 
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_blank(),
+          legend.position = "none",
+          panel.background = element_blank(),
+          plot.margin = margin(t = 5, r = 110, b = 5, l = 5)) +
+  ggtitle("C. Immune regulation") +
+  annotate("segment", x = "acetyl-CoA fermentation to butanoate II",  xend = "L-glutamate degradation XI", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "L-glutamate degradation VII", y = 4.85, label = "decreased\nanti-inflammatory\nsignals", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "enterobacterial common antigen biosynthesis",  xend = "superpathway of (Kdo)2-lipid A biosynthesis", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = 3.5, y = 4.85, label = "decreased\ninflammatory\nsignals", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "(5Z)-dodecenoate biosynthesis I",  xend = "L-tryptophan biosynthesis", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = 1.5, y = 4.85, label = "increased\nanti-inflammatory\nsignals", hjust = 0, size = 5, color = "#80b1d3") 
+
+immune_p
+
+
+
+combined <- ggarrange(redox_p, nucleotide_p, immune_p, lipid_p, oxygen_p, ncol = 3, nrow = 2, align = "v")
+
+ggsave("figures/temp_path_da.pdf", combined, width =25, height = 13)
+
+
+
+
+# find midpoint betwen two discrete values 
+levels <- levels(immune$pathway)
+
+# Get numeric positions of those two
+a <- which(levels == "enterobacterial common antigen biosynthesis")
+b <- which(levels == "superpathway of (Kdo)2-lipid A biosynthesis")
+
+# Find midpoint
+mid <- (a + b) / 2
+
+
+```
+
 
 ## d. plot model results
 
@@ -878,6 +1045,16 @@ cluster_plot <- ggarrange(p1, p2, p3, p4,
                            ncol = 2, nrow = 2,
                           labels = c("C1", "C2", "C3", "C4"))
 ```
+
+```{r}
+
+c1_info <- c1 %>% select(path_id) %>%
+  distinct() %>%
+  left_join(pathway_levels, by = "path_id") %>%
+  select(path_id, pathway)
+
+```
+
 
 
 ## d. plot clusters
@@ -1198,7 +1375,7 @@ row.names(neo_preds) <- NULL # clean up row names
 
 ```
 
-## e. coplot by Taxa
+## e. coplot by patheay
 
 Plot with the CI's for each taxa for the supplement
 
@@ -1240,13 +1417,31 @@ dev.off()
 
 ## f. coplot by effect direction
 
-
-
-### iii. Plot by effect direction
+### i. data prep
 
 ```{r}
 
-########### Prep data ################
+# Define effect type
+
+slope <- neo_preds %>%
+  group_by(path_id, bin) %>%
+  do({m <- lm(fit ~ temp_s, data = .)
+    slope <- coef(m)["temp_s"]
+    data.frame(slope = slope)}) %>%
+  ungroup() %>%
+  pivot_wider(names_from = bin, values_from = slope,
+                     names_prefix = "slope_") %>%
+  mutate(effect_type = case_when(
+      slope_neopterin_avg1 > 0 & slope_neopterin_avg2 > 0 & slope_neopterin_avg2 > slope_neopterin_avg1 ~ "positive_amplifying",
+      slope_neopterin_avg1 < 0 & slope_neopterin_avg2 < 0 & slope_neopterin_avg1 > slope_neopterin_avg2 ~ "negative_amplifying",
+      slope_neopterin_avg1 > 0 & slope_neopterin_avg2 > 0 & slope_neopterin_avg2 < slope_neopterin_avg1 ~ "positive_dampening",
+      slope_neopterin_avg1 > 0 & slope_neopterin_avg2 < 0 ~ "negative_reverse",
+      slope_neopterin_avg1 < 0 & slope_neopterin_avg2 > 0 ~ "positive_reverse",
+      TRUE ~ "other")) %>%
+  select(path_id, effect_type)
+      
+      
+# Prep data
 
 mean_neo <- mean(path_abund5$neo)
 sd_neo <- sd(path_abund5$neo) 
@@ -1258,74 +1453,90 @@ neo_reverse <- function(x) {
 bin_limits <- levels(cut(path_abund5$neo_s, breaks = 2, include.lowest = TRUE)) # look at bin range
 neo_reverse(1.24)
 
-neo_preds2 <- neo_preds %>% mutate(direction = ifelse(coef > 0, "positive", "negative"),
-                                   bin = case_when(bin == "neopterin_avg1" ~ "neopterin: 107-2812 (nmol/L)",
-                                                   bin == "neopterin_avg2" ~ "neopterin: 2812-5524 (nmol/L)"))
-                                   
+neo_preds2 <- neo_preds %>% mutate(bin = case_when(bin == "neopterin_avg1" ~ "neopterin: 107-2812 (nmol/L)",
+                                                   bin == "neopterin_avg2" ~ "neopterin: 2812-5524 (nmol/L)")) %>%
+  left_join(slope, by = "path_id") %>%
+  left_join(pathway_levels, by = "path_id")
+  
+# Create df's for each effect                               
                 
+positive_amplifying <- neo_preds2 %>% filter(effect_type == "positive_amplifying")
+negative_amplifying <- neo_preds2 %>% filter(effect_type == "negative_amplifying")
+positive_dampening <- neo_preds2 %>% filter(effect_type == "positive_dampening")
+negative_reverse <- neo_preds2 %>% filter(effect_type == "negative_reverse")
+positive_reverse <- neo_preds2 %>% filter(effect_type == "positive_reverse")
+
+# info for each interaction type
+length(unique(positive_amplifying$path_id)) # 10
+length(unique(negative_amplifying$path_id)) # 7
+length(unique(positive_dampening$path_id)) # 3
+length(unique(negative_reverse$path_id)) # 18
+length(unique(positive_reverse$path_id)) # 27
+
+info_positive_amplifying <- positive_amplifying %>%
+  select(path_id, lvl1, lvl2, pathway, effect_type) %>%
+  distinct()
+
+info_negative_amplifying <- negative_amplifying %>%
+  select(path_id, lvl1, lvl2, pathway, effect_type) %>%
+  distinct()
+
+info_positive_dampening <- positive_dampening %>%
+  select(path_id, lvl1, lvl2, pathway, effect_type) %>%
+  distinct()
+
+info_negative_reverse <- negative_reverse %>%
+  select(path_id, lvl1, lvl2, pathway, effect_type) %>%
+  distinct()
+
+info_positive_reverse <- positive_reverse %>%
+  select(path_id, lvl1, lvl2, pathway, effect_type) %>%
+  distinct()
 
 
-effect_summary <- neo_preds2 %>%
-  distinct(path_id, bin, direction) %>% # Get unique direction per bin per path_id
-  group_by(path_id) %>%
-  summarize(directions = paste(sort(unique(direction)), collapse = ", "),
-    .groups = "drop") %>%
-  mutate(effect_type = case_when(
-      directions == "negative" ~ "both negative",
-      directions == "positive" ~ "both positive",
-      directions == "negative, positive" ~ "mixed",
-      TRUE ~ "other"
-    )
-  )
-
-
-
-
-
-
-
-
-
-pos <- neo_preds2 %>% filter(direction == "positive")
-neg_pos <- neo_preds2 %>% filter(direction == "neg_pos")
-neg <- neo_preds2 %>% filter(direction == "negative")
-
-length(unique(pos$Taxa))
-length(unique(neg_pos$Taxa))
-length(unique(neg$Taxa))
 
 # bin values
 unique_bins <- unique(neo_preds2$bin)
 
 # to rescale x axis
-mean_temp <- mean(neo_abund$temp)
-sd_temp <- sd(neo_abund$temp) 
+mean_temp <- mean(path_abund5$temp)
+sd_temp <- sd(path_abund5$temp) 
 
-################## POSITIVE ###########################
-y_min <- min(pos$fit)
-y_max <- max(pos$fit)
+```
 
-pos_list <- list()
+### ii. plot
+
+```{r}
+
+# plot variables
+ylab = "predicted\nclr-transformed\nabundance"
+
+
+################## positive_amplifying ###########################
+y_min <- min(positive_amplifying$fit)
+y_max <- max(positive_amplifying$fit)
+
+positive_amp_list <- list()
 
 # loop
 for (i in unique_bins) {
   
-  pos_filtered <- pos[pos$bin == i, ]
+  pos_amp_filtered <- positive_amplifying[positive_amplifying$bin == i, ]
   
   # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 108-1464 (nmol/L)") {
-    "predicted log abundance"
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
   } else {
     ""
   }
   
-  y_tick_labels <- if (i == "neopterin: 108-1464 (nmol/L)") {
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
     element_text(size = 10, color = "black")
   } else {
     element_blank()
   }
   
-  bin_plot <- ggplot(pos_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+  bin_plot <- ggplot(pos_amp_filtered, aes(x = temp_s, y = fit, color = path_id)) +
     geom_line() +
     labs(y = y_axis_label, x = "", title = paste(i)) +
     scale_y_continuous(limits = c(y_min, y_max)) + 
@@ -1335,47 +1546,47 @@ for (i in unique_bins) {
       panel.grid.minor = element_blank(),
       axis.line = element_line(color = "black"),
       axis.ticks.x = element_line(size = 0.5),
-      axis.title.y = element_text(size = 12),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
       axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none")
   
-  pos_list[[as.character(i)]] <- bin_plot
+  positive_amp_list[[as.character(i)]] <- bin_plot
   
 }
 
-pos_plot <- do.call(ggarrange, c(pos_list, nrow = 1))
-pos_plot
+positive_amp_plot <- do.call(ggarrange, c(positive_amp_list, nrow = 1))
+positive_amp_plot
 
 
-################### NEG PLOS PLOT ######################
+################### ngeaitve_amplifying ######################
 
-y_min <- min(neg_pos$fit)
-y_max <- max(neg_pos$fit)
+y_min <- min(negative_amplifying$fit)
+y_max <- max(negative_amplifying$fit)
 
-neg_pos_list <- list()
+negative_amp_list <- list()
 
 # loop
 for (i in unique_bins) {
   
-  neg_pos_filtered <- neg_pos[neg_pos$bin == i, ]
+  negative_amp_filtered <- negative_amplifying[negative_amplifying$bin == i, ]
   
    # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 108-1464 (nmol/L)") {
-    "predicted log abundance"
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
   } else {
     ""
   }
   
-  y_tick_labels <- if (i == "neopterin: 108-1464 (nmol/L)") {
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
     element_text(size = 10, color = "black")
   } else {
     element_blank()
   }
   
-  bin_plot <- ggplot(neg_pos_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+  bin_plot <- ggplot(negative_amp_filtered, aes(x = temp_s, y = fit, color = path_id)) +
     geom_line() +
     labs(y = y_axis_label, x = "") +
     scale_y_continuous(limits = c(y_min, y_max)) + 
@@ -1385,48 +1596,147 @@ for (i in unique_bins) {
       panel.grid.minor = element_blank(),
       axis.line = element_line(color = "black"),
       axis.ticks.x = element_line(size = 0.5),
-      axis.title.y = element_text(size = 12),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
       axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none")
   
-  neg_pos_list[[as.character(i)]] <- bin_plot
+  negative_amp_list[[as.character(i)]] <- bin_plot
   
 }
 
-neg_pos_plot <- do.call(ggarrange, c(neg_pos_list, nrow = 1))
-neg_pos_plot
+negative_amp_plot <- do.call(ggarrange, c(negative_amp_list, nrow = 1))
+negative_amp_plot
 
 
+################## positive_dampening ###########################
 
-################### NEG PLOT ######################
+y_min <- min(positive_dampening$fit)
+y_max <- max(positive_dampening$fit)
 
-y_min <- min(neg$fit)
-y_max <- max(neg$fit)
-
-neg_list <- list()
+positive_dampening_list <- list()
 
 # loop
 for (i in unique_bins) {
   
-  neg_filtered <- neg[neg$bin == i, ]
+  positive_dampening_filtered <- positive_dampening[positive_dampening$bin == i, ]
   
    # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 108-1464 (nmol/L)") {
-    "predicted log abundance"
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
   } else {
     ""
   }
   
-  y_tick_labels <- if (i == "neopterin: 108-1464 (nmol/L)") {
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
     element_text(size = 10, color = "black")
   } else {
     element_blank()
   }
   
-  bin_plot <- ggplot(neg_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+  bin_plot <- ggplot(positive_dampening_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none")
+  
+  positive_dampening_list[[as.character(i)]] <- bin_plot
+  
+}
+
+positive_dampening_plot <- do.call(ggarrange, c(positive_dampening_list, nrow = 1))
+positive_dampening_plot
+
+
+################## negative_reverse ###########################
+
+y_min <- min(negative_reverse$fit)
+y_max <- max(negative_reverse$fit)
+
+negative_reverse_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  negative_reverse_filtered <- negative_reverse[negative_reverse$bin == i, ]
+  
+   # set y-axis labels for bin 1
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(negative_reverse_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none")
+  
+  negative_reverse_list[[as.character(i)]] <- bin_plot
+  
+}
+
+negative_reverse_plot <- do.call(ggarrange, c(negative_reverse_list, nrow = 1))
+negative_reverse_plot
+
+
+################## positive_reverse ###########################
+
+y_min <- min(positive_reverse$fit)
+y_max <- max(positive_reverse$fit)
+
+positive_reverse_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  positive_reverse_filtered <- positive_reverse[positive_reverse$bin == i, ]
+  
+   # set y-axis labels for bin 1
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(positive_reverse_filtered, aes(x = temp_s, y = fit, color = path_id)) +
     geom_line() +
     labs(y = y_axis_label, x = "") +
     scale_y_continuous(limits = c(y_min, y_max)) + 
@@ -1439,28 +1749,28 @@ for (i in unique_bins) {
       panel.grid.minor = element_blank(),
       axis.line = element_line(color = "black"),
       axis.ticks.x = element_line(size = 0.5),
-      axis.title.y = element_text(size = 12),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none")
   
-  neg_list[[as.character(i)]] <- bin_plot
+  positive_reverse_list[[as.character(i)]] <- bin_plot
   
 }
 
-neg_plot <- do.call(ggarrange, c(neg_list, nrow = 1))
-neg_plot
+positive_reverse_plot <- do.call(ggarrange, c(positive_reverse_list, nrow = 1))
+positive_reverse_plot
 
 
 ######## combine ##########
 
-combined_plot <- ggarrange(neg_plot, pos_plot, neg_pos_plot, 
-                           nrow = 3, ncol = 1, 
-                           labels = c("A", "B", "C"))
+combined_plot <- ggarrange(positive_amp_plot, negative_amp_plot, positive_dampening_plot, negative_reverse_plot, positive_reverse_plot, 
+                           nrow = 5, ncol = 1, 
+                           labels = c("A", "B", "C", "D", "E"))
 combined_plot
 
-ggsave("figures/fig7.pdf", combined_plot, width =13, height = 9)
+#ggsave("figures/fig7.pdf", combined_plot, width =13, height = 9)
 
 
 ```

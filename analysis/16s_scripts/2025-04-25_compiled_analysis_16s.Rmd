@@ -152,6 +152,13 @@ shannon <- shannon %>%
 
 hist(shannon$shannon) # normal dist
 
+simpson <- estimate_richness(phylo_filtered2, measures = "Simpson") # calc Simpson
+simpson <- simpson %>%
+  rownames_to_column(var = "sample") %>%
+  rename(simpson = Simpson) 
+
+hist(simpson$simpson) # normal dist
+
 observed <- estimate_richness(phylo_filtered2, measures = "Observed") # calc observed
 observed <- observed %>%
   rownames_to_column(var = "sample") %>%
@@ -164,7 +171,8 @@ hist(observed$observed) # gamma dist
 
 m_filtered3 <- m_filtered2 %>% # add to metadata
   left_join(shannon, by = "sample") %>%
-  left_join(observed, by = "sample")
+  left_join(observed, by = "sample") %>%
+  left_join(simpson, by = "sample")
 
 ```
 
@@ -284,7 +292,7 @@ When you run the loop there is a singular fit error, this is from PC2, but I the
 com_coef <- list() 
 com_aic <- list()
 
-com_features <- colnames(m_model)[c(15, 17:20)] # list of features to model
+com_features <- colnames(m_model)[c(15, 17:21)] # list of features to model
 
 ############ loop  #################
 for (i in com_features) {
@@ -412,6 +420,8 @@ ggsave("figures/fig1.pdf", p1, width = 8, height = 6)
 
 ## c. plot alpha diversity
 
+leave in or take out shannon diversity?
+
 ```{r}
 
 # set up predictions df
@@ -460,6 +470,40 @@ s_plot <- ggplot(pred_data, aes(x = temp_s, y = s_preds)) +
   axis.title.y = element_text(size = 20),
   axis.text = element_text(size = 12, color = "black"))
 
+
+######### simpson ##########
+
+sp_temp <- lm(simpson ~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + offset(log(filtered_reads)), 
+               data = m_model)
+sp_preds <- predict(sp_temp,  newdata = pred_data, interval = "confidence", level = 0.95 ) %>%
+  data.frame() %>%
+  rename(sp_preds = fit,
+         sp_lower = lwr,
+         sp_upper = upr)
+pred_data <- cbind(pred_data, sp_preds) 
+
+# to rescales x axis
+mean_temp <- mean(m_model$temp)
+sd_temp <- sd(m_model$temp) 
+
+sp_plot <- ggplot(pred_data, aes(x = temp_s, y = sp_preds)) +
+  geom_point(data = m_model, aes(x = temp_s, y = simpson),alpha = 0.5, size = 4, color = "#80b1d3") +
+  geom_smooth(method = "lm", lwd = 1, color = "black") +
+  geom_ribbon(aes(ymin = sp_lower, ymax = sp_upper), 
+              fill = "grey60", alpha = 0.5) +
+  theme_minimal() +
+  labs(y = "Simpson",
+       x = "temperature (°C)") +
+  scale_x_continuous(
+    breaks = seq(min(m_model$temp_s), max(m_model$temp_s), length.out = 6), 
+    labels = inverse_scale) +  # rescale axis labels
+  theme(panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  axis.line = element_line(color = "black"),
+  axis.title.x = element_text(size = 20),
+  axis.title.y = element_text(size = 20),
+  axis.text = element_text(size = 12, color = "black"))
+
 ########## observed ##########
 o_temp <- glm(observed ~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s +
                 offset(log(filtered_reads)), 
@@ -495,7 +539,7 @@ o_plot <- ggplot(pred_data, aes(x = temp_s, y = o_preds)) +
 
 # add plots together  
 
-combo <- ggarrange(s_plot, o_plot, ncol = 2, nrow = 1, labels = c("A", "B"))
+combo <- ggarrange(s_plot, sp_plot, o_plot, ncol = 3, nrow = 1, labels = c("A", "B", "C"))
 
 ggsave("figures/fig2.pdf", combo, width =12, height = 6)
 
@@ -2097,6 +2141,9 @@ sd_temp <- sd(neo_abund$temp)
 y_min <- min(pos$fit)
 y_max <- max(pos$fit)
 
+color_vector <- colorRampPalette(c("#e41a1c", "#f9d1d1"))(length(taxa_levels))
+names(color_vector) <- taxa_levels
+
 pos_list <- list()
 
 # loop
@@ -2258,13 +2305,116 @@ ggsave("figures/fig7.pdf", combined_plot, width =13, height = 9)
 ```
 
 
+### new plot code
+
+
+```{r}
+
+y_min <- min(neg$fit)
+y_max <- max(neg$fit)
+
+
+taxa_levels <- unique(neg$Taxa)
+
+# Create a color ramp of the same length as the number of taxa
+color_vector <- colorRampPalette(c("#e41a1c", "#f9d1d1"))(length(taxa_levels))
+names(color_vector) <- taxa_levels
+
+
+
+# Step 1: Generate plots, extract one with legend
+neg_list <- list()
+
+for (j in seq_along(unique_bins)) {
+  
+  i <- unique_bins[j]
+  neg_filtered <- neg[neg$bin == i, ]
+  
+  y_axis_label <- if (i == "neopterin: 108-1464 (nmol/L)") {
+    "predicted log abundance"
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 108-1464 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+
+  # Include legend for plot 4 only 
+  show_legend <- (j == 4)
+  
+  bin_plot <- ggplot(neg_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    scale_x_continuous(
+      breaks = seq(min(neo_preds2$temp_s), max(neo_preds2$temp_s), length.out = 3),
+      labels = inverse_scale
+    ) +
+    scale_color_manual(values = color_vector) +
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = if (show_legend) "right" else "none"
+    )
+
+  neg_list[[as.character(i)]] <- bin_plot
+  
+  if (show_legend) legend_plot <- bin_plot
+}
+
+# Step 2: Extract the legend
+legend <- cowplot::get_legend(legend_plot)
+
+# Step 3: Arrange plots without legend
+plots_no_legend <- lapply(neg_list, function(p) p + theme(legend.position = "none"))
+plot_grid <- ggarrange(plotlist = plots_no_legend, nrow = 1, align = "hv")
+
+# Step 4: Combine with legend
+final_plot <- cowplot::plot_grid(plot_grid, legend, ncol = 2, rel_widths = c(4, 0.6))
+
+bordered_plot <- ggdraw() +
+  draw_plot(final_plot) +
+  theme(plot.background = element_rect(color = "#e41a1c", fill = NA, size = 1))
+
+# Show the final plot
+final_plot
+
+
+```
 
 
 
 
+```{r}
 
+library(gtable)
+library(grid)
+library(gridExtra)
 
+# Wrap your cowplot::plot_grid object in a gtable with border
+add_border <- function(p, border_color = "black", border_size = 1) {
+  g <- ggplotGrob(p)
+  
+  # Add rectangle around the entire gtable
+  border <- rectGrob(gp = gpar(col = border_color, fill = NA, lwd = border_size))
+  
+  gtable_add_grob(g, grobs = border, t = 1, l = 1, b = nrow(g), r = ncol(g), name = "border")
+}
 
+plot1_bordered <- add_border(final_plot)
+
+gridExtra::grid.arrange(plot1_bordered, plot1_bordered, nrow = 2)
+```
 
 
 
