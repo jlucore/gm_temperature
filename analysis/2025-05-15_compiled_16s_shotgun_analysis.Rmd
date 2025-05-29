@@ -5,9 +5,7 @@ date: "2025-05-15"
 output: html_document
 ---
 
-Notes: This is the compiled analysis for both the 16s and shotgun paper with the code for the final figures. 
-
-It does not include the GAM analysis. 
+Notes: This is the compiled analysis for both the 16s and shotgun with the code for the final figures. 
 
 # 1. Load environment
 
@@ -41,10 +39,13 @@ path_physeq_u50 <- readRDS("phyloseq_objects/pathway_phylo_u50.rds")
 source("functions/my_scale.R")
 source("functions/inverse_scale.R")
 source("functions/kegg_parse_json.R")
+source("functions/make_coef_plot.R")
+source("functions/model_weight_plot.R")
 
 # conflicts
 conflict_prefer("select", "dplyr")
 conflicts_prefer(dplyr::filter)
+conflicts_prefer(cowplot::get_legend)
 
 
 ```
@@ -158,6 +159,19 @@ phylum_names <- phylum_tax_table[phylum_otu_ids, "Phylum"]
 rownames(phylum_otu_table) <- phylum_names
 
 # across samples
+phylum_otu_table2 <- phylum_otu_table %>%
+  rownames_to_column("Phylum") %>%
+  pivot_longer(-Phylum, names_to = "sample", values_to = "Count") %>%
+  left_join(reads_filtered, by = "sample") %>%
+  group_by(sample) %>%
+  mutate(RelativeAbundance = Count / sum(Count),
+          Phylum_grouped = case_when(
+           str_detect(Phylum, "Firmicutes") ~ "Firmicutes",  
+           RelativeAbundance > 0.01 ~ Phylum,  
+           TRUE ~ "Less than 1% rel abund"  
+         )) %>%
+  ungroup()
+
 df_total <- phylum_otu_table2 %>%
   mutate(Phylum_grouped = case_when(
     str_detect(Phylum, "Firmicutes") ~ "Firmicutes",  
@@ -173,7 +187,6 @@ df_total <- phylum_otu_table2 %>%
   ungroup() %>%
   mutate(RA = 100*RA,
          Phylum_grouped = fct_reorder(Phylum_grouped, RA))
-                                    
 
 ggplot(df_total, aes(x = Phylum_grouped, y = RA, fill = Phylum_grouped)) +
   geom_bar(stat = "identity") +
@@ -194,13 +207,6 @@ shannon <- shannon %>%
 
 hist(shannon$shannon) # normal dist
 
-simpson <- estimate_richness(tax_phylo_filtered2, measures = "Simpson") # calc Simpson
-simpson <- simpson %>%
-  rownames_to_column(var = "sample") %>%
-  rename(simpson = Simpson) 
-
-hist(simpson$simpson) # normal dist
-
 observed <- estimate_richness(tax_phylo_filtered2, measures = "Observed") # calc observed
 observed <- observed %>%
   rownames_to_column(var = "sample") %>%
@@ -213,8 +219,7 @@ hist(observed$observed) # gamma dist
 
 tax_m_filtered3 <- tax_m_filtered2 %>% # add to metadata
   left_join(shannon, by = "sample") %>%
-  left_join(observed, by = "sample") %>%
-  left_join(simpson, by = "sample")
+  left_join(observed, by = "sample") 
 
 ```
 
@@ -368,19 +373,13 @@ shannon <- estimate_richness(path_filtered, measures = "Shannon") %>%
   rownames_to_column(var = "sample") %>%
   rename(shannon = Shannon) 
 
-simpson <- estimate_richness(path_filtered, measures = "Simpson") %>%
-  rownames_to_column(var = "sample") %>%
-  rename(simpson = Simpson) 
-
 path_alpha <- as.data.frame(colSums(otu_table(path_filtered) > 0)) %>%
   rename(observed = 'colSums(otu_table(path_filtered) > 0)') %>%
   rownames_to_column(var = "sample") %>%
-  full_join(shannon, by = "sample") %>%
-  full_join(simpson, by = "sample")
+  full_join(shannon, by = "sample")
 
 hist(path_alpha$shannon) 
 hist(path_alpha$observed)
-hist(path_alpha$simpson)
 
 path_m1 <- path_m_filtered %>% # add to metadata
   left_join(path_alpha, by = "sample")
@@ -437,7 +436,7 @@ path_model <- path_m2 %>%
 ```
 
 
-# 3. Relatinship wth temp
+# 3. Temperature analysis
 
 ## A. Community-level modeling
 
@@ -452,7 +451,7 @@ When you run the loop there is a singular fit error, this is from PC2, but the o
 com_coef <- list() 
 com_aic <- list()
 
-com_features <- colnames(tax_model)[c(15, 17:20)] # list of features to model
+com_features <- colnames(tax_model)[c(15, 17:19)] # list of features to model
 
 ############ loop  #################
 for (i in com_features) {
@@ -556,7 +555,6 @@ normally distributed enough to model with Gaussian (PC1, shannon, and simpson ar
 ####### histogranms ########
 
 hist(path_model$shannon) 
-hist(path_model$simpson)
 hist(path_model$observed) 
 hist(path_model$PC1)
 hist(path_model$PC2)
@@ -567,7 +565,7 @@ hist(path_model$PC3)
 com_coef <- list() 
 com_aic <- list()
 
-com_features <- colnames(path_model)[c(15:20)] # list of features to model
+com_features <- colnames(path_model)[c(15:19)] # list of features to model
 
 for (i in com_features) {
       
@@ -623,55 +621,9 @@ path_com_coef <- do.call(rbind, com_coef)
 
 ```
 
-### iii. Plot
+### iii. Plot model results
 
-#### a. functions
-
-```{r}
-
-make_coef_plot <- function(data) {
-  ggplot(data, aes(x = order, y = coef, color = direction)) +
-    geom_hline(yintercept = 0, linetype = "dashed", size = 0.5, color = "grey40") +
-    geom_point(size = 3) +
-    geom_linerange(aes(ymin = low_ci_95, ymax = high_ci_95), linewidth = 1) +
-    geom_linerange(aes(ymin = low_ci_50, ymax = high_ci_50), linewidth = 1.5) +
-    scale_color_manual(values = c("positive" = "#80b1d3", "negative" = "#fb8072"),
-                       breaks = c("positive", "negative")) +
-    coord_flip() +
-    labs(y = "", x = "") +
-    theme(axis.line = element_line(color = "black", linewidth = 0.28),
-          axis.text = element_text(size = 12, color = "black"),
-          text = element_text(size = 10, color = "black", family = "sans"),
-          panel.grid.minor = element_blank(),
-          panel.grid.major = element_blank(),
-          legend.position = "none",
-          panel.background = element_blank()
-    )
-}
-
-make_model_weight_plot <- function(data) {
-  ggplot(data, aes(y = order)) +
-    geom_bar(stat = "identity", aes(x = -m_full, fill = "m_full"), position = "identity", width = 0.4) +
-    geom_bar(stat = "identity", aes(x = m_main, fill = "m_main"), position = "identity", width = 0.4) +
-    geom_vline(xintercept = 0, linetype = "dashed", color = "grey40") +
-    scale_fill_manual(values = c("m_full" = "#bc80bd", "m_main" = "#fdb462")) +
-    xlim(-1, 1) +
-    labs(x = "", y = "") +
-    theme(
-      axis.line = element_line(color = "black", linewidth = 0.28),
-      axis.text.y = element_blank(),
-      axis.text = element_text(size = 12, color = "black"),
-      text = element_text(size = 10, color = "black", family = "sans"),
-      panel.grid.minor = element_blank(),
-      panel.grid.major = element_blank(),
-      legend.position = "none",
-      panel.background = element_blank()
-    )
-}
-
-```
-
-#### b. data prep
+#### a. data prep
 
 ```{r}
 
@@ -710,7 +662,7 @@ plot_path_model_obs <- path_com_aic %>%
   spread(key = model, value = weight) %>%
    mutate(order = factor("observed"))
 
-path_order <- c("PC2", "simpson", "shannon", "PC3", "PC1")
+path_order <- c("PC2", "shannon", "PC3", "PC1")
 
 plot_path_model <- path_com_aic %>%
   filter(metric != "observed") %>%
@@ -720,45 +672,156 @@ plot_path_model <- path_com_aic %>%
   arrange(order)
 
 levels <- levels(plot_com_model$order)
-which(levels == "PC3")
+which(levels == "PC3") # height for plot label
 
 
 ```
 
-#### c. combined plot
-
-add x lables, fuss with ticks
+#### b. combined plot
 
 ```{r}
 
 p1 <- make_coef_plot(plot_com_coef) +
   ylim(-10, 10) +
-  ggtitle("A. Taxonomy coefficients") 
+  ggtitle("A. Taxonomy temperature coefficients") +
+  ylab("")
 
 p2 <- make_coef_plot(plot_path_coef) +
-  ylim(-21, 21) +
-  ggtitle("C. Pathway coefficients")
+  ylim(-24, 24) +
+  ggtitle("C. Metabolic pathway temperature coefficients") +
+  ylab("")
 
 p3 <- make_coef_plot(plot_path_observed) + 
-  ylim(-100, 100) 
+  ylim(-100, 100) +
+  ylab("Effect size")
 
-p4 <- make_model_weight_plot(plot_com_model) +
+p4 <- model_weight_plot(plot_com_model) +
   ggtitle("B. Taxonomy model weights") +
-  annotate("text", x = -0.5, y = 6.45, label = "temp model", color = "#bc80bd", size = 5) +
-  annotate("text", x = 0.5, y = 6.45, label = "base model", color = "#fdb462", size = 5)
+  annotate("text", x = -0.5, y = 5.45, label = "temp model", color = "#fee08b", size = 5, fontface = "bold") +
+  annotate("text", x = 0.5, y = 5.45, label = "base model", color = "#66bd63", size = 5, fontface = "bold") +
+  scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
+    labels = rep("", 5),
+    limits = c(-1, 1))
 
-p5 <- make_model_weight_plot(plot_path_model) +
-  ggtitle("D. Pathway model weights") 
+p5 <- model_weight_plot(plot_path_model) +
+  ggtitle("D. Metabolic pathway model weights") +
+  scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
+    labels = rep("", 5),
+    limits = c(-1, 1))
 
-p6 <- make_model_weight_plot(plot_path_model_obs)
+p6 <- model_weight_plot(plot_path_model_obs) +
+  scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
+  labels = c("100", "50", "0", "50", "100"),
+  limits = c(-1, 1)) +
+  xlab("model weight")
 
-
-ggarrange(p1, p4, p2, p5, p3, p6, ncol = 2, nrow = 3, 
+com_temp_plot <- ggarrange(p1, p4, p2, p5, p3, p6, ncol = 2, nrow = 3, 
+          widths = c(1, 1),
           align = "v",
-          heights = c(1, 1, 0.3))
+          heights = c(1, 1, 0.4))
+
+ggsave("figures/fig1.pdf", com_temp_plot, width = 12, height = 8)
 
 ```
 
+### iv. Plot alpha diversity results
+
+plot model predictions for alpha diversity over raw data
+
+```{r}
+
+# set up predictions df
+temp_seq <- seq(from = min(tax_model$temp_s, na.rm = TRUE), 
+                to = max(tax_model$temp_s, na.rm = TRUE), length.out = 100)
+
+pred_data <- data.frame(
+  group = unique(tax_model$group)[1], 
+  age_s = mean(tax_model$age_s, na.rm = TRUE),
+  sex = unique(tax_model$sex)[1], 
+  fruit_s = mean(tax_model$fruit_s, na.rm = TRUE),
+  residuals_s = mean(tax_model$residuals_s, na.rm = TRUE),
+  rain_s = mean(tax_model$rain_s, na.rm = TRUE),
+  temp_s = temp_seq,
+  filtered_reads = mean(tax_model$filtered_reads, na.rm = TRUE))
+
+########## shannon ##########
+s_temp <- lm(shannon ~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + offset(log(filtered_reads)), 
+               data = tax_model)
+s_preds <- predict(s_temp,  newdata = pred_data, interval = "confidence", level = 0.95 ) %>%
+  data.frame() %>%
+  rename(s_preds = fit,
+         s_lower = lwr,
+         s_upper = upr)
+pred_data <- cbind(pred_data, s_preds) 
+
+# to rescales x axis
+mean_temp <- mean(tax_model$temp)
+sd_temp <- sd(tax_model$temp) 
+
+s_plot <- ggplot(pred_data, aes(x = temp_s, y = s_preds)) +
+  geom_point(data = tax_model, aes(x = temp_s, y = shannon),alpha = 0.5, size = 4, color = "#fee08b") +
+  geom_smooth(method = "lm", lwd = 1, color = "black") +
+  geom_ribbon(aes(ymin = s_lower, ymax = s_upper), 
+              fill = "grey60", alpha = 0.5) +
+  theme_minimal() +
+  ggtitle("A. Shannon's diversity") +
+  labs(y = "", x = "") +
+  scale_x_continuous(
+    breaks = seq(min(tax_model$temp_s), max(tax_model$temp_s), length.out = 6), 
+    labels = inverse_scale) +  # rescale axis labels
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text = element_text(size = 12, color = "black"),
+        text = element_text(size = 10, color = "black", family = "sans"),
+        plot.title = element_text(size = 14, face = "bold"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+########## observed ##########
+o_temp <- glm(observed ~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s +
+                offset(log(filtered_reads)), 
+                family = Gamma(link = "log"),
+                data = tax_model)
+
+o_preds <- data.frame(predict(o_temp,  newdata = pred_data, type = "response", se.fit = TRUE)) %>%
+  select(-residual.scale) %>%
+  rename(o_preds = fit,
+         o_se = se.fit)
+
+pred_data <- cbind(pred_data, o_preds) %>%
+  mutate(o_lower = o_preds - 0.97 * o_se, # calc CI's 
+         o_upper = o_preds + 0.97 * o_se)
+
+o_plot <- ggplot(pred_data, aes(x = temp_s, y = o_preds)) +
+  geom_point(data = tax_model, aes(x = temp_s, y = observed),alpha = 0.5, size = 4, color = "#fee08b") +
+  geom_line(lwd = 1, color = "black") +
+  geom_ribbon(aes(ymin = o_lower, ymax = o_upper), 
+              fill = "grey60", alpha = 0.5) +
+  theme_minimal() +
+  labs(y = "", x = "") +
+  ggtitle("B. Observed ASV's") +
+  scale_x_continuous(
+    breaks = seq(min(tax_model$temp_s), max(tax_model$temp_s), length.out = 6), 
+    labels = inverse_scale) +  # rescale axis labels
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text = element_text(size = 12, color = "black"),
+        text = element_text(size = 10, color = "black", family = "sans"),
+        plot.title = element_text(size = 14, face = "bold"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+
+# add plots together  
+
+alpha_plots <- ggarrange(s_plot, o_plot, ncol = 2, nrow = 1)
+
+alpha_plots <- annotate_figure(alpha_plots, bottom = text_grob("temperature (°C)", size = 14))
+
+ggsave("figures/fig2.pdf", alpha_plots, width =8, height = 4)
+
+```
 
 ## B. Taxonomic differential abundance testing
 
@@ -905,7 +968,7 @@ length(unique(da5$Taxa)) # 211 taxa total
 
 this loops takes a while to run. 
 
-Compare m_main with all predictors except temp and m_full which includes temp for all taxa. Not including diet diversity in these models to help simplify the models. 
+Compare m_main that includes all predictors except temp and m_full which includes temp for all taxa. Same model comparison as the community-level analysis except not including diet diversity in these models to help simplify the models. 
 
 ```{r}
 
@@ -1037,16 +1100,16 @@ taxa_aic2 <- taxa_aic %>% filter(!Taxa %in% errors)
 length(taxa_aic2$Taxa) # 324/2 = 162
 
 # filter for taxa where full model fits best
-temp_filter <- taxa_aic2 %>%
+tax_temp_filter <- taxa_aic2 %>%
   group_by(Taxa) %>%
   filter(model == "m_full" & weight > 0.5) %>%
   pull(Taxa) # 93 taxa
-length(unique(temp_filter))
+length(unique(tax_temp_filter))
 
-filtered_coef <- taxa_coef2 %>%filter(Taxa %in% temp_filter)
+filtered_coef <- taxa_coef2 %>%filter(Taxa %in% tax_temp_filter)
 length(filtered_coef$Taxa)
 
-filtered_aic <- taxa_aic2 %>%filter(Taxa %in% temp_filter)
+filtered_aic <- taxa_aic2 %>%filter(Taxa %in% tax_temp_filter)
 length(filtered_aic$Taxa)
 
 ```
@@ -1073,11 +1136,7 @@ summary <- taxa_coef2 %>%
          temp_coef = coef,
          std_error = std)
 
-supp_table1 <- summary %>%
-  select(Taxa, temp_coef, std_error, level, model_weight, sensitive) %>%
-  flextable() %>%
-    autofit()
-print(supp_table1, preview = "docx")
+write.csv(summary, "figures/supp/taxonomy_temp_DAA_results.csv", row.names = FALSE)
 
 # descriptive stats
 table(summary$sensitive) # 93 temp sensitive
@@ -1111,7 +1170,7 @@ direction <- filtered_coef %>%
 
 # add temp information to da table
 da7 <- da6 %>%
-  mutate(taxa_temp_sensitive = ifelse(Taxa %in% temp_filter, "sensitive", "nuetral")) %>%
+  mutate(taxa_temp_sensitive = ifelse(Taxa %in% tax_temp_filter, "sensitive", "nuetral")) %>%
   left_join(direction, by = "Taxa") %>%
   mutate(effect_direction = case_when(
     is.na(effect_direction) ~ "neutral",
@@ -1230,7 +1289,7 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
   limits = c(NA, 45)  # or whatever max x value you need
 ) +
   
-  scale_color_gradient(high = "#7570b3", low = "#d95f02", name = "Model weight") +
+  scale_color_gradient(low = "#66bd63", high = "#fee08b", name = "Model weight") +
   
   ggnewscale::new_scale_color() + # add a new color scale for the tip circles
   
@@ -1238,7 +1297,7 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
   
   geom_point2(aes(subset = isTip, color = effect_direction), shape = 19, size = 4, stroke = 0, show.legend = FALSE) +
 
-  scale_color_manual(values = c("positive" = "#1f78b4", "negative" = "#e41a1c", "neutral"  = "#666666"), name = "Effect direction") +
+  scale_color_manual(values = c("positive" = "#80b1d3", "negative" = "#fb8072", "neutral"  = "grey60"), name = "Effect direction") +
   
   geom_text2(aes(subset = isTip, label = case_when(effect_direction == "positive" ~ "+", effect_direction == "negative" ~ "–")),
   size = 3.6, vjust = 0.4, hjust = 0.5, color = "white") +
@@ -1255,11 +1314,11 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
   # Direction effect legend
   annotate("text", x = 1.2, y = 82, label = "Effect direction", size = 3.7, hjust = 0) +
   
-  annotate("point", x = 1.5, y = 80.2, shape = 19, size = 4, color = "#1f78b4") +
+  annotate("point", x = 1.5, y = 80.2, shape = 19, size = 4, color = "#80b1d3") +
   annotate("text", x = 2.1, y = 80.25, label = "positive", size = 3.3, hjust = 0) +
   annotate("text", x = 1.5, y = 80.3, label = "+", size = 4, color = "white") +
   
-  annotate("point", x = 1.5, y = 78.4, shape = 19, size = 4, color = "#e41a1c") +
+  annotate("point", x = 1.5, y = 78.4, shape = 19, size = 4, color = "#fb8072") +
   annotate("text", x = 2.1, y = 78.45, label = "negative", size = 3.3, hjust = 0) +
   annotate("text", x = 1.5, y = 78.5, label = "–", size = 4, color = "white") +
   
@@ -1309,7 +1368,7 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
   
 tree
 
-ggsave("figures/tree.pdf", tree, width =8, height = 12.5)
+ggsave("figures/fig3.pdf", tree, width =8, height = 12.5)
 
 
 ```
@@ -1317,4 +1376,1879 @@ ggsave("figures/tree.pdf", tree, width =8, height = 12.5)
 
 ## C. Pathway differential abundance testing
 
+### i. Prep data
 
+starting with 547 pathways
+
+```{r}
+
+# wrangle pathway levels
+pathway_levels <- as.data.frame(MetaCyc_pathway_map) %>%
+  rownames_to_column("path_id") %>%
+   select(pathway, path_id)
+
+# wrangle clr abundances
+path_abund <- path_clr %>%
+  data.frame() %>%
+  rownames_to_column("sample") %>%
+  gather(key = "pathway", value = "clr_abundance", -sample) %>%
+  left_join(path_m_filtered, by = "sample") %>%
+  mutate(pathway = str_remove(pathway, "^X")) %>% 
+  separate(pathway, into = c("path_id", "pathway_name"), sep = "\\.\\.", extra = "merge") %>%
+  mutate(path_id = str_replace_all(path_id, "\\.", "-")) %>%
+  left_join(pathway_levels, by = "path_id") %>%
+  rename(path_name = pathway) %>%
+  select(sample, path_id, path_name, clr_abundance:reads) %>%
+  filter(path_id != "ALL-CHORISMATE-PWY") # remove path with no lvl 2 assignment 
+  
+length(unique(path_abund$path_id)) # 547 pathways
+table(path_abund$sample) # each sample has 547 paths
+
+# scale variables
+path_abund <- path_abund %>%
+  mutate(across(c(age, temp, rain, fruit, neo), my_scale, .names = "{.col}_s")) %>%
+  mutate(group = as.factor(group),
+         sex = as.factor(sex),
+         ID = as.factor(ID))
+
+```
+
+### ii. AIC comparison
+
+```{r}
+
+path_coef <- list()
+path_aic <- list()
+path_model_results <- list()
+
+for (i in unique(path_abund$path_id)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund, path_id == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s", 1], 4)
+    std_value <- round(summary(m_full)$coefficients["temp_s", 2], 4)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      path_id = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      path_id = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      path_id = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    path_aic[[i]] <- aic_df
+    path_coef[[i]] <- results_df
+    path_model_results[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+path_aic <- do.call(rbind, path_aic)
+path_coef <- do.call(rbind, path_coef)
+path_model_results <- do.call(rbind, path_model_results)
+
+
+```
+
+### iii. select taxa
+
+164 do not converge so we tested 383 total (started with 547)
+
+Temp model fits best for 169 pathways which means that it doesn't fit best for 214
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(path_aic$path_id[path_aic$Warning == "Convergence Warning"]) # 164 do not converge
+length(convergence_warnings)
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- path_model_results %>% 
+  filter(StdError > 100) %>%
+  pull(path_id) %>%
+  unique() # no huge SE's
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 164 do not converge
+
+# remove error taxa
+path_abund2 <- path_abund %>% filter(!path_id %in% errors)
+length(unique(path_abund2$path_id)) # 383 remaining 
+
+path_coef2 <- path_coef %>% filter(!path_id %in% errors)
+length(path_coef2$path_id)
+
+path_aic2 <- path_aic %>% filter(!path_id %in% errors)
+length(path_aic2$path_id) 
+
+# filter for taxa where full model fits best
+temp_filter <- path_aic2 %>%
+  group_by(path_id) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(path_id) 
+length(unique(temp_filter)) # temp model fits best for 169 pathways
+
+# filter df's for where temp model fits best 
+path_abund3 <- path_abund2 %>% filter(path_id %in% temp_filter)
+length(unique(path_abund3$path_id))  
+
+path_coef3 <- path_coef2 %>% filter(path_id %in% temp_filter)
+length(path_coef3$path_id)
+
+path_aic3 <- path_aic2 %>% filter(path_id %in% temp_filter)
+length(path_aic3$path_id)
+
+```
+
+### iv. supplemental table
+
+table with modeling information for all pathways for the supplement
+
+```{r}
+
+# final table of model results for all tested pathways
+levels <- path_abund2 %>% select(path_name, path_id) %>%
+  distinct()
+
+weights <- path_aic2 %>% filter(model == "m_full") %>% select(path_id, weight)
+
+groupings <- read.csv("data/path_group_assignment.csv")
+
+path_summary <- path_coef2 %>%
+  left_join(levels, by = "path_id") %>%
+  left_join(weights, by = "path_id") %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         sensitive = ifelse(weight > 0.5, "temp sensitive", "nuetral")) %>%
+  rename(model_weight = weight,
+         temp_coef = coef,
+         std_error = std,
+         pathway = path_name) %>%
+  left_join(groupings, by = "pathway") %>%
+  mutate(group = case_when(sensitive == "temp sensitive" & is.na(group) ~ "no group assignment",
+         TRUE ~ group))
+
+write.csv(path_summary, "figures/supp/pathway_temp_DAA_results.csv", row.names = FALSE)
+
+```
+
+### v. plot figure
+
+#### a. data prep
+
+```{r}
+
+temp_path_info <- path_coef3 %>%
+  left_join(pathway_levels, by = "path_id") %>%
+  select(path_id, pathway, coef:high_ci_50) %>% 
+  left_join(groupings, by = "pathway") %>%
+  filter(!is.na(group)) %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative"),
+         path_id = reorder(path_id, -coef),
+         pathway = str_remove_all(pathway, " \\(.*?\\)"),
+         pathway = str_replace_all(pathway, "&beta;", "beta"),
+         pathway = case_when(pathway == "pyruvate fermentation to acetate and-lactate I" ~ "pyruvate fermentation to acetate and (S)-lactate I",
+                             pathway == "superpathway of2-lipid A biosynthesis" ~ "superpathway of (Kdo)2-lipid A biosynthesis",
+                             pathway == "fatty acid elongation -- saturated" ~ "fatty acid elongation",
+                             pathway == "palmitoleate biosynthesis I-dodec-5-enoate)" ~ "palmitoleate biosynthesis I",
+                             TRUE ~pathway))
+
+# make functional groups
+lipid <- temp_path_info %>% filter(group == "lipid catabolism and remodeling") %>% arrange(desc(coef)) %>%
+  mutate(order = factor(pathway, levels = pathway))
+
+redox <- temp_path_info %>% filter(group == "redox maintenance") %>% arrange(desc(coef)) %>%
+  mutate(order = factor(pathway, levels = pathway))
+
+nucleotide <- temp_path_info %>% filter(group == "nucleotide mobilization") %>% arrange(desc(coef)) %>%
+  mutate(order = factor(pathway, levels = pathway))
+
+immune <- temp_path_info %>% filter(group == "immune regulation") %>% arrange(desc(coef)) %>%
+  mutate(order = factor(pathway, levels = pathway))
+
+
+# order for oxygen groups
+oxygen <- temp_path_info %>% filter(group == "oxygen-driven metabolism and carbohydrate fermentation")
+
+subgroup_order <- c("starch degradation III", "D-arabinose degradation I", "D-glucarate degradation I", "superpathway of D-glucarate and D-galactarate degradation")
+
+all_subgroups <- unique(oxygen$subgroup)
+
+custom_order <- c(subgroup_order, setdiff(all_subgroups, subgroup_order))
+
+oxygen <- oxygen %>%
+  mutate(subgroup = factor(subgroup, levels = custom_order)) %>%
+  arrange(subgroup, desc(coef)) %>%
+  mutate(order = factor(pathway, levels = pathway))
+
+
+```
+
+#### b. coefficient plots
+
+warnings when plotting are from special characters
+
+```{r}
+
+########## lipid metabolism #############
+
+lipid_p <- make_coef_plot(lipid) +
+  ggtitle("A. Lipid metabolism") +
+  ylab("") +
+  ylim(-5, 5) +
+  theme(axis.text.x = element_blank(),
+         plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
+  annotate("segment", x = "superpathway of glyoxylate cycle and fatty acid degradation",  xend = "9-cis, 11-trans-octadecadienoyl-CoA degradation", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "fatty acid salvage", y = 4.85, label = "decreased catabolism\nand recycling", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "stearate biosynthesis II",  xend = "petroselinate biosynthesis", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "gondoate biosynthesis", y = 4.85, label = "increased synthesis\nand remodeling", hjust = 0, size = 5, color = "#80b1d3") 
+lipid_p
+
+########## oxygen metabolism #############
+
+oxygen_p <- make_coef_plot(oxygen) +
+  ggtitle("B. Oxygen-driven metabolism and fermentation") +
+  ylab("") +
+  ylim(-5, 5) +
+  theme(axis.text.x = element_blank(),
+        plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
+  annotate("segment", x = "pyruvate fermentation to acetate and (S)-lactate I",  xend = "formaldehyde assimilation II", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "glycogen degradation II", y = 4.85, label = "increased anerobic\nmetabolism", hjust = 0, size = 5, color = "#80b1d3") +
+  annotate("segment", x = "superpathway of glycolysis, pyruvate dehydrogenase, TCA, and glyoxylate bypass",  xend = "glyoxylate cycle", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "superpathway of glycol metabolism and degradation", y = 4.85, label = "decreased aerobic\nmetabolism", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "superpathway of D-glucarate and D-galactarate degradation",  xend = "starch degradation III", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "D-glucarate degradation I", y = 4.85, label = "decreased complex\ncarbohydrate fermentation", hjust = 0, size = 5, color = "#fb8072") 
+
+oxygen_p
+
+########## Redox maintenance #############
+
+redox_p <- make_coef_plot(redox) +
+  ggtitle("C. Redox maintenance") +
+  ylab("") +
+  ylim(-5, 5) +
+  theme(plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
+  annotate("segment", x = "assimilatory sulfate reduction IV",  xend = "L-methionine biosynthesis IV", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "superpathway of methylglyoxal degradation", y = 4.85, label = "reduced redox\nmaintenance", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("segment", x = "tetrapyrrole biosynthesis I",  xend = "L-ascorbate degradation I", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "pentose phosphate pathway I", y = 4.85, label = "increased redox\nmaintenance", hjust = 0, size = 5, color = "#80b1d3") 
+
+redox_p
+
+########## nucleotide mobilization #############
+
+nucleotide_p <- make_coef_plot(nucleotide) +
+  ggtitle("D. Nucleotide mobilization") +
+  ylab("") +
+  ylim(-5, 5) +
+  theme(plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
+  annotate("segment", x = "pyrimidine deoxyribonucleosides salvage",  xend = "adenosine nucleotides degradation I", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = "UMP biosynthesis III", y = 4.85, label = "increased synthesis\nand salvage", hjust = 0, size = 5, color = "#80b1d3")
+
+nucleotide_p 
+
+########## immune regulation #############
+
+immune_p <- make_coef_plot(immune) +
+  ggtitle("E. Immune regulation") +
+  ylab("") +
+  ylim(-5, 5) +
+  theme(plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
+  annotate("segment", x = "acetyl-CoA fermentation to butanoate II",  xend = "L-glutamate degradation XI", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
+  annotate("text", x = "L-glutamate degradation VII", y = 4.85, label = "decreased\nanti-inflammatory\nsignals", hjust = 0, size = 5, color = "#fb8072") + 
+  annotate("segment", x = "(5Z)-dodecenoate biosynthesis I",  xend = "L-tryptophan biosynthesis", y = 4.7, yend = 4.7,
+           color = "#80b1d3", size = 0.6) +
+  annotate("text", x = 1.5, y = 4.85, label = "increased\nanti-inflammatory\nsignals", hjust = 0, size = 5, color = "#80b1d3")
+
+immune_p
+
+
+#### combine plots #####
+
+combined <- ggarrange(lipid_p, oxygen_p, redox_p, nucleotide_p, immune_p, ncol = 3, nrow = 2, align = "v")
+
+ggsave("figures/fig4.pdf", combined, width =32, height = 13)
+
+
+# find midpoint betwen two discrete values 
+#levels <- levels(immune$pathway)
+
+# Get numeric positions of those two
+#a <- which(levels == "enterobacterial common antigen biosynthesis")
+#b <- which(levels == "superpathway of (Kdo)2-lipid A biosynthesis")
+
+# Find midpoint
+#mid <- (a + b) / 2
+
+```
+
+
+
+# 4. Neopterin * Temperature analysis
+
+## A. Community-level modeling
+
+Compare m_main that has the base predictors plus the temp predictor and m_full which has an interaction between neopterin and temperature. Both model include an offset of total reads to control for seq depth.
+
+### i. Taxonomy
+
+Use lmer() for shannon and PCA axes because they are (generally) normally distributed. Use glmer() for observed because it needs a gamma distribution, data is left skewed.
+
+```{r}
+
+# create empty lists
+tax_coef_int <- list() 
+tax_aic_int <- list()
+
+com_features <- colnames(tax_model)[c(15, 17:19)] # list of features to model
+
+############ loop  #################
+for (i in com_features) {
+      
+      formula_main <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + (1 | ID) + offset(log(filtered_reads))"))
+      formula_full <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s * neo_s + (1 | ID) + offset(log(filtered_reads))"))
+      
+    m_main <- lmer(formula_main, data = tax_model)
+    m_full <- lmer(formula_full, data = tax_model)
+    
+    # AICc
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+    
+    # extract taxa coef
+    coef <- round(summary(m_full)$coeff[10,1], 4)
+    
+    # extract se
+    std <- round(summary(m_full)$coeff[10,2], 4)
+    
+    # calc CI's
+    ci_95 <- data.frame(taxa_coef = coef, taxa_std = std, Lower_95 = coef - 1.96 * std, Upper_95 = coef + 1.96 * std)
+    
+    ci_50 <- data.frame(Lower_50 = coef - 0.6745 * std, Upper_50 = coef + 0.6745 * std)
+    
+    # bind data
+    df <- cbind(ci_95, ci_50) 
+    
+    #create data frames
+    aic_df <- data.frame(
+        metric = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3))
+    
+    results_df <- data.frame(
+        metric = i, 
+        coef = round(df$taxa_coef, 3),
+        std = round(df$taxa_std, 3),
+        low_ci_95 = round(df$Lower_95, 3),
+        high_ci_95 = round(df$Upper_95, 3),
+        low_ci_50 = round(df$Lower_50, 3),
+        high_ci_50 = round(df$Upper_50, 3))
+
+    # store results
+    tax_aic_int[[i]] <- aic_df
+    tax_coef_int[[i]] <- results_df
+
+}
+
+# combine results 
+tax_aic_int <- do.call(rbind, tax_aic_int)
+tax_coef_int <- do.call(rbind, tax_coef_int)
+
+
+#### model observed ######
+
+m_full <- glmer(observed ~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s * neo_s + (1 | ID) + offset(log(filtered_reads)), 
+                family = Gamma(link = "log"),
+                data = tax_model)
+
+m_main <- glmer(observed ~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + (1 | ID) + offset(log(filtered_reads)),
+                family = Gamma(link = "log"),
+                data = tax_model)
+
+AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+AICc$model <- rownames(AICc)
+
+coef <- round(summary(m_full)$coeff[10,1], 4)
+std <- round(summary(m_full)$coeff[10,2], 4)
+ci_95 <- data.frame(taxa_coef = coef, taxa_std = std, Lower_95 = coef - 1.96 * std, Upper_95 = coef + 1.96 * std)
+ci_50 <- data.frame(Lower_50 = coef - 0.6745 * std, Upper_50 = coef + 0.6745 * std)
+df <- cbind(ci_95, ci_50) 
+
+aic_df <- data.frame(
+  metric = "observed",
+  model = AICc$model,
+  dAICc = round(AICc$dAICc,3),
+  weight = round(AICc$weight, 3))
+    
+results_df <- data.frame(
+  metric = "observed",
+  coef = round(df$taxa_coef, 3),
+  std = round(df$taxa_std, 3),
+  low_ci_95 = round(df$Lower_95, 3),
+  high_ci_95 = round(df$Upper_95, 3),
+  low_ci_50 = round(df$Lower_50, 3),
+  high_ci_50 = round(df$Upper_50, 3))
+
+tax_coef_int <- rbind(tax_coef_int, results_df)
+
+tax_aic_int <- rbind(tax_aic_int, aic_df) 
+
+```
+
+### ii. Pathways
+
+```{r}
+path_coef_int <- list() 
+path_aic_int <- list()
+
+com_features <- colnames(tax_model)[c(15:19)] # list of features to model
+
+for (i in com_features) {
+      
+      formula_main <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s + (1 | ID) + offset(log(reads))"))
+      formula_full <- as.formula(paste(i, "~ group + age_s + sex + fruit_s + residuals_s + rain_s + temp_s * neo_s + (1 | ID) + offset(log(reads))"))
+      
+      m_main <- lmer(formula_main, data = path_model)
+      m_full <- lmer(formula_full, data = path_model)
+    
+    # AICc
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+    
+    # extract taxa coef
+    coef <- round(summary(m_full)$coeff[10,1], 4)
+    
+    # extract se
+    std <- round(summary(m_full)$coeff[10,2], 4)
+    
+    # calc CI's
+    ci_95 <- data.frame(taxa_coef = coef, taxa_std = std, Lower_95 = coef - 1.96 * std, Upper_95 = coef + 1.96 * std)
+    
+    ci_50 <- data.frame(Lower_50 = coef - 0.6745 * std, Upper_50 = coef + 0.6745 * std)
+    
+    # bind data
+    df <- cbind(ci_95, ci_50) 
+    
+    #create data frames
+    aic_df <- data.frame(
+        metric = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3))
+    
+    results_df <- data.frame(
+        metric = i, 
+        coef = round(df$taxa_coef, 3),
+        std = round(df$taxa_std, 3),
+        low_ci_95 = round(df$Lower_95, 3),
+        high_ci_95 = round(df$Upper_95, 3),
+        low_ci_50 = round(df$Lower_50, 3),
+        high_ci_50 = round(df$Upper_50, 3))
+
+    # store results
+    path_aic_int[[i]] <- aic_df
+    path_coef_int[[i]] <- results_df
+
+}
+
+# combine results 
+path_aic_int <- do.call(rbind, path_aic_int)
+path_coef_int <- do.call(rbind, path_coef_int)
+```
+
+
+### iii. Plot model results
+
+#### a. data prep
+
+```{r}
+
+## taxa data prep ##
+
+plot_coef_int <- tax_coef_int %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative")) %>%
+  arrange(desc(coef)) %>%
+  mutate(order = factor(metric, levels = metric))
+
+plot_aic_int <- tax_aic_int %>%
+  select(metric, model, weight) %>%
+  mutate(model = case_when(model == "o_full" ~ "m_full",
+                           model == "o_main" ~ "m_main",
+                           TRUE ~ model)) %>%
+  spread(key = model, value = weight) %>%          
+  mutate(order = factor(metric, levels = levels(plot_coef_int$order))) %>%
+  arrange(order)
+
+## path data prep ##
+
+plot_path_coef_int_observed <- path_coef_int %>%
+  filter(metric == "observed") %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative")) %>%
+  arrange(desc(coef)) %>%
+  mutate(order = factor(metric, levels = metric))
+
+plot_path_coef_int <- path_coef_int %>%
+  filter(metric != "observed") %>%
+  mutate(direction = ifelse(coef > 0, "positive", "negative")) %>%
+  arrange(desc(coef)) %>%
+  mutate(order = factor(metric, levels = metric))
+
+
+plot_path_aic_int_observed <- path_aic_int %>%
+  filter(metric == "observed") %>%
+  select(metric, model, weight) %>%
+  spread(key = model, value = weight) %>%    
+  mutate(order = factor("observed"))
+  
+path_order <- c("PC3", "PC2", "shannon", "PC1")  
+
+plot_path_aic_int <- path_aic_int %>%
+  filter(metric != "observed") %>%
+  select(metric, model, weight) %>%
+  spread(key = model, value = weight) %>%  
+  mutate(order = factor(metric, levels = levels(plot_path_coef_int$order))) %>%
+  arrange(order)
+
+
+levels <- levels(plot_aic_int$order)
+which(levels == "PC1") # height for plot label
+
+
+```
+
+#### b. combined plot
+
+```{r}
+
+p1 <- make_coef_plot(plot_coef_int) +
+  ylim(-10, 10) +
+  ggtitle("A. Taxonomy interaction coefficients") +
+  ylab("")
+
+p2 <- make_coef_plot(plot_path_coef_int) +
+  ylim(-36, 36) +
+  ggtitle("C. Metabolic pathway interaction coefficients") +
+  ylab("")
+
+p3 <- make_coef_plot(plot_path_coef_int_observed) + 
+  ylim(-165, 165) +
+  ylab("Effect size")
+
+p4 <- model_weight_plot(plot_aic_int) +
+  ggtitle("B. Taxonomy model weights") +
+  annotate("text", x = -0.5, y = 5.45, label = "interaction model", color = "#fee08b", size = 5, fontface = "bold") +
+  annotate("text", x = 0.5, y = 5.45, label = "temp model", color = "#66bd63", size = 5, fontface = "bold") +
+  scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
+    labels = rep("", 5),
+    limits = c(-1, 1))
+
+p5 <- model_weight_plot(plot_path_aic_int) +
+  ggtitle("D. Metabolic pathway model weights") +
+  scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
+    labels = rep("", 5),
+    limits = c(-1, 1))
+
+p6 <- model_weight_plot(plot_path_aic_int_observed) +
+  scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
+  labels = c("100", "50", "0", "50", "100"),
+  limits = c(-1, 1)) +
+  xlab("model weight")
+
+int_com_temp_plot <- ggarrange(p1, p4, p2, p5, p3, p6, ncol = 2, nrow = 3, 
+          widths = c(1, 1),
+          align = "v",
+          heights = c(1, 1, 0.4))
+
+ggsave("figures/fig5.pdf", int_com_temp_plot, width = 12, height = 8)
+
+```
+
+## B. Taxonomic Differential abundance testing
+
+### i. AIC comparison
+
+Take all temp taxa (taxa that had a relationship with temp) and fit with m_main model with all the base predictors plus temp and m_full model with base predictors and a temp * neopterin interaction. 
+
+```{r}
+
+# filter abundance for temp taxa
+temp_abund <- da6 %>% filter(Taxa %in% tax_temp_filter)
+length(unique(temp_abund$Taxa)) # 93
+
+# create lists
+tax_neo_coef <- list()
+tax_neo_aic <- list()
+tax_neo_model_results <- list()
+
+for (i in unique(temp_abund$Taxa)) {
+  tryCatch({
+    
+    # subset based on taxa
+    data <- droplevels(subset(temp_abund, Taxa == i))
+    
+    # convergence warning variable
+    warning_msg <- "No Warning"
+    
+    withCallingHandlers({
+
+      m_full <- gam(Abundance ~ age_s + temp_s * neo_s + rain_s + sex + group + fruit_s + s(ID, bs = "re") + offset(log(filtered_reads)), data = data, method = "REML", family = nb(link = "log")) 
+
+      m_main <- gam(Abundance ~ age_s + rain_s + temp_s + sex + group + fruit_s + s(ID, bs = "re") + offset(log(filtered_reads)), data = data, method = "REML", family = nb(link = "log")) 
+      
+    }, warning = function(w) {
+   
+      warning_msg <- conditionMessage(w)
+  
+      if (grepl("Fitting terminated with step failure", warning_msg)) {
+      warning_msg <<- "Convergence Warning"  # update warning variable
+      } 
+    })
+    
+     # compare with AICctab
+      AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+      AICc$model <- rownames(AICc)
+      
+      # extract temp coef
+      coef <- round(summary(m_full)$p.coeff[9], 4)
+    
+      # extract temp ci's
+      std <- round(summary(m_full)$se[9], 4)
+    
+      # clac CI'
+      ci_95 <- data.frame(taxa_coef = coef, taxa_std = std, Lower_95 = coef - 1.96 * std, Upper_95 = coef + 1.96 * std)
+      ci_50 <- data.frame(Lower_50 = coef - 0.6745 * std, Upper_50 = coef + 0.6745 * std)
+    
+      # bind data
+      df <- cbind(ci_95, ci_50)
+      
+      #create data frames
+    aic_df <- data.frame(
+        Taxa = i, 
+        model = AICc$model,
+        dAICc = round(AICc$dAICc,3),
+        weight = round(AICc$weight, 3),
+        Warning = warning_msg,
+        stringsAsFactors = FALSE)
+    
+    results_df <- data.frame(
+        Taxa = i, 
+        coef = round(df$taxa_coef, 3),
+        std = round(df$taxa_std, 3),
+        low_ci_95 = round(df$Lower_95, 3),
+        high_ci_95 = round(df$Upper_95, 3),
+        low_ci_50 = round(df$Lower_50, 3),
+        high_ci_50 = round(df$Upper_50, 3),
+        stringsAsFactors = FALSE)
+
+    options(scipen = 999)  
+
+    model_results_df <- data.frame(
+      Taxa = i,
+      Predictor = names(summary(m_full)$p.coeff[c(2:9)]),
+      Coefficient = round(summary(m_full)$p.coeff[c(2:9)], 4),
+      StdError = round(summary(m_full)$se[c(2:9)], 4),
+      stringsAsFactors = FALSE)
+    
+    
+      # save results
+    tax_neo_aic[[i]] <- aic_df
+    tax_neo_coef[[i]] <- results_df
+    tax_neo_model_results[[i]] <- model_results_df
+      
+  }, error = function(e) {
+
+    message(paste("Error with Taxa:", i, "- Skipping."))  # skip to next taxa if error
+    
+  })
+}
+
+# combine results
+tax_neo_aic <- do.call(rbind, tax_neo_aic)
+tax_neo_coef <- do.call(rbind, tax_neo_coef)
+tax_neo_model_results <- do.call(rbind, tax_neo_model_results)
+
+```
+
+### ii. taxa selection
+
+same as previous AIC taxa filtered. Remove convergence warnings and any taxa that look like they didn't converge from SE. Filter for taxa where m_full (model with temp * neo interaction) have > .50 model weight. 20 taxa left. 
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(tax_neo_aic$Taxa[tax_neo_aic$Warning == "Convergence Warning"]) # 2 warnings
+
+# remove all taxa where one or more predictos have huge SE
+convergence_errors <- tax_neo_model_results %>%
+  filter(StdError > 100) %>%
+  pull(Taxa) %>%
+  unique()
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 2 do not converge
+
+# remove error taxa
+temp_abund2 <- temp_abund %>% filter(!Taxa %in% errors)
+length(unique(temp_abund2$Taxa)) # 91 remaining taxa
+
+tax_neo_coef2 <- tax_neo_coef %>% filter(!Taxa %in% errors)
+length(tax_neo_coef2$Taxa)
+
+tax_neo_aic2 <- tax_neo_aic %>% filter(!Taxa %in% errors)
+length(tax_neo_aic2$Taxa) # 182/2 = 91
+
+# filter for taxa where full model fits best
+tax_neo_filter <- tax_neo_aic2 %>%
+  group_by(Taxa) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(Taxa) 
+length(tax_neo_filter) # 20 taxa
+
+# filter abundances for temp taxa
+tax_neo_abund <- temp_abund2 %>% filter(Taxa %in% tax_neo_filter)
+length(unique(tax_neo_abund$Taxa)) 
+
+tax_filtered_neo_coef <- tax_neo_coef2 %>% filter(Taxa %in% tax_neo_filter)
+length(tax_filtered_neo_coef$Taxa)
+
+tax_filtered_neo_aic <- tax_neo_aic2 %>% filter(Taxa %in% tax_neo_filter)
+length(tax_filtered_neo_aic$Taxa) 
+
+```
+
+### iii. get model predictions
+
+```{r}
+
+# Create neo bins
+tax_neo_abund$neo_bin <- cut(tax_neo_abund$neo_s, breaks = 3, labels = c("Bin1", "Bin2", "Bin3"), include.lowest = TRUE)
+
+bin_limits <- levels(cut(tax_neo_abund$neo_s, breaks = 3, include.lowest = TRUE)) # look at bin range
+bin_avg <- tapply(tax_neo_abund$neo_s, tax_neo_abund$neo_bin, mean, na.rm = TRUE) # use for co plot
+
+# Create temp seq
+temp_seq <- seq(min(tax_neo_abund$temp_s, na.rm = TRUE), max(tax_neo_abund$temp_s, na.rm = TRUE), length.out = 100)
+
+# list
+neo_preds <- list()
+
+# loop
+for (i in unique(tax_neo_abund$Taxa)) {
+  
+  data <- droplevels(subset(tax_neo_abund, Taxa == i))
+  
+  m <- gam(Abundance ~ age_s + temp_s * neo_s + rain_s + rain_s + sex + group + fruit_s + offset(log(filtered_reads)), 
+           data = data, 
+           method = "REML", 
+           family = nb(link = "log"))
+  
+  coef <- round(summary(m)$p.coeff[9], 4)
+  
+  # neo_s values and bins
+  neo_values <- c(-0.1001032,  1.0280093,  2.5125214)
+  bins <- paste0("neopterin_avg", 1:3)
+  
+  # Generate predictions for each neo_s value
+  preds <- lapply(seq_along(neo_values), function(j) {
+    neo_s <- neo_values[j]
+    bin <- bins[j]
+    
+    # preds dataset
+    pred <- expand.grid(
+      temp_s = temp_seq,
+      neo_s = neo_s,
+      age_s = mean(data$age_s, na.rm = TRUE),
+      rain_s = mean(data$rain_s, na.rm = TRUE),
+      fruit_s = mean(data$fruit_s, na.rm = TRUE),
+      group = unique(data$group)[1],
+      sex = unique(data$sex)[1],
+      filtered_reads = mean(data$filtered_reads, na.rm = TRUE)
+    )
+    
+    # get model predictions
+    preds_model <- predict(m, newdata = pred, type = "link", se.fit = TRUE)
+    
+    # store preds and CI's 
+    df <- data.frame(
+      temp_s = pred$temp_s,  
+      neo_s = neo_s,
+      fit = preds_model$fit,
+      lower = preds_model$fit - 1.96 * preds_model$se.fit,
+      upper = preds_model$fit + 1.96 * preds_model$se.fit,
+      bin = bin,
+      coef = coef
+    )
+    
+    return(df)
+  })
+  
+  # combine predictions for all bins 
+  preds_df <- do.call(rbind, preds)
+  preds_df$Taxa <- i 
+  
+  # store preds
+  neo_preds[[i]] <- preds_df
+}
+
+# Combine all predictions into a single dataframe
+tax_neo_preds <- do.call(rbind, neo_preds)
+row.names(neo_preds) <- NULL # clean up row names
+
+```
+
+### vi. plot by Taxa
+
+Plot with the CI's for each taxa for the supplement
+
+```{r}
+
+pdf("figures/supp/taxa_interaction_plottedpreds.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(tax_neo_preds$Taxa)) {
+  
+  data <- subset(tax_neo_preds, Taxa == i)
+
+  p <- ggplot(data, aes(x = temp_s, y = fit)) +
+    geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, fill = "grey") +
+    geom_line() +
+    facet_wrap(~ bin, nrow = 1) +  
+    theme_minimal() +
+    labs(
+      title = paste("predicted Abundance for", i),
+      x = "temperature (scaled)",
+      y = "predicted log abundance") 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 3)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```
+
+### v. Plot by effect direction
+
+#### a. data prep
+```{r}
+
+########### Prep data ################
+
+mean_neo <- mean(tax_neo_abund$neo)
+sd_neo <- sd(tax_neo_abund$neo) 
+
+neo_reverse <- function(x) {
+  return(round(x * 2 * sd_neo + mean_neo))  # reverse scale in figure axes
+}
+
+bin_limits <- levels(cut(tax_neo_abund$neo_s, breaks = 3, include.lowest = TRUE)) # look at bin range
+neo_reverse(3.26)
+
+tax_effect_type <- tax_neo_preds %>%
+  group_by(Taxa, bin) %>%
+  do({m <- lm(fit ~ temp_s, data = .)
+    slope <- coef(m)["temp_s"]
+    data.frame(slope = slope)}) %>%
+  ungroup() %>%
+  pivot_wider(names_from = bin, values_from = slope,
+                     names_prefix = "slope_") %>%
+  mutate(effect_type = case_when(slope_neopterin_avg1 > 0 & slope_neopterin_avg3 > 0 ~ "positive_amplifying",
+                                 slope_neopterin_avg1 < 0 & slope_neopterin_avg3 < 0 ~ "negative_amplifying",
+                                 slope_neopterin_avg1 < 0 & slope_neopterin_avg3 > 0 ~ "positive_inverse",
+                                 TRUE ~ "other")) %>%
+  select(Taxa, effect_type)
+
+
+tax_neo_preds2 <- tax_neo_preds %>% 
+  mutate(bin = case_when(bin == "neopterin_avg1" ~ "neopterin: 108-1915 (nmol/L)",
+                         bin == "neopterin_avg2" ~ "neopterin: 1915-3711 (nmol/L)",
+                         bin == "neopterin_avg3" ~ "neopterin: 3711-5525 (nmol/L)")) %>%
+  left_join(tax_effect_type, by = "Taxa")
+
+
+pos <- tax_neo_preds2 %>% filter(effect_type == "positive_amplifying")
+neg <- tax_neo_preds2 %>% filter(effect_type == "negative_amplifying")
+inverse <- tax_neo_preds2 %>% filter(effect_type == "positive_inverse")
+
+length(unique(pos$Taxa))
+length(unique(neg$Taxa))
+length(unique(inverse$Taxa))
+
+
+```
+
+#### b. plot
+
+```{r}
+
+# bin values
+unique_bins <- unique(tax_neo_preds2$bin)
+
+# to rescale x axis
+mean_temp <- mean(tax_neo_abund$temp)
+sd_temp <- sd(tax_neo_abund$temp) 
+
+# color scale
+generate_shades <- function(base_color, n, light_factor = 0.6, dark_factor = 0.6) {
+  if (!requireNamespace("colorspace", quietly = TRUE)) {
+    stop("The 'colorspace' package is required. Please install it with install.packages('colorspace').")
+  }
+
+  half_n <- floor(n / 2)
+
+  # Generate lighter and darker colors from the base
+  light_color <- colorspace::lighten(base_color, amount = light_factor)
+  dark_color  <- colorspace::darken(base_color, amount = dark_factor)
+
+  # Create gradients
+  light_to_base <- colorRampPalette(c(light_color, base_color))(half_n + 1)
+  base_to_dark  <- colorRampPalette(c(base_color, dark_color))(half_n + 1)
+
+  # Combine, avoiding duplication
+  if (n %% 2 == 1) {
+    c(light_to_base[-length(light_to_base)], base_color, base_to_dark[-1])
+  } else {
+    c(light_to_base[-length(light_to_base)], base_to_dark[-1])
+  }
+}
+################## positive amplifying###########################
+
+y_min <- min(pos$fit)
+y_max <- max(pos$fit)
+
+pos_taxa <- unique(pos$Taxa) # unique taxa
+pos_colors <- setNames(generate_shades("#66bd63", length(pos_taxa)), pos_taxa) # color assignment
+
+pos_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  pos_filtered <- pos[pos$bin == i, ]
+  
+  y_tick_labels <- if (i == "neopterin: 108-1915 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(pos_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+    geom_line() +
+    labs(y = "", x = "") +
+    scale_y_continuous(limits = c(y_min, y_max),
+                       labels = function(x) sprintf("  %s", x)) + # a two spaces in front of ticks to line up axes with other two plots with neg scales
+    scale_x_continuous(breaks = seq(min(tax_neo_preds2$temp_s), max(tax_neo_preds2$temp_s), length.out = 6),
+                       labels = rep("", 6)) +
+    scale_color_manual(values = pos_colors) +
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5)) 
+  
+  pos_list[[as.character(i)]] <- bin_plot
+  
+}
+
+# legend
+pos_taxa <- paste(c("<b>Included taxa:</b>", unique(pos$Taxa)), collapse = "<br>")
+
+pos_labels <- richtext_grob(pos_taxa,
+  x = 0, y = 0.85, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 10),
+  box_gp = gpar(col = NA))  # no box around the text
+
+pos_plot <- ggarrange(do.call(ggarrange, c(pos_list, nrow = 1)),
+  as_ggplot(pos_labels), 
+  ncol = 2,
+  widths = c(3, 0.6))
+
+pos_plot
+
+
+################### positive inverse ######################
+
+y_min <- min(inverse$fit)
+y_max <- max(inverse$fit)
+
+inverse_taxa <- unique(inverse$Taxa) # unique taxa
+inverse_colors <- setNames(generate_shades("#80b1d3", length(inverse_taxa)), inverse_taxa) # color assignment
+
+inverse_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  inverse_filtered <- inverse[inverse$bin == i, ]
+  
+    y_tick_labels <- if (i == "neopterin: 108-1915 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(inverse_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+    geom_line() +
+    labs(y = "", x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    scale_x_continuous(breaks = seq(min(tax_neo_preds2$temp_s), max(tax_neo_preds2$temp_s), length.out = 6), 
+      labels = inverse_scale) +
+    scale_color_manual(values = inverse_colors) +
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
+  
+  inverse_list[[as.character(i)]] <- bin_plot
+  
+}
+
+# legend
+inverse_taxa <- paste(c("<b>Included taxa:</b>", unique(inverse$Taxa)), collapse = "<br>")
+
+inverse_labels <- richtext_grob(inverse_taxa,
+  x = 0, y = 0.85, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 10),
+  box_gp = gpar(col = NA))  # no box around the text
+
+inverse_plot <- ggarrange(do.call(ggarrange, c(inverse_list, nrow = 1)),
+  as_ggplot(inverse_labels), 
+  ncol = 2,
+  widths = c(3, 0.6))
+
+inverse_plot<- annotate_figure(inverse_plot, bottom = text_grob("temperature (°C)", size = 14)) 
+
+inverse_plot
+
+################### NEG PLOT ######################
+
+y_min <- min(neg$fit)
+y_max <- max(neg$fit)
+
+neg_taxa <- unique(neg$Taxa) # unique taxa
+neg_colors <- setNames(generate_shades("#fb8072", length(neg_taxa)), neg_taxa) # color assignment
+
+neg_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  neg_filtered <- neg[neg$bin == i, ]
+  
+    y_tick_labels <- if (i == "neopterin: 108-1915 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(neg_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+    geom_line() +
+    labs(y = "", x = "", title = paste(i)) +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    scale_x_continuous(breaks = seq(min(tax_neo_preds2$temp_s), max(tax_neo_preds2$temp_s), length.out = 6),
+                       labels = rep("", 6)) +
+    scale_color_manual(values = neg_colors) +
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
+  
+  neg_list[[as.character(i)]] <- bin_plot
+  
+}
+
+
+# legend
+neg_taxa <- paste(c("<b>Included taxa:</b>", unique(neg$Taxa)), collapse = "<br>")
+
+neg_labels <- richtext_grob(neg_taxa,
+  x = 0, y = 0.85, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 10),
+  box_gp = gpar(col = NA))  # no box around the text
+
+neg_plot <- ggarrange(do.call(ggarrange, c(neg_list, nrow = 1)),
+  as_ggplot(neg_labels), 
+  ncol = 2,
+  widths = c(3, 0.6))
+
+neg_plot
+
+
+######## combine ##########
+
+pos_slope <- ggarrange(pos_plot, inverse_plot, 
+                           nrow = 2, ncol = 1, align = "v",
+                           labels = c("B", "C"))
+pos_slope <- annotate_figure(pos_slope, left = text_grob("predicted\nlog abundance", size = 12))  
+
+neg_slope <- ggarrange(neg_plot, 
+                       nrow = 1, ncol = 1, 
+                       labels = "A")
+neg_slope <- annotate_figure(neg_slope, left = text_grob("predicted\nlog abundance", size = 12)) 
+
+spacer <- ggplot() + theme_void()
+
+combined_plot <- ggarrange(neg_slope, spacer, pos_slope, 
+                           nrow = 3, ncol = 1,
+                           heights = c(1, 0.3, 2))
+
+ggsave("figures/fig6.pdf", combined_plot, width =13, height = 9)
+
+```
+
+
+
+
+### vii. summary table
+
+add interaction type to summary predictions and also do this for all the temp taxa tested not just the ones were the interaction effect has >50% of model weight
+
+```{r}
+
+# final table of model results for all tested taxa
+levels <- tax_neo_abund %>% select(Taxa, level, Phylum) %>%
+  distinct()
+
+weights <- tax_filtered_neo_aic %>% filter(model == "m_full") %>% select(Taxa, weight)
+
+neo_int_summary <- tax_filtered_neo_coef %>%
+  left_join(levels, by = "Taxa") %>%
+  left_join(weights, by = "Taxa") %>%
+  rename(model_weight = weight,
+         temp_coef = coef,
+         std_error = std)
+
+write.csv(summary, "figures/supp/taxonomy_interaction_DAA_results.csv", row.names = FALSE)
+
+
+```
+
+
+## C. Pathway differential abundance testing
+### i. AIC comparions
+
+```{r}
+
+path_coef_int <- list()
+path_aic_int <- list()
+path_model_results_int <- list()
+
+for (i in unique(path_abund3$path_id)) {
+  tryCatch({
+
+    # Subset based on taxa
+    data <- droplevels(subset(path_abund3, path_id == i))
+
+    # Default warning message
+    warning_msg <- "No Warning"
+
+    # Fit models
+    m_full <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s * neo_s + (1 | ID),
+                   data = data)
+
+    m_main <- lmer(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s + (1 | ID),
+                   data = data)
+
+    # Check for convergence warning
+    if (!is.null(m_full@optinfo$conv$lme4$messages)) {
+      warning_msg <- "Convergence Warning"
+    }
+
+    # AICc Calculation
+    AICc <- as.data.frame(AICctab(m_full, m_main, weights = TRUE))
+    AICc$model <- rownames(AICc)
+
+    # Extract coefficient and standard error for "temp_s"
+    coef_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 1], 6)
+    std_value <- round(summary(m_full)$coefficients["temp_s:neo_s", 2], 6)
+
+    # Calculate Confidence Intervals
+    Lower_95 <- coef_value - 1.96 * std_value
+    Upper_95 <- coef_value + 1.96 * std_value
+    Lower_50 <- coef_value - 0.6745 * std_value
+    Upper_50 <- coef_value + 0.6745 * std_value
+
+    # Create data frames
+    aic_df <- data.frame(
+      path_id = i, 
+      model = AICc$model,
+      dAICc = round(AICc$dAICc, 3),
+      weight = round(AICc$weight, 3),
+      Warning = warning_msg,
+      stringsAsFactors = FALSE
+    )
+
+    results_df <- data.frame(
+      path_id = i, 
+      coef = coef_value,
+      std = std_value,
+      low_ci_95 = Lower_95,
+      high_ci_95 = Upper_95,
+      low_ci_50 = Lower_50,
+      high_ci_50 = Upper_50,
+      stringsAsFactors = FALSE
+    )
+
+    model_results_df <- data.frame(
+      path_id = i,
+      Predictor = rownames(summary(m_full)$coefficients)[-1], # Exclude intercept
+      Coefficient = round(summary(m_full)$coefficients[-1, 1], 4),
+      StdError = round(summary(m_full)$coefficients[-1, 2], 4),
+      stringsAsFactors = FALSE
+    )
+
+    # Save results
+    path_aic_int[[i]] <- aic_df
+    path_coef_int[[i]] <- results_df
+    path_model_results_int[[i]] <- model_results_df
+
+  })
+}
+
+# combine results
+path_aic_int <- do.call(rbind, path_aic_int)
+path_coef_int <- do.call(rbind, path_coef_int)
+path_model_results_int <- do.call(rbind, path_model_results_int)
+
+```
+
+### ii. patheay selection
+
+tested 169, 53 of those didn't converge so tested 116, out of 116 the interaction model first best for 65 of them 
+
+```{r}
+
+# Remove taxa with convergence warnings 
+convergence_warnings <- unique(path_aic_int$path_id[path_aic_int$Warning == "Convergence Warning"]) # 53 do not converge
+length(convergence_warnings)
+
+# remove all taxa where one or more predictor have huge SE
+convergence_errors <- path_model_results_int %>% 
+  filter(StdError > 100) %>%
+  pull(path_id) %>%
+  unique() # no big SE's
+
+errors <- c(convergence_warnings, convergence_errors)
+length(unique(errors)) # 53 do not converge
+
+# remove error taxa
+path_abund4 <- path_abund3 %>% filter(!path_id %in% errors)
+length(unique(path_abund4$path_id)) # 116 remaining 
+
+path_coef_int2 <- path_coef_int %>% filter(!path_id%in% errors)
+length(path_coef_int2$path_id)
+
+path_aic_int2 <- path_aic_int %>% filter(!path_id %in% errors)
+length(path_aic_int2$path_id) 
+
+# filter for taxa where full model fits best
+interaction_filter <- path_aic_int2 %>%
+  group_by(path_id) %>%
+  filter(model == "m_full" & weight > 0.5) %>%
+  pull(path_id) 
+length(unique(interaction_filter)) # 65 interaction model fits best for all
+
+# filter df's for where temp model fits best 
+path_abund5 <- path_abund4 %>% filter(path_id %in% interaction_filter)
+length(unique(path_abund5$path_id))  
+
+path_coef_int3 <- path_coef_int2 %>% filter(path_id %in% interaction_filter)
+length(path_coef_int3$path_id)
+
+path_aic_int2 <- path_aic_int2 %>% filter(path_id %in% interaction_filter)
+length(path_aic_int2$path_id)
+
+```
+
+### iii. summary table
+
+```{r}
+
+
+# final table of model results for all tested taxa
+levels <- path_abund5 %>% select(path_id, path_name) %>%
+  distinct()
+
+weights <- path_aic_int2 %>% filter(model == "m_full") %>% select(path_id, weight)
+
+path_int_summary <- path_coef_int3 %>%
+  left_join(levels, by = "path_id") %>%
+  left_join(weights, by = "path_id")
+
+
+write.csv(path_int_summary, "figures/supp/path_interaction_DAA_results.csv", row.names = FALSE)
+
+```
+
+### iv get model predictions
+
+Only using two neopterin bins because we don't have a wide range of neopterin values for the shotgun data as we did for the taxonomy data
+
+```{r}
+
+# Create neo bins
+path_abund5$neo_bin <- cut(path_abund5$neo_s, breaks = 2, labels = c("Bin1", "Bin2"), include.lowest = TRUE)
+bin_limits <- levels(cut(path_abund5$neo_s, breaks = 2, include.lowest = TRUE)) # look at bin range
+bin_avg <- tapply(path_abund5$neo_s, path_abund5$neo_bin, mean, na.rm = TRUE) # use for co plot
+
+# Create temp seq
+temp_seq <- seq(min(path_abund5$temp_s, na.rm = TRUE), max(path_abund5$temp_s, na.rm = TRUE), length.out = 100)
+
+# list
+neo_preds <- list()
+
+# loop
+for (i in unique(path_abund5$path_id)) {
+  
+  data <- droplevels(subset(path_abund5, path_id == i))
+  
+  m <- lm(clr_abundance ~ age_s + rain_s + sex + group + fruit_s + temp_s * neo_s,
+            data = data)
+  
+  coef <- round(summary(m)$coefficients["temp_s:neo_s", 1], 6)
+  
+  # neo_s values and bins
+  neo_values <- c(-0.04380621, 3.06643502)
+  bins <- paste0("neopterin_avg", 1:2)
+  
+  # Generate predictions for each neo_s value
+  preds <- lapply(seq_along(neo_values), function(j) {
+    neo_s <- neo_values[j]
+    bin <- bins[j]
+    
+    # preds dataset
+    pred <- expand.grid(
+      temp_s = temp_seq,
+      neo_s = neo_s,
+      age_s = mean(data$age_s, na.rm = TRUE),
+      rain_s = mean(data$rain_s, na.rm = TRUE),
+      fruit_s = mean(data$fruit_s, na.rm = TRUE),
+      group = "Tenori",
+      sex = "M"
+    )
+    
+    # get model predictions
+    preds_model <- predict(m, newdata = pred, se.fit = TRUE)
+    
+    # store preds and CI's 
+    df <- data.frame(
+      temp_s = pred$temp_s,  
+      neo_s = neo_s,
+      fit = preds_model$fit,
+      lower = preds_model$fit - 1.96 * preds_model$se.fit,
+      upper = preds_model$fit + 1.96 * preds_model$se.fit,
+      bin = bin,
+      coef = coef
+    )
+    
+    return(df)
+  })
+  
+  # combine predictions for all bins 
+  preds_df <- do.call(rbind, preds)
+  preds_df$path_id <- i 
+  
+  # store preds
+  neo_preds[[i]] <- preds_df
+}
+
+# Combine all predictions into a single dataframe
+path_neo_preds <- do.call(rbind, neo_preds)
+row.names(path_neo_preds) <- NULL # clean up row names
+
+path_name <- path_abund5 %>% select(path_id, path_name) %>%
+  distinct()
+
+path_neo_preds <- path_neo_preds %>% left_join(path_name, by = "path_id")
+
+```
+
+### v. plot by pathway
+
+pdf for supplement with plotted model predictions for each pathway plus confidence intervals 
+
+```{r}
+
+pdf("figures/supp/pathway_interaction.pdf", width = 8, height = 11)  
+
+plot_list <- list()
+
+# loop
+for (i in unique(path_neo_preds$path_name)) {
+  
+  data <- subset(path_neo_preds, path_name == i)
+
+  p <- ggplot(data, aes(x = temp_s, y = fit)) +
+    geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2, fill = "grey") +
+    geom_line() +
+    facet_wrap(~ bin, nrow = 1) +  
+    theme_minimal() +
+    labs(
+      title = paste("predicted Abundance for", i),
+      x = "temperature (scaled)",
+      y = "predicted log abundance") 
+  
+  plot_list[[i]] <- p
+}
+
+# save plots in groups of 3 per page
+for (i in seq(1, length(plot_list), by = 3)) {
+  
+  batch_plots <- plot_list[i:min(i + 2, length(plot_list))]
+  
+  grid.arrange(grobs = batch_plots, ncol = 1)
+}
+
+dev.off()
+
+```
+
+
+### vi. plot by effect direction
+
+#### a. data prep
+
+```{r}
+
+# Define effect type
+
+slope <- path_neo_preds %>%
+  group_by(path_name, bin) %>%
+  do({m <- lm(fit ~ temp_s, data = .)
+    slope <- coef(m)["temp_s"]
+    data.frame(slope = slope)}) %>%
+  ungroup() %>%
+  pivot_wider(names_from = bin, values_from = slope,
+                     names_prefix = "slope_") %>%
+  mutate(effect_type = case_when(
+      slope_neopterin_avg1 > 0 & slope_neopterin_avg2 > 0 & slope_neopterin_avg2 > slope_neopterin_avg1 ~ "positive_amplifying",
+      slope_neopterin_avg1 < 0 & slope_neopterin_avg2 < 0 & slope_neopterin_avg1 > slope_neopterin_avg2 ~ "negative_amplifying",
+      slope_neopterin_avg1 > 0 & slope_neopterin_avg2 > 0 & slope_neopterin_avg2 < slope_neopterin_avg1 ~ "positive_dampening",
+      slope_neopterin_avg1 > 0 & slope_neopterin_avg2 < 0 ~ "negative_reverse",
+      slope_neopterin_avg1 < 0 & slope_neopterin_avg2 > 0 ~ "positive_reverse",
+      TRUE ~ "other")) %>%
+  select(path_name, effect_type)
+      
+      
+# Prep data
+
+mean_neo <- mean(path_abund5$neo)
+sd_neo <- sd(path_abund5$neo) 
+
+neo_reverse <- function(x) {
+  return(round(x * 2 * sd_neo + mean_neo))  # reverse scale in figure axes
+}
+
+bin_limits <- levels(cut(path_abund5$neo_s, breaks = 2, include.lowest = TRUE)) # look at bin range
+neo_reverse(1.24)
+
+path_neo_preds2 <- path_neo_preds %>% mutate(bin = case_when(bin == "neopterin_avg1" ~ "neopterin: 107-2812 (nmol/L)",
+                                                   bin == "neopterin_avg2" ~ "neopterin: 2812-5524 (nmol/L)")) %>%
+  left_join(slope, by = "path_name") %>%
+  left_join(pathway_levels, by = "path_id")
+  
+# Create df's for each effect                               
+                
+positive_amplifying <- path_neo_preds2 %>% filter(effect_type == "positive_amplifying")
+negative_amplifying <- path_neo_preds2 %>% filter(effect_type == "negative_amplifying")
+positive_dampening <- path_neo_preds2 %>% filter(effect_type == "positive_dampening")
+negative_reverse <- path_neo_preds2 %>% filter(effect_type == "negative_reverse")
+positive_reverse <- path_neo_preds2 %>% filter(effect_type == "positive_reverse")
+
+# info for each interaction type
+length(unique(positive_amplifying$path_id)) # 10
+length(unique(negative_amplifying$path_id)) # 7
+length(unique(positive_dampening$path_id)) # 3
+length(unique(negative_reverse$path_id)) # 18
+length(unique(positive_reverse$path_id)) # 27
+
+info_positive_amplifying <- positive_amplifying %>%
+  select(path_id, pathway, effect_type) %>%
+  distinct()
+
+info_negative_amplifying <- negative_amplifying %>%
+  select(path_id, pathway, effect_type) %>%
+  distinct()
+
+info_positive_dampening <- positive_dampening %>%
+  select(path_id, pathway, effect_type) %>%
+  distinct()
+
+info_negative_reverse <- negative_reverse %>%
+  select(path_id, pathway, effect_type) %>%
+  distinct()
+
+info_positive_reverse <- positive_reverse %>%
+  select(path_id, pathway, effect_type) %>%
+  distinct()
+
+
+
+# bin values
+unique_bins <- unique(path_neo_preds2$bin)
+
+# to rescale x axis
+mean_temp <- mean(path_abund5$temp)
+sd_temp <- sd(path_abund5$temp) 
+
+```
+
+#### b. plot
+
+```{r}
+
+# plot variables
+ylab = "predicted\nclr-transformed\nabundance"
+
+
+################## positive_amplifying ###########################
+y_min <- min(positive_amplifying$fit)
+y_max <- max(positive_amplifying$fit)
+
+positive_amp_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  pos_amp_filtered <- positive_amplifying[positive_amplifying$bin == i, ]
+  
+  # set y-axis labels for bin 1
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(pos_amp_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "", title = paste(i)) +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none")
+  
+  positive_amp_list[[as.character(i)]] <- bin_plot
+  
+}
+
+positive_amp_plot <- do.call(ggarrange, c(positive_amp_list, nrow = 1))
+positive_amp_plot
+
+
+################### ngeaitve_amplifying ######################
+
+y_min <- min(negative_amplifying$fit)
+y_max <- max(negative_amplifying$fit)
+
+negative_amp_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  negative_amp_filtered <- negative_amplifying[negative_amplifying$bin == i, ]
+  
+   # set y-axis labels for bin 1
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(negative_amp_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none")
+  
+  negative_amp_list[[as.character(i)]] <- bin_plot
+  
+}
+
+negative_amp_plot <- do.call(ggarrange, c(negative_amp_list, nrow = 1))
+negative_amp_plot
+
+
+################## positive_dampening ###########################
+
+y_min <- min(positive_dampening$fit)
+y_max <- max(positive_dampening$fit)
+
+positive_dampening_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  positive_dampening_filtered <- positive_dampening[positive_dampening$bin == i, ]
+  
+   # set y-axis labels for bin 1
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(positive_dampening_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none")
+  
+  positive_dampening_list[[as.character(i)]] <- bin_plot
+  
+}
+
+positive_dampening_plot <- do.call(ggarrange, c(positive_dampening_list, nrow = 1))
+positive_dampening_plot
+
+
+################## negative_reverse ###########################
+
+y_min <- min(negative_reverse$fit)
+y_max <- max(negative_reverse$fit)
+
+negative_reverse_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  negative_reverse_filtered <- negative_reverse[negative_reverse$bin == i, ]
+  
+   # set y-axis labels for bin 1
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(negative_reverse_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none")
+  
+  negative_reverse_list[[as.character(i)]] <- bin_plot
+  
+}
+
+negative_reverse_plot <- do.call(ggarrange, c(negative_reverse_list, nrow = 1))
+negative_reverse_plot
+
+
+################## positive_reverse ###########################
+
+y_min <- min(positive_reverse$fit)
+y_max <- max(positive_reverse$fit)
+
+positive_reverse_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  positive_reverse_filtered <- positive_reverse[positive_reverse$bin == i, ]
+  
+   # set y-axis labels for bin 1
+  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    ylab
+  } else {
+    ""
+  }
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(positive_reverse_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+    geom_line() +
+    labs(y = y_axis_label, x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    scale_x_continuous(
+      breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 3),
+      labels = inverse_scale) +
+      theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none")
+  
+  positive_reverse_list[[as.character(i)]] <- bin_plot
+  
+}
+
+positive_reverse_plot <- do.call(ggarrange, c(positive_reverse_list, nrow = 1))
+positive_reverse_plot
+
+
+######## combine ##########
+
+combined_plot <- ggarrange(positive_amp_plot, negative_amp_plot, positive_dampening_plot, negative_reverse_plot, positive_reverse_plot, 
+                           nrow = 5, ncol = 1, 
+                           labels = c("A", "B", "C", "D", "E"))
+combined_plot
+
+ggsave("figures/fig7.pdf", combined_plot, width =13, height = 9)
+
+
+```
