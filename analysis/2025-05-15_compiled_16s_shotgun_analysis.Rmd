@@ -41,6 +41,8 @@ source("functions/inverse_scale.R")
 source("functions/kegg_parse_json.R")
 source("functions/make_coef_plot.R")
 source("functions/model_weight_plot.R")
+source("functions/model_weight_plot.R")
+source("functions/generate_shades.R")
 
 # conflicts
 conflict_prefer("select", "dplyr")
@@ -1322,7 +1324,7 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
   annotate("text", x = 2.1, y = 78.45, label = "negative", size = 3.3, hjust = 0) +
   annotate("text", x = 1.5, y = 78.5, label = "–", size = 4, color = "white") +
   
-  annotate("point", x = 1.5, y = 76.6, shape = 19, size = 4, color = "#666666") +
+  annotate("point", x = 1.5, y = 76.6, shape = 19, size = 4, color = "grey60") +
   annotate("text", x = 2.1, y = 76.65, label = "no effect", size = 3.3, hjust = 0) +
   
   # Bacteroidota
@@ -2352,29 +2354,67 @@ unique_bins <- unique(tax_neo_preds2$bin)
 mean_temp <- mean(tax_neo_abund$temp)
 sd_temp <- sd(tax_neo_abund$temp) 
 
-# color scale
-generate_shades <- function(base_color, n, light_factor = 0.6, dark_factor = 0.6) {
-  if (!requireNamespace("colorspace", quietly = TRUE)) {
-    stop("The 'colorspace' package is required. Please install it with install.packages('colorspace').")
-  }
+################### NEG PLOT ######################
 
-  half_n <- floor(n / 2)
+y_min <- min(neg$fit)
+y_max <- max(neg$fit)
 
-  # Generate lighter and darker colors from the base
-  light_color <- colorspace::lighten(base_color, amount = light_factor)
-  dark_color  <- colorspace::darken(base_color, amount = dark_factor)
+neg_taxa <- unique(neg$Taxa) # unique taxa
+neg_colors <- setNames(generate_shades("#fb8072", length(neg_taxa)), neg_taxa) # color assignment
 
-  # Create gradients
-  light_to_base <- colorRampPalette(c(light_color, base_color))(half_n + 1)
-  base_to_dark  <- colorRampPalette(c(base_color, dark_color))(half_n + 1)
+neg_list <- list()
 
-  # Combine, avoiding duplication
-  if (n %% 2 == 1) {
-    c(light_to_base[-length(light_to_base)], base_color, base_to_dark[-1])
+# loop
+for (i in unique_bins) {
+  
+  neg_filtered <- neg[neg$bin == i, ]
+  
+    y_tick_labels <- if (i == "neopterin: 108-1915 (nmol/L)") {
+    element_text(size = 10, color = "black")
   } else {
-    c(light_to_base[-length(light_to_base)], base_to_dark[-1])
+    element_blank()
   }
+  
+  bin_plot <- ggplot(neg_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
+    geom_line() +
+    labs(y = "", x = "", title = paste(i)) +
+    scale_y_continuous(limits = c(y_min, y_max)) + 
+    scale_x_continuous(breaks = seq(min(tax_neo_preds2$temp_s), max(tax_neo_preds2$temp_s), length.out = 6),
+                       labels = rep("", 6)) +
+    scale_color_manual(values = neg_colors) +
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
+  
+  neg_list[[as.character(i)]] <- bin_plot
+  
 }
+
+# legend
+neg_taxa <- paste(c("<b>Included taxa:</b>", unique(neg$Taxa)), collapse = "<br>")
+
+neg_labels <- richtext_grob(neg_taxa,
+  x = 0, y = 0.85, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 10),
+  box_gp = gpar(col = NA))  # no box around the text
+
+neg_plot <- ggarrange(do.call(ggarrange, c(neg_list, nrow = 1)),
+  as_ggplot(neg_labels), 
+  ncol = 2,
+  widths = c(3, 0.6))
+
+neg_plot
+
 ################## positive amplifying###########################
 
 y_min <- min(pos$fit)
@@ -2437,7 +2477,6 @@ pos_plot <- ggarrange(do.call(ggarrange, c(pos_list, nrow = 1)),
 
 pos_plot
 
-
 ################### positive inverse ######################
 
 y_min <- min(inverse$fit)
@@ -2499,69 +2538,6 @@ inverse_plot <- ggarrange(do.call(ggarrange, c(inverse_list, nrow = 1)),
 inverse_plot<- annotate_figure(inverse_plot, bottom = text_grob("temperature (°C)", size = 14)) 
 
 inverse_plot
-
-################### NEG PLOT ######################
-
-y_min <- min(neg$fit)
-y_max <- max(neg$fit)
-
-neg_taxa <- unique(neg$Taxa) # unique taxa
-neg_colors <- setNames(generate_shades("#fb8072", length(neg_taxa)), neg_taxa) # color assignment
-
-neg_list <- list()
-
-# loop
-for (i in unique_bins) {
-  
-  neg_filtered <- neg[neg$bin == i, ]
-  
-    y_tick_labels <- if (i == "neopterin: 108-1915 (nmol/L)") {
-    element_text(size = 10, color = "black")
-  } else {
-    element_blank()
-  }
-  
-  bin_plot <- ggplot(neg_filtered, aes(x = temp_s, y = fit, color = Taxa)) +
-    geom_line() +
-    labs(y = "", x = "", title = paste(i)) +
-    scale_y_continuous(limits = c(y_min, y_max)) + 
-    scale_x_continuous(breaks = seq(min(tax_neo_preds2$temp_s), max(tax_neo_preds2$temp_s), length.out = 6),
-                       labels = rep("", 6)) +
-    scale_color_manual(values = neg_colors) +
-    theme_minimal() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      axis.line = element_line(color = "black"),
-      axis.ticks.x = element_line(size = 0.5),
-      axis.title.y = element_text(size = 12),
-      axis.text.y = y_tick_labels,
-      axis.ticks.y = element_line(size = 0.5),
-      axis.text.x = element_blank(),
-      axis.text = element_text(size = 10, color = "black"),
-      legend.position = "none",
-      plot.margin = margin(5, 5, 5, 5))
-  
-  neg_list[[as.character(i)]] <- bin_plot
-  
-}
-
-
-# legend
-neg_taxa <- paste(c("<b>Included taxa:</b>", unique(neg$Taxa)), collapse = "<br>")
-
-neg_labels <- richtext_grob(neg_taxa,
-  x = 0, y = 0.85, hjust = 0, vjust = 1,
-  gp = gpar(fontsize = 10),
-  box_gp = gpar(col = NA))  # no box around the text
-
-neg_plot <- ggarrange(do.call(ggarrange, c(neg_list, nrow = 1)),
-  as_ggplot(neg_labels), 
-  ncol = 2,
-  widths = c(3, 0.6))
-
-neg_plot
-
 
 ######## combine ##########
 
@@ -2934,7 +2910,13 @@ neo_reverse(1.24)
 path_neo_preds2 <- path_neo_preds %>% mutate(bin = case_when(bin == "neopterin_avg1" ~ "neopterin: 107-2812 (nmol/L)",
                                                    bin == "neopterin_avg2" ~ "neopterin: 2812-5524 (nmol/L)")) %>%
   left_join(slope, by = "path_name") %>%
-  left_join(pathway_levels, by = "path_id")
+  rename(pathway = path_name) %>%
+  mutate(pathway = str_remove_all(pathway, " \\(.*?\\)"),
+         pathway = str_replace_all(pathway, "&beta;", "beta"),
+         pathway = str_replace_all(pathway, "&alpha;", "alpha"),
+         pathway = str_replace_all(pathway, "&delta;", "delta")) 
+  
+  
   
 # Create df's for each effect                               
                 
@@ -2971,8 +2953,6 @@ info_positive_reverse <- positive_reverse %>%
   select(path_id, pathway, effect_type) %>%
   distinct()
 
-
-
 # bin values
 unique_bins <- unique(path_neo_preds2$bin)
 
@@ -2986,63 +2966,13 @@ sd_temp <- sd(path_abund5$temp)
 
 ```{r}
 
-# plot variables
-ylab = "predicted\nclr-transformed\nabundance"
-
-
-################## positive_amplifying ###########################
-y_min <- min(positive_amplifying$fit)
-y_max <- max(positive_amplifying$fit)
-
-positive_amp_list <- list()
-
-# loop
-for (i in unique_bins) {
-  
-  pos_amp_filtered <- positive_amplifying[positive_amplifying$bin == i, ]
-  
-  # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
-    ylab
-  } else {
-    ""
-  }
-  
-  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
-    element_text(size = 10, color = "black")
-  } else {
-    element_blank()
-  }
-  
-  bin_plot <- ggplot(pos_amp_filtered, aes(x = temp_s, y = fit, color = path_id)) +
-    geom_line() +
-    labs(y = y_axis_label, x = "", title = paste(i)) +
-    scale_y_continuous(limits = c(y_min, y_max)) + 
-    theme_minimal() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      axis.line = element_line(color = "black"),
-      axis.ticks.x = element_line(size = 0.5),
-      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
-      axis.text.y = y_tick_labels,
-      axis.ticks.y = element_line(size = 0.5),
-      axis.text.x = element_blank(),
-      axis.text = element_text(size = 10, color = "black"),
-      legend.position = "none")
-  
-  positive_amp_list[[as.character(i)]] <- bin_plot
-  
-}
-
-positive_amp_plot <- do.call(ggarrange, c(positive_amp_list, nrow = 1))
-positive_amp_plot
-
-
 ################### ngeaitve_amplifying ######################
 
 y_min <- min(negative_amplifying$fit)
 y_max <- max(negative_amplifying$fit)
+
+negamp_path <- unique(negative_amplifying$pathway) # unique paths
+negamp_colors <- setNames(generate_shades("#fb8072", length(negamp_path)), negamp_path) # color assignment
 
 negative_amp_list <- list()
 
@@ -3051,23 +2981,19 @@ for (i in unique_bins) {
   
   negative_amp_filtered <- negative_amplifying[negative_amplifying$bin == i, ]
   
-   # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
-    ylab
-  } else {
-    ""
-  }
-  
   y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
     element_text(size = 10, color = "black")
   } else {
     element_blank()
   }
   
-  bin_plot <- ggplot(negative_amp_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+  bin_plot <- ggplot(negative_amp_filtered, aes(x = temp_s, y = fit, color = pathway)) +
     geom_line() +
-    labs(y = y_axis_label, x = "") +
-    scale_y_continuous(limits = c(y_min, y_max)) + 
+    labs(y = "", x = "") +
+     scale_y_continuous(limits = c(y_min, y_max)) + 
+    scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
+                       labels = rep("", 6)) + 
+    scale_color_manual(values = negamp_colors) +
     theme_minimal() +
     theme(
       panel.grid.major = element_blank(),
@@ -3079,70 +3005,36 @@ for (i in unique_bins) {
       axis.ticks.y = element_line(size = 0.5),
       axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
-      legend.position = "none")
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
   
   negative_amp_list[[as.character(i)]] <- bin_plot
   
 }
 
-negative_amp_plot <- do.call(ggarrange, c(negative_amp_list, nrow = 1))
+
+# legend
+negamp_path <- paste(c("<b>Included pathways:</b>", unique(negative_amplifying$pathway)), collapse = "<br>")
+
+negamp_labels <- richtext_grob(negamp_path,
+  x = 0, y = 1, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 8),
+  box_gp = gpar(col = NA))  # no box around the text
+
+negative_amp_plot <- ggarrange(do.call(ggarrange, c(negative_amp_list, nrow = 1)),
+  as_ggplot(negamp_labels), 
+  ncol = 2,
+  widths = c(3, 2.2))
+
 negative_amp_plot
-
-
-################## positive_dampening ###########################
-
-y_min <- min(positive_dampening$fit)
-y_max <- max(positive_dampening$fit)
-
-positive_dampening_list <- list()
-
-# loop
-for (i in unique_bins) {
-  
-  positive_dampening_filtered <- positive_dampening[positive_dampening$bin == i, ]
-  
-   # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
-    ylab
-  } else {
-    ""
-  }
-  
-  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
-    element_text(size = 10, color = "black")
-  } else {
-    element_blank()
-  }
-  
-  bin_plot <- ggplot(positive_dampening_filtered, aes(x = temp_s, y = fit, color = path_id)) +
-    geom_line() +
-    labs(y = y_axis_label, x = "") +
-    scale_y_continuous(limits = c(y_min, y_max)) + 
-    theme_minimal() +
-    theme(
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      axis.line = element_line(color = "black"),
-      axis.ticks.x = element_line(size = 0.5),
-      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
-      axis.text.y = y_tick_labels,
-      axis.ticks.y = element_line(size = 0.5),
-      axis.text.x = element_blank(),
-      axis.text = element_text(size = 10, color = "black"),
-      legend.position = "none")
-  
-  positive_dampening_list[[as.character(i)]] <- bin_plot
-  
-}
-
-positive_dampening_plot <- do.call(ggarrange, c(positive_dampening_list, nrow = 1))
-positive_dampening_plot
-
 
 ################## negative_reverse ###########################
 
 y_min <- min(negative_reverse$fit)
 y_max <- max(negative_reverse$fit)
+
+negrev_path <- unique(negative_reverse$pathway) 
+negrev_colors <- setNames(generate_shades("#fdae61", length(negrev_path)), negrev_path) 
 
 negative_reverse_list <- list()
 
@@ -3151,23 +3043,20 @@ for (i in unique_bins) {
   
   negative_reverse_filtered <- negative_reverse[negative_reverse$bin == i, ]
   
-   # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
-    ylab
-  } else {
-    ""
-  }
-  
   y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
     element_text(size = 10, color = "black")
   } else {
     element_blank()
   }
   
-  bin_plot <- ggplot(negative_reverse_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+  bin_plot <- ggplot(negative_reverse_filtered, aes(x = temp_s, y = fit, color = pathway)) +
     geom_line() +
-    labs(y = y_axis_label, x = "") +
-    scale_y_continuous(limits = c(y_min, y_max)) + 
+    labs(y = "", x = "") +
+    scale_y_continuous(limits = c(y_min, y_max),
+                       labels = function(x) sprintf("     %s", x)) +
+    scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
+                       labels = rep("", 6)) + 
+    scale_color_manual(values = negrev_colors) +
     theme_minimal() +
     theme(
       panel.grid.major = element_blank(),
@@ -3179,20 +3068,158 @@ for (i in unique_bins) {
       axis.ticks.y = element_line(size = 0.5),
       axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
-      legend.position = "none")
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
   
   negative_reverse_list[[as.character(i)]] <- bin_plot
   
 }
 
-negative_reverse_plot <- do.call(ggarrange, c(negative_reverse_list, nrow = 1))
+# legend
+negrev_path <- paste(c("<b>Included pathways:</b>", unique(negative_reverse$pathway)), collapse = "<br>")
+
+negrev_labels <- richtext_grob(negrev_path,
+  x = 0, y = 1, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 8),
+  box_gp = gpar(col = NA)) 
+
+negative_reverse_plot <- ggarrange(do.call(ggarrange, c(negative_reverse_list, nrow = 1)),
+  as_ggplot(negrev_labels), 
+  ncol = 2,
+  widths = c(3, 2.2))
+
 negative_reverse_plot
 
+################## positive_dampening ###########################
+
+y_min <- min(positive_dampening$fit)
+y_max <- max(positive_dampening$fit)
+
+posdamp_path <- unique(positive_dampening$pathway) 
+posdamp_colors <- setNames(generate_shades("#bc80bd", length(posdamp_path)), posdamp_path)
+
+positive_dampening_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  positive_dampening_filtered <- positive_dampening[positive_dampening$bin == i, ]
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(positive_dampening_filtered, aes(x = temp_s, y = fit, color = pathway)) +
+    geom_line() +
+    labs(y = "", x = "") +
+    scale_y_continuous(limits = c(y_min, y_max),
+                       labels = function(x) sprintf("  %s", x)) +
+    scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
+                       labels = rep("", 6)) + 
+    scale_color_manual(values = posdamp_colors) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
+  
+  positive_dampening_list[[as.character(i)]] <- bin_plot
+  
+}
+
+# legend
+posdamp_path <- paste(c("<b>Included pathways:</b>", unique(positive_dampening$pathway)), collapse = "<br>")
+
+posdamp_labels <- richtext_grob(posdamp_path,
+  x = 0, y = 0.4, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 8),
+  box_gp = gpar(col = NA)) 
+
+positive_dampening_plot <- ggarrange(do.call(ggarrange, c(positive_dampening_list, nrow = 1)),
+  as_ggplot(posdamp_labels), 
+  ncol = 2,
+  widths = c(3, 2.2))
+
+positive_dampening_plot
+
+################## positive_amplifying ###########################
+y_min <- min(positive_amplifying$fit)
+y_max <- max(positive_amplifying$fit)
+
+posamp_path <- unique(positive_amplifying$pathway) 
+posamp_colors <- setNames(generate_shades("#80b1d3", length(posamp_path)), posamp_path)
+
+positive_amp_list <- list()
+
+# loop
+for (i in unique_bins) {
+  
+  pos_amp_filtered <- positive_amplifying[positive_amplifying$bin == i, ]
+  
+  y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
+    element_text(size = 10, color = "black")
+  } else {
+    element_blank()
+  }
+  
+  bin_plot <- ggplot(pos_amp_filtered, aes(x = temp_s, y = fit, color = pathway)) +
+    geom_line() +
+    labs(y = "", x = "", title = paste(i)) +
+    scale_y_continuous(limits = c(y_min, y_max),
+                       labels = function(x) sprintf("  %s", x)) +
+    scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
+                       labels = rep("", 6)) + 
+    scale_color_manual(values = posamp_colors) + 
+    theme_minimal() +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks.x = element_line(size = 0.5),
+      axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
+      axis.text.y = y_tick_labels,
+      axis.ticks.y = element_line(size = 0.5),
+      axis.text.x = element_blank(),
+      axis.text = element_text(size = 10, color = "black"),
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
+  
+  positive_amp_list[[as.character(i)]] <- bin_plot
+  
+}
+
+#legend
+posamp_path <- paste(c("<b>Included pathways:</b>", unique(positive_amplifying$pathway)), collapse = "<br>")
+
+posamp_labels <- richtext_grob(posamp_path,
+  x = 0, y = .85, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 8),
+  box_gp = gpar(col = NA)) 
+
+positive_amp_plot <- ggarrange(do.call(ggarrange, c(positive_amp_list, nrow = 1)),
+  as_ggplot(posamp_labels), 
+  ncol = 2,
+  widths = c(3, 2.2))
+
+positive_amp_plot
 
 ################## positive_reverse ###########################
 
 y_min <- min(positive_reverse$fit)
 y_max <- max(positive_reverse$fit)
+
+posrev_path <- unique(positive_reverse$pathway) 
+posrev_colors <- setNames(generate_shades("#66bd63", length(posrev_path)), posrev_path)
 
 positive_reverse_list <- list()
 
@@ -3201,27 +3228,20 @@ for (i in unique_bins) {
   
   positive_reverse_filtered <- positive_reverse[positive_reverse$bin == i, ]
   
-   # set y-axis labels for bin 1
-  y_axis_label <- if (i == "neopterin: 107-2812 (nmol/L)") {
-    ylab
-  } else {
-    ""
-  }
-  
   y_tick_labels <- if (i == "neopterin: 107-2812 (nmol/L)") {
     element_text(size = 10, color = "black")
   } else {
     element_blank()
   }
   
-  bin_plot <- ggplot(positive_reverse_filtered, aes(x = temp_s, y = fit, color = path_id)) +
+  bin_plot <- ggplot(positive_reverse_filtered, aes(x = temp_s, y = fit, color = pathway)) +
     geom_line() +
-    labs(y = y_axis_label, x = "") +
-    scale_y_continuous(limits = c(y_min, y_max)) + 
-    scale_x_continuous(
-      breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 3),
-      labels = inverse_scale) +
-      theme_minimal() +
+    labs(y = "", x = "") +
+    scale_y_continuous(limits = c(y_min, y_max)) +
+    scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
+                       labels = inverse_scale) + 
+    scale_color_manual(values = posrev_colors) +
+    theme_minimal() +
     theme(
       panel.grid.major = element_blank(),
       panel.grid.minor = element_blank(),
@@ -3231,24 +3251,61 @@ for (i in unique_bins) {
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
       axis.text = element_text(size = 10, color = "black"),
-      legend.position = "none")
+      legend.position = "none",
+      plot.margin = margin(5, 5, 5, 5))
   
   positive_reverse_list[[as.character(i)]] <- bin_plot
   
 }
 
-positive_reverse_plot <- do.call(ggarrange, c(positive_reverse_list, nrow = 1))
+#legend
+posrev_path <- paste(c("<b>Included pathways:</b>", unique(positive_reverse$pathway)), collapse = "<br>")
+
+posrev_labels <- richtext_grob(posrev_path,
+  x = 0, y = 1, hjust = 0, vjust = 1,
+  gp = gpar(fontsize = 8),
+  box_gp = gpar(col = NA)) 
+
+positive_reverse_plot <- ggarrange(do.call(ggarrange, c(positive_reverse_list, nrow = 1)),
+  as_ggplot(posrev_labels), 
+  ncol = 2,
+  widths = c(3, 2.2))
+
 positive_reverse_plot
 
 
 ######## combine ##########
 
-combined_plot <- ggarrange(positive_amp_plot, negative_amp_plot, positive_dampening_plot, negative_reverse_plot, positive_reverse_plot, 
-                           nrow = 5, ncol = 1, 
-                           labels = c("A", "B", "C", "D", "E"))
-combined_plot
+pos_slope <- ggarrange(positive_amp_plot, positive_reverse_plot, 
+                           nrow = 2, ncol = 1, align = "v",
+                           labels = c("A", "B"))
 
-ggsave("figures/fig7.pdf", combined_plot, width =13, height = 9)
+pos_slope <- annotate_figure(pos_slope, left = text_grob("predicted\nclr-transformed\nabundance", size = 12)) 
+
+
+neg_slope <- ggarrange(negative_amp_plot, negative_reverse_plot, positive_dampening_plot,
+                       nrow = 3, ncol = 1, align = "v", 
+                       labels = c("C", "D", "E"))
+
+neg_slope <- annotate_figure(neg_slope, left = text_grob("predicted\nclr-transformed\nabundance", size = 12)) 
+
+neg_slope <- annotate_figure(neg_slope, bottom = text_grob("temperature (°C)", size = 14, x = 0.42))
+
+
+
+
+
+
+
+spacer <- ggplot() + theme_void()
+
+combined_plot <- ggarrange(pos_slope, spacer, neg_slope, 
+                           nrow = 3, ncol = 1, 
+                           heights = c(2, 1.3, 3))
+
+
+
+ggsave("figures/fig7.pdf", combined_plot, width =11, height = 12)
 
 
 ```
