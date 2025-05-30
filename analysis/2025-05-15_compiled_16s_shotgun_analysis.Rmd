@@ -1718,7 +1718,6 @@ immune_p <- make_coef_plot(immune) +
 
 immune_p
 
-
 #### combine plots #####
 
 combined <- ggarrange(lipid_p, oxygen_p, redox_p, nucleotide_p, immune_p, ncol = 3, nrow = 2, align = "v")
