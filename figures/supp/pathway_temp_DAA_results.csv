@@ -146,7 +146,7 @@
 "PWY-5651",0.0746,0.3979,-0.705284,0.854484,-0.19378355,0.34298355,"L-tryptophan degradation to 2-amino-3-carboxymuconate semialdehyde",0.214,"positive","nuetral",NA,NA
 "PWY-5656",-1.3955,0.6904,-2.748684,-0.042316,-1.8611748,-0.9298252,"mannosylglycerate biosynthesis I",0.774,"negative","temp sensitive","no group assignment",NA
 "PWY-5659",0.6931,0.2836,0.137244,1.248956,0.5018118,0.8843882,"GDP-mannose biosynthesis",0.771,"positive","temp sensitive","no group assignment",NA
-"PWY-5675",-1.7102,0.7357,-3.152172,-0.268228,-2.20642965,-1.21397035,"nitrate reduction V (assimilatory)",0.87,"negative","temp sensitive","oxygen-driven metabolism","decreased aerobic metabolism"
+"PWY-5675",-1.7102,0.7357,-3.152172,-0.268228,-2.20642965,-1.21397035,"nitrate reduction V (assimilatory)",0.87,"negative","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","decreased aerobic metabolism"
 "PWY-5676",-3.2407,0.7701,-4.750096,-1.731304,-3.76013245,-2.72126755,"acetyl-CoA fermentation to butanoate II",0.999,"negative","temp sensitive","immune regulation","decrease anti-inflammatory signals"
 "PWY-5677",-0.6849,0.6417,-1.942632,0.572832,-1.11772665,-0.25207335,"succinate fermentation to butanoate",0.432,"negative","nuetral",NA,NA
 "PWY-5686",0.6044,0.2577,0.0993080000000001,1.109492,0.43058135,0.77821865,"UMP biosynthesis I",0.698,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"

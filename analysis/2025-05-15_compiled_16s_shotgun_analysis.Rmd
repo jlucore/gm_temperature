@@ -30,6 +30,8 @@ library(jsonlite)
 library(file2meco)
 library(phyloseq)
 library(flextable)
+library(gridtext)
+library(grid)
 
 #physeq objects
 tax_physeq <- readRDS("phyloseq_objects/2024-12-18_phyloseq_16s.rds")
@@ -2676,7 +2678,7 @@ path_model_results_int <- do.call(rbind, path_model_results_int)
 
 ```
 
-### ii. patheay selection
+### ii. pathway selection
 
 tested 169, 53 of those didn't converge so tested 116, out of 116 the interaction model first best for 65 of them 
 
@@ -3116,7 +3118,7 @@ for (i in unique_bins) {
     scale_y_continuous(limits = c(y_min, y_max),
                        labels = function(x) sprintf("  %s", x)) +
     scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
-                       labels = rep("", 6)) + 
+                       labels = inverse_scale) + 
     scale_color_manual(values = posdamp_colors) + 
     theme_minimal() +
     theme(
@@ -3127,7 +3129,7 @@ for (i in unique_bins) {
       axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
-      axis.text.x = element_blank(),
+      #axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none",
       plot.margin = margin(5, 5, 5, 5))
@@ -3238,7 +3240,7 @@ for (i in unique_bins) {
     labs(y = "", x = "") +
     scale_y_continuous(limits = c(y_min, y_max)) +
     scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
-                       labels = inverse_scale) + 
+                       labels = rep("", 6)) + 
     scale_color_manual(values = posrev_colors) +
     theme_minimal() +
     theme(
