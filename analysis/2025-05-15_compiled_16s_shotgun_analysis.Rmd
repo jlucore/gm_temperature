@@ -111,7 +111,7 @@ prev_fig <- ggplot(prevdf, aes(TotalAbundance, Prevalence)) +
   ylab("Prevalence (# of samples)") +
   theme_minimal()
 
-ggsave("figures/supp/figS_prev.pdf", prev_fig, width = 6, height = 4)
+ggsave("figures/supp/supp_fig4.pdf", prev_fig, width = 6, height = 4)
 
 # summary stats
 asv_onesample <- nrow(prevdf[prevdf$Prevalence == 1,]) # number of ASV's present only in one sample
@@ -277,7 +277,7 @@ pe_plot <- tibble(pe = percent_explained, axis = 1:length(percent_explained)) %>
         panel.grid.major = element_blank(),
         panel.background = element_blank())
 
-ggsave("figures/supp/fig1S.pdf", pe_plot, width = 6, height = 6)
+ggsave("figures/supp/supp_fig6.pdf", pe_plot, width = 6, height = 6)
 
 ######### Add PCA values to metadata #########
 
@@ -323,7 +323,7 @@ fruit_plot <- ggplot(tax_model, aes(x = temp, y = fruit)) +
         panel.grid.major = element_blank(),
         panel.background = element_blank())
 
-ggsave("figures/supp/fig2S.pdf", fruit_plot, width = 6, height = 6)
+ggsave("figures/supp/supp_fig5.pdf", fruit_plot, width = 6, height = 6)
 
 ```
 
@@ -688,16 +688,28 @@ which(levels == "PC3") # height for plot label
 p1 <- make_coef_plot(plot_com_coef) +
   ylim(-10, 10) +
   ggtitle("A. Taxonomy temperature coefficients") +
-  ylab("")
+  ylab("") +
+  theme(axis.text = element_text(size = 12, color = "black"),
+      text = element_text(size = 10, color = "black", family = "sans"),
+      axis.title = element_text(size = 12, color = "black"),
+      plot.title = element_text(size = 14, face = "bold"))
 
 p2 <- make_coef_plot(plot_path_coef) +
   ylim(-24, 24) +
   ggtitle("C. Metabolic pathway temperature coefficients") +
-  ylab("")
+  ylab("") +
+  theme(axis.text = element_text(size = 12, color = "black"),
+      text = element_text(size = 10, color = "black", family = "sans"),
+      axis.title = element_text(size = 12, color = "black"),
+      plot.title = element_text(size = 14, face = "bold"))
 
 p3 <- make_coef_plot(plot_path_observed) + 
   ylim(-100, 100) +
-  ylab("Effect size")
+  ylab("Effect size") +
+  theme(axis.text = element_text(size = 12, color = "black"),
+      text = element_text(size = 10, color = "black", family = "sans"),
+      axis.title = element_text(size = 12, color = "black"),
+      plot.title = element_text(size = 14, face = "bold"))
 
 p4 <- model_weight_plot(plot_com_model) +
   ggtitle("B. Taxonomy model weights") +
@@ -823,7 +835,7 @@ alpha_plots <- ggarrange(s_plot, o_plot, ncol = 2, nrow = 1)
 
 alpha_plots <- annotate_figure(alpha_plots, bottom = text_grob("temperature (°C)", size = 14))
 
-ggsave("figures/fig2.pdf", alpha_plots, width =8, height = 4)
+ggsave("figures/supp/supp_fig2.pdf", alpha_plots, width =8, height = 4)
 
 ```
 
@@ -1136,11 +1148,11 @@ summary <- taxa_coef2 %>%
   left_join(weights, by = "Taxa") %>%
   mutate(direction = ifelse(coef > 0, "positive", "negative"),
          sensitive = ifelse(weight > 0.5, "temp sensitive", "nuetral")) %>%
-  rename(model_weight = weight,
+  rename(mfull_model_weight = weight,
          temp_coef = coef,
          std_error = std)
 
-write.csv(summary, "figures/supp/taxonomy_temp_DAA_results.csv", row.names = FALSE)
+write.csv(summary, "figures/supp/supp_table1.csv", row.names = FALSE)
 
 # descriptive stats
 table(summary$sensitive) # 93 temp sensitive
@@ -1293,7 +1305,7 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
   limits = c(NA, 45)  # or whatever max x value you need
 ) +
   
-  scale_color_gradient(low = "#66bd63", high = "#fee08b", name = "Model weight") +
+  scale_color_gradient(low = "#66bd63", high = "#fee08b", name = "Temperature sensitivity\n(model weight)") +
   
   ggnewscale::new_scale_color() + # add a new color scale for the tip circles
   
@@ -1316,18 +1328,18 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
     axis.title.x = element_blank()) +
   
   # Direction effect legend
-  annotate("text", x = 1.2, y = 82, label = "Effect direction", size = 3.7, hjust = 0) +
+  annotate("text", x = 1.2, y = 81, label = "Effect direction", size = 3.7, hjust = 0) +
   
-  annotate("point", x = 1.5, y = 80.2, shape = 19, size = 4, color = "#80b1d3") +
-  annotate("text", x = 2.1, y = 80.25, label = "positive", size = 3.3, hjust = 0) +
-  annotate("text", x = 1.5, y = 80.3, label = "+", size = 4, color = "white") +
+  annotate("point", x = 1.5, y = 79.2, shape = 19, size = 4, color = "#80b1d3") +
+  annotate("text", x = 2.1, y = 79.25, label = "positive", size = 3.3, hjust = 0) +
+  annotate("text", x = 1.5, y = 79.3, label = "+", size = 4, color = "white") +
   
-  annotate("point", x = 1.5, y = 78.4, shape = 19, size = 4, color = "#fb8072") +
-  annotate("text", x = 2.1, y = 78.45, label = "negative", size = 3.3, hjust = 0) +
-  annotate("text", x = 1.5, y = 78.5, label = "–", size = 4, color = "white") +
+  annotate("point", x = 1.5, y = 77.4, shape = 19, size = 4, color = "#fb8072") +
+  annotate("text", x = 2.1, y = 77.45, label = "negative", size = 3.3, hjust = 0) +
+  annotate("text", x = 1.5, y = 77.5, label = "–", size = 4, color = "white") +
   
-  annotate("point", x = 1.5, y = 76.6, shape = 19, size = 4, color = "grey60") +
-  annotate("text", x = 2.1, y = 76.65, label = "no effect", size = 3.3, hjust = 0) +
+  annotate("point", x = 1.5, y = 75.6, shape = 19, size = 4, color = "grey60") +
+  annotate("text", x = 2.1, y = 75.65, label = "no effect", size = 3.3, hjust = 0) +
   
   # Bacteroidota
   annotate("segment", x = 32.5, xend = 32.5, y = 31, yend = 43, color = "black", size = 0.6) +
@@ -1372,7 +1384,7 @@ tree <- ggtree(genus_tree, branch.length = "none") %<+% tree_data +
   
 tree
 
-ggsave("figures/fig3.pdf", tree, width =8, height = 12.5)
+ggsave("figures/fig2.pdf", tree, width =8, height = 13.5)
 
 
 ```
@@ -1582,7 +1594,7 @@ path_summary <- path_coef2 %>%
   mutate(group = case_when(sensitive == "temp sensitive" & is.na(group) ~ "no group assignment",
          TRUE ~ group))
 
-write.csv(path_summary, "figures/supp/pathway_temp_DAA_results.csv", row.names = FALSE)
+write.csv(path_summary, "figures/supp/supp_table2.csv", row.names = FALSE)
 
 ```
 
@@ -1653,27 +1665,27 @@ lipid_p <- make_coef_plot(lipid) +
   theme(axis.text.x = element_blank(),
          plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
   annotate("segment", x = "superpathway of glyoxylate cycle and fatty acid degradation",  xend = "9-cis, 11-trans-octadecadienoyl-CoA degradation", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
-  annotate("text", x = "fatty acid salvage", y = 4.85, label = "decreased catabolism\nand recycling", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("text", x = "fatty acid salvage", y = 4.85, label = "decreased\ncatabolism\nand recycling", hjust = 0, size = 6, color = "#fb8072") +
   annotate("segment", x = "stearate biosynthesis II",  xend = "petroselinate biosynthesis", y = 4.7, yend = 4.7,
            color = "#80b1d3", size = 0.6) +
-  annotate("text", x = "gondoate biosynthesis", y = 4.85, label = "increased synthesis\nand remodeling", hjust = 0, size = 5, color = "#80b1d3") 
+  annotate("text", x = "gondoate biosynthesis", y = 4.85, label = "increased\nsynthesis\nand remodeling", hjust = 0, size = 6, color = "#80b1d3") 
 lipid_p
 
 ########## oxygen metabolism #############
 
 oxygen_p <- make_coef_plot(oxygen) +
-  ggtitle("B. Oxygen-driven metabolism and fermentation") +
+  ggtitle("B. Oxygen-driven metabolism\nand fermentation") +
   ylab("") +
   ylim(-5, 5) +
   theme(axis.text.x = element_blank(),
         plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
   annotate("segment", x = "pyruvate fermentation to acetate and (S)-lactate I",  xend = "formaldehyde assimilation II", y = 4.7, yend = 4.7,
            color = "#80b1d3", size = 0.6) +
-  annotate("text", x = "glycogen degradation II", y = 4.85, label = "increased anerobic\nmetabolism", hjust = 0, size = 5, color = "#80b1d3") +
+  annotate("text", x = "glycogen degradation II", y = 4.85, label = "increased\nanerobic\nmetabolism", hjust = 0, size = 6, color = "#80b1d3") +
   annotate("segment", x = "superpathway of glycolysis, pyruvate dehydrogenase, TCA, and glyoxylate bypass",  xend = "glyoxylate cycle", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
-  annotate("text", x = "superpathway of glycol metabolism and degradation", y = 4.85, label = "decreased aerobic\nmetabolism", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("text", x = "superpathway of glycol metabolism and degradation", y = 4.85, label = "decreased\naerobic\nmetabolism", hjust = 0, size = 6, color = "#fb8072") +
   annotate("segment", x = "superpathway of D-glucarate and D-galactarate degradation",  xend = "starch degradation III", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
-  annotate("text", x = "D-glucarate degradation I", y = 4.85, label = "decreased complex\ncarbohydrate fermentation", hjust = 0, size = 5, color = "#fb8072") 
+  annotate("text", x = "D-arabinose degradation I", y = 4.85, label = "decreased\ncomplex\ncarbohydrate\nfermentation", hjust = 0, size = 6, color = "#fb8072") 
 
 oxygen_p
 
@@ -1685,10 +1697,10 @@ redox_p <- make_coef_plot(redox) +
   ylim(-5, 5) +
   theme(plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
   annotate("segment", x = "assimilatory sulfate reduction IV",  xend = "L-methionine biosynthesis IV", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
-  annotate("text", x = "superpathway of methylglyoxal degradation", y = 4.85, label = "reduced redox\nmaintenance", hjust = 0, size = 5, color = "#fb8072") +
+  annotate("text", x = "superpathway of methylglyoxal degradation", y = 4.85, label = "reduced redox\nmaintenance", hjust = 0, size = 6, color = "#fb8072") +
   annotate("segment", x = "tetrapyrrole biosynthesis I",  xend = "L-ascorbate degradation I", y = 4.7, yend = 4.7,
            color = "#80b1d3", size = 0.6) +
-  annotate("text", x = "pentose phosphate pathway I", y = 4.85, label = "increased redox\nmaintenance", hjust = 0, size = 5, color = "#80b1d3") 
+  annotate("text", x = "pentose phosphate pathway I", y = 4.85, label = "increased redox\nmaintenance", hjust = 0, size = 6, color = "#80b1d3") 
 
 redox_p
 
@@ -1701,7 +1713,7 @@ nucleotide_p <- make_coef_plot(nucleotide) +
   theme(plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
   annotate("segment", x = "pyrimidine deoxyribonucleosides salvage",  xend = "adenosine nucleotides degradation I", y = 4.7, yend = 4.7,
            color = "#80b1d3", size = 0.6) +
-  annotate("text", x = "UMP biosynthesis III", y = 4.85, label = "increased synthesis\nand salvage", hjust = 0, size = 5, color = "#80b1d3")
+  annotate("text", x = "UMP biosynthesis III", y = 4.85, label = "increased\nsynthesis\nand salvage", hjust = 0, size = 6, color = "#80b1d3")
 
 nucleotide_p 
 
@@ -1713,18 +1725,18 @@ immune_p <- make_coef_plot(immune) +
   ylim(-5, 5) +
   theme(plot.margin = margin(t = 5, r = 120, b = 5, l = 5)) +
   annotate("segment", x = "acetyl-CoA fermentation to butanoate II",  xend = "L-glutamate degradation XI", y = 4.7, yend = 4.7, color = "#fb8072", size = 0.6) +
-  annotate("text", x = "L-glutamate degradation VII", y = 4.85, label = "decreased\nanti-inflammatory\nsignals", hjust = 0, size = 5, color = "#fb8072") + 
+  annotate("text", x = "L-glutamate degradation VII", y = 4.85, label = "decreased\nanti-inflammatory\nsignals", hjust = 0, size = 6, color = "#fb8072") + 
   annotate("segment", x = "(5Z)-dodecenoate biosynthesis I",  xend = "L-tryptophan biosynthesis", y = 4.7, yend = 4.7,
            color = "#80b1d3", size = 0.6) +
-  annotate("text", x = 1.5, y = 4.85, label = "increased\nanti-inflammatory\nsignals", hjust = 0, size = 5, color = "#80b1d3")
+  annotate("text", x = 1.5, y = 4.85, label = "increased\nanti-inflammatory\nsignals", hjust = 0, size = 6, color = "#80b1d3")
 
 immune_p
 
 #### combine plots #####
 
-combined <- ggarrange(lipid_p, oxygen_p, redox_p, nucleotide_p, immune_p, ncol = 3, nrow = 2, align = "v")
+combined <- ggarrange(lipid_p, oxygen_p, redox_p, nucleotide_p, immune_p, ncol = 2, nrow = 3, align = "v")
 
-ggsave("figures/fig4.pdf", combined, width =32, height = 13)
+ggsave("figures/fig3.pdf", combined, width =25, height = 28)
 
 
 # find midpoint betwen two discrete values 
@@ -1981,16 +1993,28 @@ which(levels == "PC1") # height for plot label
 p1 <- make_coef_plot(plot_coef_int) +
   ylim(-10, 10) +
   ggtitle("A. Taxonomy interaction coefficients") +
-  ylab("")
+  ylab("") +
+   theme(axis.text = element_text(size = 12, color = "black"),
+      text = element_text(size = 10, color = "black", family = "sans"),
+      axis.title = element_text(size = 12, color = "black"),
+      plot.title = element_text(size = 14, face = "bold"))
 
 p2 <- make_coef_plot(plot_path_coef_int) +
   ylim(-36, 36) +
   ggtitle("C. Metabolic pathway interaction coefficients") +
-  ylab("")
+  ylab("") +
+ theme(axis.text = element_text(size = 12, color = "black"),
+      text = element_text(size = 10, color = "black", family = "sans"),
+      axis.title = element_text(size = 12, color = "black"),
+      plot.title = element_text(size = 14, face = "bold"))
 
 p3 <- make_coef_plot(plot_path_coef_int_observed) + 
   ylim(-165, 165) +
-  ylab("Effect size")
+  ylab("Effect size") +
+   theme(axis.text = element_text(size = 12, color = "black"),
+      text = element_text(size = 10, color = "black", family = "sans"),
+      axis.title = element_text(size = 12, color = "black"),
+      plot.title = element_text(size = 14, face = "bold"))
 
 p4 <- model_weight_plot(plot_aic_int) +
   ggtitle("B. Taxonomy model weights") +
@@ -2017,7 +2041,7 @@ int_com_temp_plot <- ggarrange(p1, p4, p2, p5, p3, p6, ncol = 2, nrow = 3,
           align = "v",
           heights = c(1, 1, 0.4))
 
-ggsave("figures/fig5.pdf", int_com_temp_plot, width = 12, height = 8)
+ggsave("figures/supp/supp_fig3.pdf", int_com_temp_plot, width = 12, height = 8)
 
 ```
 
@@ -2260,7 +2284,7 @@ Plot with the CI's for each taxa for the supplement
 
 ```{r}
 
-pdf("figures/supp/taxa_interaction_plottedpreds.pdf", width = 8, height = 11)  
+pdf("figures/old_work/taxa_interaction_plottedpreds.pdf", width = 8, height = 11)  
 
 plot_list <- list()
 
@@ -2402,10 +2426,14 @@ for (i in unique_bins) {
 }
 
 # legend
-neg_taxa <- paste(c("<b>Included taxa:</b>", unique(neg$Taxa)), collapse = "<br>")
 
-neg_labels <- richtext_grob(neg_taxa,
-  x = 0, y = 0.85, hjust = 0, vjust = 1,
+neg_text <- neg_taxa[neg_taxa != "Parolsenella"]
+neg_text <- paste(neg_text, collapse = "<br>")
+
+neg_text <- paste0("<b>Discussed taxa:</b><br>", neg_text)
+
+neg_labels <- richtext_grob(neg_text,
+  x = 0, y = 0.9, hjust = 0, vjust = 1,
   gp = gpar(fontsize = 10),
   box_gp = gpar(col = NA))  # no box around the text
 
@@ -2464,10 +2492,13 @@ for (i in unique_bins) {
 }
 
 # legend
-pos_taxa <- paste(c("<b>Included taxa:</b>", unique(pos$Taxa)), collapse = "<br>")
+pos_text <- pos_taxa[pos_taxa == "Helicobacteraceae" | pos_taxa == "Phascolarctobacterium_A"]
+pos_text <- paste(pos_text, collapse = "<br>")
 
-pos_labels <- richtext_grob(pos_taxa,
-  x = 0, y = 0.85, hjust = 0, vjust = 1,
+pos_text <- paste0("<b>Discussed taxa:</b><br>", pos_text)
+
+pos_labels <- richtext_grob(pos_text,
+  x = 0, y = 0.9, hjust = 0, vjust = 1,
   gp = gpar(fontsize = 10),
   box_gp = gpar(col = NA))  # no box around the text
 
@@ -2524,10 +2555,10 @@ for (i in unique_bins) {
 }
 
 # legend
-inverse_taxa <- paste(c("<b>Included taxa:</b>", unique(inverse$Taxa)), collapse = "<br>")
+inverse_text <- "<b>Discussed taxa:</b><br>Eubacterium_I"
 
-inverse_labels <- richtext_grob(inverse_taxa,
-  x = 0, y = 0.85, hjust = 0, vjust = 1,
+inverse_labels <- richtext_grob(inverse_text,
+  x = 0, y = 0.9, hjust = 0, vjust = 1,
   gp = gpar(fontsize = 10),
   box_gp = gpar(col = NA))  # no box around the text
 
@@ -2558,12 +2589,9 @@ combined_plot <- ggarrange(neg_slope, spacer, pos_slope,
                            nrow = 3, ncol = 1,
                            heights = c(1, 0.3, 2))
 
-ggsave("figures/fig6.pdf", combined_plot, width =13, height = 9)
+ggsave("figures/fig4.pdf", combined_plot, width =13, height = 9)
 
 ```
-
-
-
 
 ### vii. summary table
 
@@ -2577,15 +2605,28 @@ levels <- tax_neo_abund %>% select(Taxa, level, Phylum) %>%
 
 weights <- tax_filtered_neo_aic %>% filter(model == "m_full") %>% select(Taxa, weight)
 
+# Get taxa categories
+neg_taxa <- unique(neg$Taxa)
+inverse_taxa <- unique(inverse$Taxa)
+pos_taxa <- unique(pos$Taxa)
+
+neg_df <- data.frame(Taxa = neg_taxa, category = "decreasing slope")
+inverse_df <- data.frame(Taxa = inverse_taxa, category = "increasing slope")
+pos_df <- data.frame(Taxa = pos_taxa, category = "increasing slope")
+
+slope_df <- rbind(neg_df, inverse_df, pos_df)
+
+
+# create summary table
 neo_int_summary <- tax_filtered_neo_coef %>%
   left_join(levels, by = "Taxa") %>%
   left_join(weights, by = "Taxa") %>%
+  left_join(slope_df, by = "Taxa") %>%
   rename(model_weight = weight,
-         temp_coef = coef,
+         interaction_coef = coef,
          std_error = std)
 
-write.csv(summary, "figures/supp/taxonomy_interaction_DAA_results.csv", row.names = FALSE)
-
+write.csv(neo_int_summary, "figures/supp/supp_table3.csv", row.names = FALSE)
 
 ```
 
@@ -2726,27 +2767,7 @@ length(path_aic_int2$path_id)
 
 ```
 
-### iii. summary table
-
-```{r}
-
-
-# final table of model results for all tested taxa
-levels <- path_abund5 %>% select(path_id, path_name) %>%
-  distinct()
-
-weights <- path_aic_int2 %>% filter(model == "m_full") %>% select(path_id, weight)
-
-path_int_summary <- path_coef_int3 %>%
-  left_join(levels, by = "path_id") %>%
-  left_join(weights, by = "path_id")
-
-
-write.csv(path_int_summary, "figures/supp/path_interaction_DAA_results.csv", row.names = FALSE)
-
-```
-
-### iv get model predictions
+### iii. get model predictions
 
 Only using two neopterin bins because we don't have a wide range of neopterin values for the shotgun data as we did for the taxonomy data
 
@@ -2829,13 +2850,13 @@ path_neo_preds <- path_neo_preds %>% left_join(path_name, by = "path_id")
 
 ```
 
-### v. plot by pathway
+### iv. plot by pathway
 
 pdf for supplement with plotted model predictions for each pathway plus confidence intervals 
 
 ```{r}
 
-pdf("figures/supp/pathway_interaction.pdf", width = 8, height = 11)  
+pdf("figures/old_work/pathway_interaction.pdf", width = 8, height = 11)  
 
 plot_list <- list()
 
@@ -2870,7 +2891,7 @@ dev.off()
 ```
 
 
-### vi. plot by effect direction
+### v. plot by effect direction
 
 #### a. data prep
 
@@ -2915,7 +2936,9 @@ path_neo_preds2 <- path_neo_preds %>% mutate(bin = case_when(bin == "neopterin_a
   mutate(pathway = str_remove_all(pathway, " \\(.*?\\)"),
          pathway = str_replace_all(pathway, "&beta;", "beta"),
          pathway = str_replace_all(pathway, "&alpha;", "alpha"),
-         pathway = str_replace_all(pathway, "&delta;", "delta")) 
+         pathway = str_replace_all(pathway, "&delta;", "delta"),
+         pathway = case_when(pathway == "superpathway of2-lipid A biosynthesis" ~ "superpathway Kdo2-lipid A biosynthesis",
+         TRUE ~ pathway))
   
   
   
@@ -3013,17 +3036,9 @@ for (i in unique_bins) {
   
 }
 
-
-# legend
-negamp_path <- paste(c("<b>Included pathways:</b>", unique(negative_amplifying$pathway)), collapse = "<br>")
-
-negamp_labels <- richtext_grob(negamp_path,
-  x = 0, y = 1, hjust = 0, vjust = 1,
-  gp = gpar(fontsize = 8),
-  box_gp = gpar(col = NA))  # no box around the text
+# no legend
 
 negative_amp_plot <- ggarrange(do.call(ggarrange, c(negative_amp_list, nrow = 1)),
-  as_ggplot(negamp_labels), 
   ncol = 2,
   widths = c(3, 2.2))
 
@@ -3052,11 +3067,11 @@ for (i in unique_bins) {
   
   bin_plot <- ggplot(negative_reverse_filtered, aes(x = temp_s, y = fit, color = pathway)) +
     geom_line() +
-    labs(y = "", x = "") +
+    labs(y = "", x = "", title = paste(i)) +
     scale_y_continuous(limits = c(y_min, y_max),
                        labels = function(x) sprintf("     %s", x)) +
     scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
-                       labels = rep("", 6)) + 
+                       labels = rep("", 6)) +
     scale_color_manual(values = negrev_colors) +
     theme_minimal() +
     theme(
@@ -3077,10 +3092,23 @@ for (i in unique_bins) {
 }
 
 # legend
-negrev_path <- paste(c("<b>Included pathways:</b>", unique(negative_reverse$pathway)), collapse = "<br>")
 
-negrev_labels <- richtext_grob(negrev_path,
-  x = 0, y = 1, hjust = 0, vjust = 1,
+target_paths <- c(
+  "L-tryptophan biosynthesis",
+  "stachyose degradation",
+  "2-oxobutanoate degradation I",
+  "peptidoglycan biosynthesis III",
+  "peptidoglycan biosynthesis I",
+  "methylerythritol phosphate pathway I",
+  "methylerythritol phosphate pathway II"
+)
+
+negrev_text <- negrev_path[negrev_path %in% target_paths]
+negrev_text <- paste(negrev_text, collapse = "<br>")
+negrev_text <- paste0("<b>Discussed pathways:</b><br>", negrev_text)
+
+negrev_labels <- richtext_grob(negrev_text,
+  x = 0, y = 0.9, hjust = 0, vjust = 1,
   gp = gpar(fontsize = 8),
   box_gp = gpar(col = NA)) 
 
@@ -3118,7 +3146,7 @@ for (i in unique_bins) {
     scale_y_continuous(limits = c(y_min, y_max),
                        labels = function(x) sprintf("  %s", x)) +
     scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
-                       labels = inverse_scale) + 
+                       labels = rep("", 6)) + 
     scale_color_manual(values = posdamp_colors) + 
     theme_minimal() +
     theme(
@@ -3129,7 +3157,7 @@ for (i in unique_bins) {
       axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
-      #axis.text.x = element_blank(),
+      axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none",
       plot.margin = margin(5, 5, 5, 5))
@@ -3139,10 +3167,14 @@ for (i in unique_bins) {
 }
 
 # legend
-posdamp_path <- paste(c("<b>Included pathways:</b>", unique(positive_dampening$pathway)), collapse = "<br>")
+posdamp_text <- posdamp_path[posdamp_path == "(5Z)-dodecenoate biosynthesis I" | posdamp_path == "oleate biosynthesis IV"]
 
-posdamp_labels <- richtext_grob(posdamp_path,
-  x = 0, y = 0.4, hjust = 0, vjust = 1,
+posdamp_text <- paste(posdamp_text, collapse = "<br>")
+
+posdamp_text <- paste0("<b>Discussed pathways:</b><br>", posdamp_text)
+
+posdamp_labels <- richtext_grob(posdamp_text,
+  x = 0, y = 0.9, hjust = 0, vjust = 1,
   gp = gpar(fontsize = 8),
   box_gp = gpar(col = NA)) 
 
@@ -3175,11 +3207,11 @@ for (i in unique_bins) {
   
   bin_plot <- ggplot(pos_amp_filtered, aes(x = temp_s, y = fit, color = pathway)) +
     geom_line() +
-    labs(y = "", x = "", title = paste(i)) +
+    labs(y = "", x = "") +
     scale_y_continuous(limits = c(y_min, y_max),
                        labels = function(x) sprintf("  %s", x)) +
     scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
-                       labels = rep("", 6)) + 
+                       labels = inverse_scale) + 
     scale_color_manual(values = posamp_colors) + 
     theme_minimal() +
     theme(
@@ -3190,7 +3222,7 @@ for (i in unique_bins) {
       axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
-      axis.text.x = element_blank(),
+      #axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none",
       plot.margin = margin(5, 5, 5, 5))
@@ -3200,10 +3232,13 @@ for (i in unique_bins) {
 }
 
 #legend
-posamp_path <- paste(c("<b>Included pathways:</b>", unique(positive_amplifying$pathway)), collapse = "<br>")
 
-posamp_labels <- richtext_grob(posamp_path,
-  x = 0, y = .85, hjust = 0, vjust = 1,
+posamp_text <- posamp_path[posamp_path == "superpathway of menaquinol-8 biosynthesis III"]
+posamp_text <- paste(posamp_text, collapse = "<br>")
+posamp_text <- paste0("<b>Discussed pathways:</b><br>", posamp_text)
+
+posamp_labels <- richtext_grob(posamp_text,
+  x = 0, y = 0.9, hjust = 0, vjust = 1,
   gp = gpar(fontsize = 8),
   box_gp = gpar(col = NA)) 
 
@@ -3260,10 +3295,25 @@ for (i in unique_bins) {
 }
 
 #legend
-posrev_path <- paste(c("<b>Included pathways:</b>", unique(positive_reverse$pathway)), collapse = "<br>")
+target_paths <- c(
+  "ubiquinol-7 biosynthesis",
+  "ubiquinol-8 biosynthesis",
+  "superpathway of ubiquinol-8 biosynthesis",
+  "Rubisco shunt",
+  "glyoxylate cycle",
+  "superpathway of glycolysis, pyruvate dehydrogenase, TCA, and glyoxylate bypass",
+  "enterobacterial common antigen biosynthesis",
+  "superpathway Kdo2-lipid A biosynthesis",
+  "mitochondrial NADPH production",
+  "pyridoxal 5'-phosphate salvage II"
+  )
 
-posrev_labels <- richtext_grob(posrev_path,
-  x = 0, y = 1, hjust = 0, vjust = 1,
+posrev_text <- posrev_path[posrev_path %in% target_paths]
+posrev_text <- paste(posrev_text, collapse = "<br>")
+posrev_text <- paste0("<b>Discussed pathways:</b><br>", posrev_text)
+
+posrev_labels <- richtext_grob(posrev_text,
+  x = 0, y = 0.9, hjust = 0, vjust = 1,
   gp = gpar(fontsize = 8),
   box_gp = gpar(col = NA)) 
 
@@ -3274,39 +3324,75 @@ positive_reverse_plot <- ggarrange(do.call(ggarrange, c(positive_reverse_list, n
 
 positive_reverse_plot
 
-
 ######## combine ##########
 
-pos_slope <- ggarrange(positive_amp_plot, positive_reverse_plot, 
+pos_slope <- ggarrange(positive_reverse_plot, positive_amp_plot, 
                            nrow = 2, ncol = 1, align = "v",
-                           labels = c("A", "B"))
+                           labels = c("D", "E"))
 
 pos_slope <- annotate_figure(pos_slope, left = text_grob("predicted\nclr-transformed\nabundance", size = 12)) 
 
+pos_slope <- annotate_figure(pos_slope, bottom = text_grob("temperature (°C)", size = 14, x = 0.42))
 
-neg_slope <- ggarrange(negative_amp_plot, negative_reverse_plot, positive_dampening_plot,
+
+
+neg_slope <- ggarrange(negative_reverse_plot, positive_dampening_plot, negative_amp_plot,
                        nrow = 3, ncol = 1, align = "v", 
-                       labels = c("C", "D", "E"))
+                       labels = c("A", "B", "C"))
 
 neg_slope <- annotate_figure(neg_slope, left = text_grob("predicted\nclr-transformed\nabundance", size = 12)) 
 
-neg_slope <- annotate_figure(neg_slope, bottom = text_grob("temperature (°C)", size = 14, x = 0.42))
-
-
-
-
+#neg_slope <- annotate_figure(neg_slope, bottom = text_grob("temperature (°C)", size = 14, x = 0.42))
 
 
 
 spacer <- ggplot() + theme_void()
 
-combined_plot <- ggarrange(pos_slope, spacer, neg_slope, 
+combined_plot <- ggarrange(neg_slope, spacer, pos_slope, 
                            nrow = 3, ncol = 1, 
-                           heights = c(2, 1.3, 3))
+                           heights = c(3, .3, 2))
 
 
 
-ggsave("figures/fig7.pdf", combined_plot, width =11, height = 12)
+ggsave("figures/fig5.pdf", combined_plot, width =11, height = 12)
 
+
+```
+
+
+### vi. summary table
+
+```{r}
+
+# final table of model results for all tested taxa
+levels <- path_abund5 %>% select(path_id, path_name) %>%
+  distinct()
+
+weights <- path_aic_int2 %>% filter(model == "m_full") %>% select(path_id, weight)
+
+
+# Get path categories
+slope_df <- path_neo_preds2 %>% select(pathway, effect_type) %>%
+  distinct() %>%
+  rename(path_name = pathway) %>%
+  mutate(category = case_when(effect_type == "positive_amplifying" ~ "increasing slope",
+                              effect_type == "positive_reverse" ~ "increasing slope",
+                              effect_type == "negative_amplifying" ~ "decreasing slope",
+                              effect_type == "positive_dampening" ~ "decreasing slope",
+                              effect_type == "negative_reverse" ~ "decreasing slope")) %>%
+  select(path_name, category)
+
+# combine info
+path_int_summary <- path_coef_int3 %>%
+  left_join(levels, by = "path_id") %>%
+  left_join(weights, by = "path_id") %>%
+  mutate(path_name = str_remove_all(path_name, " \\(.*?\\)"),
+         path_name = str_replace_all(path_name, "&beta;", "beta"),
+         path_name = str_replace_all(path_name, "&alpha;", "alpha"),
+         path_name = str_replace_all(path_name, "&delta;", "delta")) %>%
+  left_join(slope_df, by = "path_name")
+
+
+write.csv(path_int_summary, "figures/supp/supp_table4.csv", row.names = FALSE)
 
 ```

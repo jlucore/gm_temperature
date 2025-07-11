@@ -1,0 +1,21 @@
+Taxa,interaction_coef,std_error,low_ci_95,high_ci_95,low_ci_50,high_ci_50,level,Phylum,model_weight,category
+Phascolarctobacterium_A,0.546,0.234,0.086,1.006,0.388,0.704,Genus,Firmicutes_C,0.684,increasing slope
+Anaerobiospirillum_A,1.483,0.457,0.587,2.379,1.174,1.791,Genus,Proteobacteria,0.876,increasing slope
+Phocaeicola_A_858004,-0.95,0.505,-1.939,0.04,-1.29,-0.609,Genus,Bacteroidota,0.679,decreasing slope
+Parabacteroides_B_862066,-2.416,1.384,-5.128,0.296,-3.349,-1.483,Genus,Bacteroidota,0.545,decreasing slope
+DTU089,-3.684,1.397,-6.423,-0.946,-4.627,-2.742,Genus,Firmicutes_A,0.903,decreasing slope
+Traorella,5.487,1.659,2.236,8.737,4.368,6.605,Genus,Firmicutes_D,0.99,increasing slope
+Parolsenella,-7.207,2.373,-11.857,-2.557,-8.807,-5.607,Genus,Actinobacteriota,0.675,decreasing slope
+CAG-317_146760,7.648,7.039,-6.147,21.444,2.901,12.396,Genus,Firmicutes_A,0.554,increasing slope
+UMGS1071,-3.543,1.139,-5.776,-1.31,-4.312,-2.775,Genus,Firmicutes_A,1,decreasing slope
+Eubacterium_I,4.527,3.693,-2.712,11.766,2.036,7.018,Genus,Firmicutes_A,0.611,increasing slope
+Alistipes_A_871400,-29.677,14.675,-58.441,-0.913,-39.576,-19.778,Genus,Bacteroidota,0.998,decreasing slope
+Fimiplasma,-8.329,6.169,-20.421,3.762,-12.491,-4.168,Genus,Firmicutes_D,0.687,decreasing slope
+Alistipes_A_871404,-2.232,2.323,-6.784,2.321,-3.798,-0.665,Genus,Bacteroidota,0.773,decreasing slope
+Helicobacteraceae,1.105,0.484,0.156,2.054,0.779,1.432,Family,Campylobacterota,0.935,increasing slope
+Acidaminococcaceae,0.546,0.23,0.096,0.997,0.391,0.701,Family,Firmicutes_C,0.709,increasing slope
+Coprobacillaceae,-0.519,0.74,-1.97,0.932,-1.019,-0.02,Family,Firmicutes_D,0.758,decreasing slope
+Peptostreptococcaceae_256921,-2.684,2.698,-7.972,2.603,-4.504,-0.865,Family,Firmicutes_A,0.799,decreasing slope
+Tannerellaceae,-2.542,1.295,-5.08,-0.005,-3.415,-1.669,Family,Bacteroidota,0.566,decreasing slope
+Acutalibacteraceae,-2.9,0.872,-4.61,-1.19,-3.489,-2.312,Family,Firmicutes_A,0.995,decreasing slope
+Erysipelotrichaceae,5.515,1.664,2.253,8.778,4.393,6.638,Family,Firmicutes_D,0.986,increasing slope
