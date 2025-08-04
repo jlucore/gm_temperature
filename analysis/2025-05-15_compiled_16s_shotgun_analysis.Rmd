@@ -2405,7 +2405,7 @@ for (i in unique_bins) {
     labs(y = "", x = "", title = paste(i)) +
     scale_y_continuous(limits = c(y_min, y_max)) + 
     scale_x_continuous(breaks = seq(min(tax_neo_preds2$temp_s), max(tax_neo_preds2$temp_s), length.out = 6),
-                       labels = rep("", 6)) +
+                       labels = inverse_scale) +
     scale_color_manual(values = neg_colors) +
     theme_minimal() +
     theme(
@@ -2416,7 +2416,6 @@ for (i in unique_bins) {
       axis.title.y = element_text(size = 12),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
-      axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none",
       plot.margin = margin(5, 5, 5, 5))
@@ -2853,7 +2852,6 @@ path_neo_preds <- path_neo_preds %>% left_join(path_name, by = "path_id")
 ### iv. plot by pathway
 
 pdf for supplement with plotted model predictions for each pathway plus confidence intervals 
-
 ```{r}
 
 pdf("figures/old_work/pathway_interaction.pdf", width = 8, height = 11)  
@@ -2990,7 +2988,7 @@ sd_temp <- sd(path_abund5$temp)
 
 ```{r}
 
-################### ngeaitve_amplifying ######################
+################### negative_amplifying ######################
 
 y_min <- min(negative_amplifying$fit)
 y_max <- max(negative_amplifying$fit)
@@ -3016,7 +3014,7 @@ for (i in unique_bins) {
     labs(y = "", x = "") +
      scale_y_continuous(limits = c(y_min, y_max)) + 
     scale_x_continuous(breaks = seq(min(path_neo_preds2$temp_s), max(path_neo_preds2$temp_s), length.out = 6),
-                       labels = rep("", 6)) + 
+                       labels = inverse_scale) + 
     scale_color_manual(values = negamp_colors) +
     theme_minimal() +
     theme(
@@ -3027,7 +3025,6 @@ for (i in unique_bins) {
       axis.title.y = element_text(size = 12, angle = 0, vjust = 0.5),
       axis.text.y = y_tick_labels,
       axis.ticks.y = element_line(size = 0.5),
-      axis.text.x = element_blank(),
       axis.text = element_text(size = 10, color = "black"),
       legend.position = "none",
       plot.margin = margin(5, 5, 5, 5))
