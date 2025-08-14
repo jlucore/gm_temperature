@@ -713,8 +713,8 @@ p3 <- make_coef_plot(plot_path_observed) +
 
 p4 <- model_weight_plot(plot_com_model) +
   ggtitle("B. Taxonomy model weights") +
-  annotate("text", x = -0.5, y = 5.45, label = "temp model", color = "#fee08b", size = 5, fontface = "bold") +
-  annotate("text", x = 0.5, y = 5.45, label = "base model", color = "#66bd63", size = 5, fontface = "bold") +
+  annotate("text", x = -0.5, y = 5.45, label = "temp model", color = "#f4b942", size = 5, fontface = "bold") +
+  annotate("text", x = 0.5, y = 5.45, label = "base model", color = "#3f7743", size = 5, fontface = "bold") +
   scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
     labels = rep("", 5),
     limits = c(-1, 1))
@@ -780,7 +780,7 @@ s_plot <- ggplot(pred_data, aes(x = temp_s, y = s_preds)) +
   geom_ribbon(aes(ymin = s_lower, ymax = s_upper), 
               fill = "grey60", alpha = 0.5) +
   theme_minimal() +
-  ggtitle("A. Shannon's diversity") +
+  ggtitle("A. Shannon diversity") +
   labs(y = "", x = "") +
   scale_x_continuous(
     breaks = seq(min(tax_model$temp_s), max(tax_model$temp_s), length.out = 6), 
@@ -2018,8 +2018,8 @@ p3 <- make_coef_plot(plot_path_coef_int_observed) +
 
 p4 <- model_weight_plot(plot_aic_int) +
   ggtitle("B. Taxonomy model weights") +
-  annotate("text", x = -0.5, y = 5.45, label = "interaction model", color = "#fee08b", size = 5, fontface = "bold") +
-  annotate("text", x = 0.5, y = 5.45, label = "temp model", color = "#66bd63", size = 5, fontface = "bold") +
+  annotate("text", x = -0.5, y = 5.45, label = "interaction model", color = "#f4b942", size = 5, fontface = "bold") +
+  annotate("text", x = 0.5, y = 5.45, label = "temp model", color = "#3f7743", size = 5, fontface = "bold") +
   scale_x_continuous(breaks = seq(-1, 1, length.out = 5),
     labels = rep("", 5),
     limits = c(-1, 1))
