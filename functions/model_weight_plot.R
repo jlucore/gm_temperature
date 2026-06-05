@@ -8,9 +8,9 @@ model_weight_plot <- function(data) {
     theme(
       axis.line = element_line(color = "black", linewidth = 0.28),
       axis.text.y = element_blank(),
-      axis.text = element_text(size = 12, color = "black"),
-      text = element_text(size = 10, color = "black", family = "sans"),
-      axis.title = element_text(size = 12, color = "black"),
+      axis.text = element_text(size = 16, color = "black"),
+      text = element_text(size = 16, color = "black", family = "sans"),
+      axis.title = element_text(size = 14, color = "black"),
       plot.title = element_text(size = 14, face = "bold"),
       panel.grid.minor = element_blank(),
       panel.grid.major = element_blank(),

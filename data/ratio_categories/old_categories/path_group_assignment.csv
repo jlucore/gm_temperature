@@ -1,0 +1,105 @@
+﻿pathway,group,subgroup
+L-glutamate degradation XI (reductive Stickland reaction),immune regulation,decrease anti-inflammatory signals
+L-glutamate degradation VII (to butanoate),immune regulation,decrease anti-inflammatory signals
+pyruvate fermentation to propanoate I,immune regulation,decrease anti-inflammatory signals
+acetyl-CoA fermentation to butanoate II,immune regulation,decrease anti-inflammatory signals
+oleate &beta;-oxidation,immune regulation,decrease anti-inflammatory signals
+L-arginine degradation II (AST pathway),immune regulation,decrease anti-inflammatory signals
+L-ornithine biosynthesis II,immune regulation,decrease anti-inflammatory signals
+superpathway of ornithine degradation,immune regulation,decrease anti-inflammatory signals
+L-arginine degradation XIII (reductive Stickland reaction),immune regulation,decrease anti-inflammatory signals
+(5Z)-dodecenoate biosynthesis I,immune regulation,increased anti-inflammatory signals
+L-tryptophan biosynthesis,immune regulation,increased anti-inflammatory signals
+flavin biosynthesis III (fungi),redox maintenance,reduced redox maintenance
+pyridoxal 5'-phosphate salvage II (plants),redox maintenance,reduced redox maintenance
+superpathway of adenosylcobalamin salvage from cobinamide II,redox maintenance,reduced redox maintenance
+superpathway of sulfur amino acid biosynthesis (Saccharomyces cerevisiae),redox maintenance,reduced redox maintenance
+catechol degradation to &beta;-ketoadipate,redox maintenance,reduced redox maintenance
+catechol degradation III (ortho-cleavage pathway),redox maintenance,reduced redox maintenance
+aromatic compounds degradation via &beta;-ketoadipate,redox maintenance,reduced redox maintenance
+superpathway of menaquinol-9 biosynthesis,redox maintenance,reduced redox maintenance
+superpathway of demethylmenaquinol-9 biosynthesis,redox maintenance,reduced redox maintenance
+superpathway of demethylmenaquinol-6 biosynthesis II,redox maintenance,reduced redox maintenance
+superpathway of menaquinol-8 biosynthesis III,redox maintenance,reduced redox maintenance
+superpathway of ubiquinol-8 biosynthesis (early decarboxylation),redox maintenance,reduced redox maintenance
+ubiquinol-8 biosynthesis (early decarboxylation),redox maintenance,reduced redox maintenance
+ubiquinol-7 biosynthesis (early decarboxylation),redox maintenance,reduced redox maintenance
+mitochondrial NADPH production (yeast),redox maintenance,reduced redox maintenance
+aerobactin biosynthesis,redox maintenance,reduced redox maintenance
+coenzyme A biosynthesis I (prokaryotic),redox maintenance,reduced redox maintenance
+5'-deoxyadenosine degradation II,redox maintenance,reduced redox maintenance
+"L-ascorbate degradation II (bacterial, aerobic)",redox maintenance,reduced redox maintenance
+assimilatory sulfate reduction IV,redox maintenance,reduced redox maintenance
+L-methionine biosynthesis IV,redox maintenance,reduced redox maintenance
+superpathway of methylglyoxal degradation,redox maintenance,reduced redox maintenance
+"1,4-dihydroxy-6-naphthoate biosynthesis II",redox maintenance,increased redox maintenance
+L-cysteine biosynthesis VI (from L-methionine),redox maintenance,increased redox maintenance
+folate transformations I,redox maintenance,increased redox maintenance
+folate transformations II (plants),redox maintenance,increased redox maintenance
+tetrapyrrole biosynthesis I (from glutamate),redox maintenance,increased redox maintenance
+pentose phosphate pathway (non-oxidative branch) II,redox maintenance,increased redox maintenance
+pentose phosphate pathway (non-oxidative branch) I,redox maintenance,increased redox maintenance
+NAD de novo biosynthesis I (from aspartate),redox maintenance,increased redox maintenance
+L-methionine biosynthesis III,redox maintenance,increased redox maintenance
+D-erythronate degradation II,redox maintenance,increased redox maintenance
+L-threonate degradation,redox maintenance,increased redox maintenance
+"L-ascorbate degradation I (bacterial, anaerobic)",redox maintenance,increased redox maintenance
+glycolysis III (from glucose),oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+glycolysis IV,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+lactose and galactose degradation I,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+pyruvate fermentation to acetate and (S)-lactate I,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+pyruvate fermentation to acetate and lactate II,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+reductive TCA cycle I,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+incomplete reductive TCA cycle,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+formaldehyde assimilation II (assimilatory RuMP Cycle),oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+gluconeogenesis I,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+glucose and glucose-1-phosphate degradation,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+D-galactose degradation I (Leloir pathway),oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+glycogen degradation II,oxygen-driven metabolism and carbohydrate fermentation,increased anerobic metabolism
+"superpathway of glycolysis, pyruvate dehydrogenase, TCA, and glyoxylate bypass",oxygen-driven metabolism and carbohydrate fermentation,decreased aerobic metabolism
+glyoxylate cycle,oxygen-driven metabolism and carbohydrate fermentation,decreased aerobic metabolism
+superpathway of glycol metabolism and degradation,oxygen-driven metabolism and carbohydrate fermentation,decreased aerobic metabolism
+methanol oxidation to carbon dioxide,oxygen-driven metabolism and carbohydrate fermentation,decreased aerobic metabolism
+starch degradation III,oxygen-driven metabolism and carbohydrate fermentation,decreased complex carbohydrate fermentation
+D-arabinose degradation I,oxygen-driven metabolism and carbohydrate fermentation,decreased complex carbohydrate fermentation
+D-glucarate degradation I,oxygen-driven metabolism and carbohydrate fermentation,decreased complex carbohydrate fermentation
+superpathway of D-glucarate and D-galactarate degradation,oxygen-driven metabolism and carbohydrate fermentation,decreased complex carbohydrate fermentation
+nitrate reduction V (assimilatory),oxygen-driven metabolism and carbohydrate fermentation,decreased aerobic metabolism
+"9-cis, 11-trans-octadecadienoyl-CoA degradation (isomerase-dependent, yeast)",lipid catabolism and remodeling,decreased catabolism and recycling
+fatty acid &beta;-oxidation I (generic),lipid catabolism and remodeling,decreased catabolism and recycling
+fatty acid &beta;-oxidation II (plant peroxisome),lipid catabolism and remodeling,decreased catabolism and recycling
+"fatty acid &beta;-oxidation IV (unsaturated, even number)",lipid catabolism and remodeling,decreased catabolism and recycling
+fatty acid &beta;-oxidation VI (mammalian peroxisome),lipid catabolism and remodeling,decreased catabolism and recycling
+superpathway of glyoxylate cycle and fatty acid degradation,lipid catabolism and remodeling,decreased catabolism and recycling
+phospholipases,lipid catabolism and remodeling,decreased catabolism and recycling
+fatty acid salvage,lipid catabolism and remodeling,decreased catabolism and recycling
+oleate biosynthesis IV (anaerobic),lipid catabolism and remodeling,increased synthesis and remodeling
+palmitoleate biosynthesis I (from (5Z)-dodec-5-enoate),lipid catabolism and remodeling,increased synthesis and remodeling
+cis-vaccenate biosynthesis,lipid catabolism and remodeling,increased synthesis and remodeling
+petroselinate biosynthesis,lipid catabolism and remodeling,increased synthesis and remodeling
+gondoate biosynthesis (anaerobic),lipid catabolism and remodeling,increased synthesis and remodeling
+superpathway of unsaturated fatty acids biosynthesis (E. coli),lipid catabolism and remodeling,increased synthesis and remodeling
+superpathway of fatty acids biosynthesis (E. coli),lipid catabolism and remodeling,increased synthesis and remodeling
+fatty acid elongation -- saturated,lipid catabolism and remodeling,increased synthesis and remodeling
+stearate biosynthesis II (bacteria and plants),lipid catabolism and remodeling,increased synthesis and remodeling
+mevalonate pathway I (eukaryotes and bacteria),lipid catabolism and remodeling,increased synthesis and remodeling
+fatty acid biosynthesis initiation (mitochondria),lipid catabolism and remodeling,increased synthesis and remodeling
+superpathway of geranylgeranyldiphosphate biosynthesis I (via mevalonate),lipid catabolism and remodeling,increased synthesis and remodeling
+inosine-5'-phosphate biosynthesis II,nucleotide mobilization,increased synthesis and salvage
+inosine-5'-phosphate biosynthesis I,nucleotide mobilization,increased synthesis and salvage
+guanosine ribonucleotides de novo biosynthesis,nucleotide mobilization,increased synthesis and salvage
+5-aminoimidazole ribonucleotide biosynthesis II,nucleotide mobilization,increased synthesis and salvage
+superpathway of 5-aminoimidazole ribonucleotide biosynthesis,nucleotide mobilization,increased synthesis and salvage
+UMP biosynthesis I,nucleotide mobilization,increased synthesis and salvage
+UMP biosynthesis II,nucleotide mobilization,increased synthesis and salvage
+UMP biosynthesis III,nucleotide mobilization,increased synthesis and salvage
+pyrimidine deoxyribonucleosides salvage,nucleotide mobilization,increased synthesis and salvage
+adenosine nucleotides degradation I,nucleotide mobilization,increased synthesis and salvage
+adenine and adenosine salvage III,nucleotide mobilization,increased synthesis and salvage
+queuosine biosynthesis I (de novo),nucleotide mobilization,increased synthesis and salvage
+S-adenosyl-L-methionine salvage I,nucleotide mobilization,increased synthesis and salvage
+preQ0 biosynthesis,nucleotide mobilization,increased synthesis and salvage
+inosine 5'-phosphate degradation,nucleotide mobilization,increased synthesis and salvage
+purine ribonucleosides degradation,nucleotide mobilization,increased synthesis and salvage
+tRNA processing,nucleotide mobilization,increased synthesis and salvage
+tRNA charging,nucleotide mobilization,increased synthesis and salvage

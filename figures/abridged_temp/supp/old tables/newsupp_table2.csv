@@ -1,0 +1,439 @@
+"path_id","temp_coef","std_error","low_ci_95","high_ci_95","low_ci_50","high_ci_50","pathway","model_weight","direction","sensitive","group","subgroup"
+"12DICHLORETHDEG-PWY",-0.2789,0.2799,-0.827504,0.269704,-0.46769255,-0.09010745,"1,2-dichloroethane degradation",0.249,"negative","nuetral",NA,NA
+"14DICHLORBENZDEG-PWY",0.0936,0.2959,-0.486364,0.673564,-0.10598455,0.29318455,"1,4-dichlorobenzene degradation",0.183,"positive","nuetral",NA,NA
+"1CMET2-PWY",-0.3487,0.2241,-0.787936,0.090536,-0.49985545,-0.19754455,"folate transformations III (E. coli)",0.348,"negative","nuetral",NA,NA
+"3-HYDROXYPHENYLACETATE-DEGRADATION-PWY",-0.5748,0.4591,-1.474636,0.325036,-0.88446295,-0.26513705,"4-hydroxyphenylacetate degradation",0.42,"negative","nuetral",NA,NA
+"AEROBACTINSYN-PWY",-0.6691,0.4575,-1.5658,0.2276,-0.97768375,-0.36051625,"aerobactin biosynthesis",0.489,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"ALLANTOINDEG-PWY",1.7147,0.5948,0.548892,2.880508,1.3135074,2.1158926,"superpathway of allantoin degradation in yeast",0.959,"positive","temp sensitive","no group assignment",NA
+"ANAEROFRUCAT-PWY",0.3294,0.2427,-0.146292,0.805092,0.16569885,0.49310115,"homolactic fermentation",0.305,"positive","nuetral",NA,NA
+"ANAGLYCOLYSIS-PWY",0.3087,0.1986,-0.080556,0.697956,0.1747443,0.4426557,"glycolysis III (from glucose)",0.322,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"ARG-POLYAMINE-SYN",0.291,0.4081,-0.508876,1.090876,0.01573655,0.56626345,NA,0.273,"positive","nuetral",NA,NA
+"ARGDEG-PWY",-0.5352,0.5819,-1.675724,0.605324,-0.92769155,-0.14270845,"superpathway of L-arginine, putrescine, and 4-aminobutanoate degradation",0.39,"negative","nuetral",NA,NA
+"ARGININE-SYN4-PWY",-1.1492,0.598,-2.32128,0.02288,-1.552551,-0.745849,"L-ornithine biosynthesis II",0.723,"negative","temp sensitive","immune regulation","decrease anti-inflammatory signals"
+"ARGSYN-PWY",0.4365,0.1737,0.096048,0.776952,0.31933935,0.55366065,"L-arginine biosynthesis I (via L-ornithine)",0.729,"positive","temp sensitive","no group assignment",NA
+"ARGSYNBSUB-PWY",0.5481,0.1874,0.180796,0.915404,0.4216987,0.6745013,"L-arginine biosynthesis II (acetyl cycle)",0.892,"positive","temp sensitive","no group assignment",NA
+"ARO-PWY",0.3099,0.1971,-0.076416,0.696216,0.17695605,0.44284395,"chorismate biosynthesis I",0.327,"positive","nuetral",NA,NA
+"ASPASN-PWY",0.0498,0.1291,-0.203236,0.302836,-0.03727795,0.13687795,"superpathway of L-aspartate and L-asparagine biosynthesis",0.091,"positive","nuetral",NA,NA
+"AST-PWY",-0.4489,0.6112,-1.646852,0.749052,-0.8611544,-0.0366456000000001,"L-arginine degradation II (AST pathway)",0.366,"negative","nuetral","immune regulation","decrease anti-inflammatory signals"
+"BRANCHED-CHAIN-AA-SYN-PWY",0.5092,0.1961,0.124844,0.893556,0.37693055,0.64146945,"superpathway of branched chain amino acid biosynthesis",0.789,"positive","temp sensitive","no group assignment",NA
+"CALVIN-PWY",0.3364,0.1788,-0.014048,0.686848,0.2157994,0.4570006,"Calvin-Benson-Bassham cycle",0.426,"positive","nuetral",NA,NA
+"CARNMET-PWY",-0.589,0.6087,-1.782052,0.604052,-0.99956815,-0.17843185,"L-carnitine degradation I",0.412,"negative","nuetral",NA,NA
+"CATECHOL-ORTHO-CLEAVAGE-PWY",-0.8246,0.3592,-1.528632,-0.120568,-1.0668804,-0.5823196,"catechol degradation to &beta;-ketoadipate",0.772,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"CHLOROPHYLL-SYN",-0.2343,0.415,-1.0477,0.5791,-0.5142175,0.0456175,"3,8-divinyl-chlorophyllide a biosynthesis I (aerobic, light-dependent)",0.258,"negative","nuetral",NA,NA
+"CITRULBIO-PWY",-0.2216,0.3323,-0.872908,0.429708,-0.44573635,0.00253634999999999,"L-citrulline biosynthesis",0.228,"negative","nuetral",NA,NA
+"COA-PWY-1",0.3101,0.2207,-0.122472,0.742672,0.16123785,0.45896215,"superpathway of coenzyme A biosynthesis III (mammals)",0.299,"positive","nuetral",NA,NA
+"COA-PWY",0.2599,0.2015,-0.13504,0.65484,0.12398825,0.39581175,"coenzyme A biosynthesis I (prokaryotic)",0.25,"positive","nuetral","redox maintenance","reduced redox maintenance"
+"CRNFORCAT-PWY",-0.366,0.3786,-1.108056,0.376056,-0.6213657,-0.1106343,"creatinine degradation I",0.303,"negative","nuetral",NA,NA
+"DAPLYSINESYN-PWY",0.4743,0.1674,0.146196,0.802404,0.3613887,0.5872113,"L-lysine biosynthesis I",0.841,"positive","temp sensitive","no group assignment",NA
+"DARABCATK12-PWY",-0.5737,0.5758,-1.702268,0.554868,-0.9620771,-0.1853229,"D-arabinose degradation I",0.403,"negative","nuetral","oxygen-driven metabolism and carbohydrate fermentation","decreased complex carbohydrate fermentation"
+"DENOVOPURINE2-PWY",0.4535,0.8213,-1.156248,2.063248,-0.10046685,1.00746685,"superpathway of purine nucleotides de novo biosynthesis II",0.407,"positive","nuetral",NA,NA
+"DHGLUCONATE-PYR-CAT-PWY",-0.0333,0.3731,-0.764576,0.697976,-0.28495595,0.21835595,"glucose degradation (oxidative)",0.212,"negative","nuetral",NA,NA
+"DTDPRHAMSYN-PWY",0.4228,0.2304,-0.028784,0.874384,0.2673952,0.5782048,"dTDP-&beta;-L-rhamnose biosynthesis",0.465,"positive","nuetral",NA,NA
+"ECASYN-PWY",-1.6669,0.7449,-3.126904,-0.206896,-2.16933505,-1.16446495,"enterobacterial common antigen biosynthesis",0.861,"negative","temp sensitive","no group assignment",NA
+"FAO-PWY",-0.5043,0.8249,-2.121104,1.112504,-1.06069505,0.05209505,"fatty acid &beta;-oxidation I (generic)",0.417,"negative","nuetral","lipid catabolism and remodeling","decreased catabolism and recycling"
+"FASYN-ELONG-PWY",0.3075,0.1591,-0.00433600000000001,0.619336,0.20018705,0.41481295,"fatty acid elongation -- saturated",0.418,"positive","nuetral","lipid catabolism and remodeling","increased synthesis and remodeling"
+"FASYN-INITIAL-PWY",2.6374,0.7258,1.214832,4.059968,2.1478479,3.1269521,"superpathway of fatty acid biosynthesis initiation (E. coli)",0.996,"positive","temp sensitive","no group assignment",NA
+"FOLSYN-PWY",-0.2576,0.5029,-1.243284,0.728084,-0.59680605,0.08160605,"superpathway of tetrahydrofolate biosynthesis and salvage",0.292,"negative","nuetral",NA,NA
+"FUC-RHAMCAT-PWY",0.4006,0.3606,-0.306176,1.107376,0.1573753,0.6438247,"superpathway of fucose and rhamnose degradation",0.325,"positive","nuetral",NA,NA
+"FUCCAT-PWY",0.5479,0.3601,-0.157896,1.253696,0.30501255,0.79078745,"fucose degradation",0.451,"positive","nuetral",NA,NA
+"GALACT-GLUCUROCAT-PWY",0.8612,0.4616,-0.043536,1.765936,0.5498508,1.1725492,"superpathway of hexuronide and hexuronate degradation",0.638,"positive","temp sensitive","no group assignment",NA
+"GALACTARDEG-PWY",-1.3846,0.5915,-2.54394,-0.22526,-1.78356675,-0.98563325,"D-galactarate degradation I",0.861,"negative","temp sensitive","no group assignment",NA
+"GALACTITOLCAT-PWY",1.1196,0.3826,0.369704,1.869496,0.8615363,1.3776637,"galactitol degradation",0.944,"positive","temp sensitive","no group assignment",NA
+"GALLATE-DEGRADATION-I-PWY",-0.0595,0.3494,-0.744324,0.625324,-0.2951703,0.1761703,"gallate degradation II",0.203,"negative","nuetral",NA,NA
+"GALLATE-DEGRADATION-II-PWY",-0.246,0.3138,-0.861048,0.369048,-0.4576581,-0.0343419,"gallate degradation I",0.234,"negative","nuetral",NA,NA
+"GLUCARDEG-PWY",-1.3679,0.5797,-2.504112,-0.231688,-1.75890765,-0.97689235,"D-glucarate degradation I",0.864,"negative","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","decreased complex carbohydrate fermentation"
+"GLUCARGALACTSUPER-PWY",-1.3846,0.5915,-2.54394,-0.22526,-1.78356675,-0.98563325,"superpathway of D-glucarate and D-galactarate degradation",0.861,"negative","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","decreased complex carbohydrate fermentation"
+"GLUCONEO-PWY",0.3167,0.1823,-0.040608,0.674008,0.19373865,0.43966135,"gluconeogenesis I",0.37,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"GLUCOSE1PMETAB-PWY",0.759,0.5604,-0.339384,1.857384,0.3810102,1.1369898,"glucose and glucose-1-phosphate degradation",0.487,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"GLUDEG-II-PWY",-1.1605,0.5654,-2.268684,-0.052316,-1.5418623,-0.7791377,"L-glutamate degradation VII (to butanoate)",0.763,"negative","temp sensitive","immune regulation","decrease anti-inflammatory signals"
+"GLYCOGENSYNTH-PWY",0.2264,0.2028,-0.171088,0.623888,0.0896114,0.3631886,"glycogen biosynthesis I (from ADP-D-Glucose)",0.214,"positive","nuetral",NA,NA
+"GLYCOL-GLYOXDEG-PWY",-0.9926,0.5593,-2.088828,0.103628,-1.36984785,-0.61535215,"superpathway of glycol metabolism and degradation",0.654,"negative","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","decreased aerobic metabolism"
+"GLYCOLYSIS-E-D",-0.1901,0.3085,-0.79476,0.41456,-0.39818325,0.01798325,"superpathway of glycolysis and the Entner-Doudoroff pathway",0.209,"negative","nuetral",NA,NA
+"GLYCOLYSIS-TCA-GLYOX-BYPASS",-0.8501,0.8172,-2.451812,0.751612,-1.4013014,-0.2988986,"superpathway of glycolysis, pyruvate dehydrogenase, TCA, and glyoxylate bypass",0.503,"negative","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","decreased aerobic metabolism"
+"GLYCOLYSIS",0.2881,0.2456,-0.193276,0.769476,0.1224428,0.4537572,"glycolysis I (from glucose 6-phosphate)",0.26,"positive","nuetral",NA,NA
+"GLYOXYLATE-BYPASS",-0.4499,0.4927,-1.415592,0.515792,-0.78222615,-0.11757385,"glyoxylate cycle",0.35,"negative","nuetral","oxygen-driven metabolism and carbohydrate fermentation","decreased aerobic metabolism"
+"HCAMHPDEG-PWY",-0.8934,0.5347,-1.941412,0.154612,-1.25405515,-0.53274485,"3-phenylpropanoate and 3-(3-hydroxyphenyl)propanoate degradation to 2-hydroxypentadienoate",0.606,"negative","temp sensitive","no group assignment",NA
+"HEME-BIOSYNTHESIS-II-1",0.2517,0.3407,-0.416072,0.919472,0.02189785,0.48150215,"heme b biosynthesis V (aerobic)",0.244,"positive","nuetral",NA,NA
+"HEME-BIOSYNTHESIS-II",0.0303,0.2299,-0.420304,0.480904,-0.12476755,0.18536755,"heme b biosynthesis I (aerobic)",0.143,"positive","nuetral",NA,NA
+"HEMESYN2-PWY",0.2961,0.1936,-0.083356,0.675556,0.1655168,0.4266832,"heme b biosynthesis II (oxygen-independent)",0.309,"positive","nuetral",NA,NA
+"HOMOSER-METSYN-PWY",-0.1037,0.1563,-0.410048,0.202648,-0.20912435,0.00172435,"L-methionine biosynthesis I",0.123,"negative","nuetral",NA,NA
+"HSERMETANA-PWY",0.4337,0.1754,0.089916,0.777484,0.3153927,0.5520073,"L-methionine biosynthesis III",0.713,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"ILEUDEG-PWY",0.1082,0.3364,-0.551144,0.767544,-0.1187018,0.3351018,"L-isoleucine degradation I",0.203,"positive","nuetral",NA,NA
+"ILEUSYN-PWY",0.4905,0.1984,0.101636,0.879364,0.3566792,0.6243208,"L-isoleucine biosynthesis I (from threonine)",0.737,"positive","temp sensitive","no group assignment",NA
+"KDO-NAGLIPASYN-PWY",-0.077,0.586,-1.22556,1.07156,-0.472257,0.318257,"superpathway of (Kdo)2-lipid A biosynthesis",0.298,"negative","nuetral",NA,NA
+"KETOGLUCONMET-PWY",0.2642,0.6966,-1.101136,1.629536,-0.2056567,0.7340567,"ketogluconate metabolism",0.35,"positive","nuetral",NA,NA
+"LACTOSECAT-PWY",1.2557,0.604,0.07186,2.43954,0.848302,1.663098,"lactose and galactose degradation I",0.78,"positive","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"LEU-DEG2-PWY",0.1143,0.357,-0.58542,0.81402,-0.1264965,0.3550965,"L-leucine degradation I",0.213,"positive","nuetral",NA,NA
+"LIPA-CORESYN-PWY",0.254,0.5485,-0.82106,1.32906,-0.11596325,0.62396325,"lipid A-core biosynthesis (E. coli K-12)",0.303,"positive","nuetral",NA,NA
+"LPSSYN-PWY",-0.2703,0.54,-1.3287,0.7881,-0.63453,0.09393,"superpathway of lipopolysaccharide biosynthesis",0.301,"negative","nuetral",NA,NA
+"M-CRESOL-DEGRADATION-PWY",-0.2054,0.3045,-0.80222,0.39142,-0.41078525,-0.0000147500000000078,"m-cresol degradation",0.216,"negative","nuetral",NA,NA
+"MET-SAM-PWY",-0.0934,0.1596,-0.406216,0.219416,-0.2010502,0.0142502,"superpathway of S-adenosyl-L-methionine biosynthesis",0.12,"negative","nuetral",NA,NA
+"METH-ACETATE-PWY",0.0933,0.4374,-0.764004,0.950604,-0.2017263,0.3883263,"methanogenesis from acetate",0.243,"positive","nuetral",NA,NA
+"METHGLYUT-PWY",-0.6385,0.4978,-1.614188,0.337188,-0.9742661,-0.3027339,"superpathway of methylglyoxal degradation",0.446,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"METHYLGALLATE-DEGRADATION-PWY",-0.0796,0.3635,-0.79206,0.63286,-0.32478075,0.16558075,"methylgallate degradation",0.211,"negative","nuetral",NA,NA
+"METSYN-PWY",-0.0364,0.1466,-0.323736,0.250936,-0.1352817,0.0624817,"superpathway of L-homoserine and L-methionine biosynthesis",0.098,"negative","nuetral",NA,NA
+"NAD-BIOSYNTHESIS-II",-0.1506,0.5491,-1.226836,0.925636,-0.52096795,0.21976795,"NAD salvage pathway III (to nicotinamide riboside)",0.291,"negative","nuetral",NA,NA
+"NADSYN-PWY",-0.3582,0.3639,-1.071444,0.355044,-0.60365055,-0.11274945,"NAD de novo biosynthesis II (from tryptophan)",0.297,"negative","nuetral",NA,NA
+"NAGLIPASYN-PWY",0.2208,0.2107,-0.192172,0.633772,0.07868285,0.36291715,"lipid IVA biosynthesis (E. coli)",0.207,"positive","nuetral",NA,NA
+"NONMEVIPP-PWY",0.3087,0.2226,-0.127596,0.744996,0.1585563,0.4588437,"methylerythritol phosphate pathway I",0.295,"positive","nuetral",NA,NA
+"NONOXIPENT-PWY",0.446,0.169,0.11476,0.77724,0.3320095,0.5599905,"pentose phosphate pathway (non-oxidative branch) I",0.781,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"ORNARGDEG-PWY",-0.5352,0.5819,-1.675724,0.605324,-0.92769155,-0.14270845,"superpathway of L-arginine and L-ornithine degradation",0.39,"negative","nuetral",NA,NA
+"ORNDEG-PWY",-0.3697,0.7606,-1.860476,1.121076,-0.8827247,0.1433247,"superpathway of ornithine degradation",0.381,"negative","nuetral","immune regulation","decrease anti-inflammatory signals"
+"P101-PWY",0.4632,0.3664,-0.254944,1.181344,0.2160632,0.7103368,"ectoine biosynthesis",0.363,"positive","nuetral",NA,NA
+"P105-PWY",-0.0837,0.5747,-1.210112,1.042712,-0.47133515,0.30393515,"TCA cycle IV (2-oxoglutarate decarboxylase)",0.294,"negative","nuetral",NA,NA
+"P108-PWY",-0.3734,0.6622,-1.671312,0.924512,-0.8200539,0.0732539,"pyruvate fermentation to propanoate I",0.358,"negative","nuetral","immune regulation","decrease anti-inflammatory signals"
+"P124-PWY",0.5948,0.6715,-0.72134,1.91094,0.14187325,1.04772675,"Bifidobacterium shunt",0.417,"positive","nuetral",NA,NA
+"P162-PWY",-0.9598,0.5259,-1.990564,0.070964,-1.31451955,-0.60508045,"L-glutamate degradation V (via hydroxyglutarate)",0.649,"negative","temp sensitive","no group assignment",NA
+"P163-PWY",-0.5653,0.5023,-1.549808,0.419208,-0.90410135,-0.22649865,"L-lysine fermentation to acetate and butanoate",0.406,"negative","nuetral",NA,NA
+"P184-PWY",0.0991,0.3215,-0.53104,0.72924,-0.11775175,0.31595175,"protocatechuate degradation I (meta-cleavage pathway)",0.195,"positive","nuetral",NA,NA
+"P185-PWY",-1.0224,0.7327,-2.458492,0.413692,-1.51660615,-0.52819385,"formaldehyde assimilation III (dihydroxyacetone cycle)",0.563,"negative","temp sensitive","no group assignment",NA
+"P23-PWY",0.5074,0.4249,-0.325404,1.340204,0.22080495,0.79399505,"reductive TCA cycle I",0.38,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"P3-PWY",-0.1435,0.3912,-0.910252,0.623252,-0.4073644,0.1203644,"gallate degradation III (anaerobic)",0.231,"negative","nuetral",NA,NA
+"P4-PWY",1.1099,0.395,0.3357,1.8841,0.8434725,1.3763275,"superpathway of L-lysine, L-threonine and L-methionine biosynthesis I",0.924,"positive","temp sensitive","no group assignment",NA
+"P41-PWY",0.2121,0.1857,-0.151872,0.576072,0.08684535,0.33735465,"pyruvate fermentation to acetate and (S)-lactate I",0.204,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"P42-PWY",0.3831,0.2511,-0.109056,0.875256,0.21373305,0.55246695,"incomplete reductive TCA cycle",0.352,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"P441-PWY",0.1929,0.4595,-0.70772,1.09352,-0.11703275,0.50283275,"superpathway of N-acetylneuraminate degradation",0.265,"positive","nuetral",NA,NA
+"P562-PWY",-0.5908,0.3977,-1.370292,0.188692,-0.85904865,-0.32255135,"myo-inositol degradation I",0.462,"negative","nuetral",NA,NA
+"P621-PWY",-0.001,0.3278,-0.643488,0.641488,-0.2221011,0.2201011,"nylon-6 oligomer degradation",0.191,"negative","nuetral",NA,NA
+"PANTO-PWY",0.0889,0.1971,-0.297416,0.475216,-0.04404395,0.22184395,"phosphopantothenate biosynthesis I",0.135,"positive","nuetral",NA,NA
+"PANTOSYN-PWY",0.2527,0.2515,-0.24024,0.74564,0.08306325,0.42233675,"superpathway of coenzyme A biosynthesis I (bacteria)",0.23,"positive","nuetral",NA,NA
+"PENTOSE-P-PWY",0.4281,0.2551,-0.071896,0.928096,0.25603505,0.60016495,"pentose phosphate pathway",0.426,"positive","nuetral",NA,NA
+"PEPTIDOGLYCANSYN-PWY",0.2482,0.1766,-0.097936,0.594336,0.1290833,0.3673167,"peptidoglycan biosynthesis I (meso-diaminopimelate containing)",0.254,"positive","nuetral",NA,NA
+"PHOSLIPSYN-PWY",0.1651,0.1554,-0.139484,0.469684,0.0602827,0.2699173,"superpathway of phospholipid biosynthesis I (bacteria)",0.163,"positive","nuetral",NA,NA
+"PHOTOALL-PWY",-0.3719,0.8507,-2.039272,1.295472,-0.94569715,0.20189715,"oxygenic photosynthesis",0.402,"negative","nuetral",NA,NA
+"POLYAMINSYN3-PWY",0.1018,0.6234,-1.120064,1.323664,-0.3186833,0.5222833,"superpathway of polyamine biosynthesis II",0.311,"positive","nuetral",NA,NA
+"POLYAMSYN-PWY",0.2171,0.358,-0.48458,0.91878,-0.024371,0.458571,"superpathway of polyamine biosynthesis I",0.235,"positive","nuetral",NA,NA
+"POLYISOPRENSYN-PWY",-0.0684,0.4024,-0.857104,0.720304,-0.3398188,0.2030188,"polyisoprenoid biosynthesis (E. coli)",0.227,"negative","nuetral",NA,NA
+"PROPFERM-PWY",-0.8473,0.524,-1.87434,0.17974,-1.200738,-0.493862,"superpathway of L-alanine fermentation (Stickland reaction)",0.574,"negative","temp sensitive","no group assignment",NA
+"PRPP-PWY",0.5428,0.8197,-1.063812,2.149412,-0.01008765,1.09568765,"superpathway of histidine, purine, and pyrimidine biosynthesis",0.423,"positive","nuetral",NA,NA
+"PWY-101",-0.2412,0.8646,-1.935816,1.453416,-0.8243727,0.3419727,"photosynthesis light reactions",0.393,"negative","nuetral",NA,NA
+"PWY-1042",0.2731,0.1969,-0.112824,0.659024,0.14029095,0.40590905,"glycolysis IV",0.269,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"PWY-1269",0.5214,0.2198,0.090592,0.952208,0.3731449,0.6696551,"CMP-3-deoxy-D-manno-octulosonate biosynthesis",0.698,"positive","temp sensitive","no group assignment",NA
+"PWY-1361",-0.2596,0.307,-0.86132,0.34212,-0.4666715,-0.0525285,"benzoyl-CoA degradation I (aerobic)",0.239,"negative","nuetral",NA,NA
+"PWY-1501",0.4772,0.3763,-0.260348,1.214748,0.22338565,0.73101435,"mandelate degradation I",0.37,"positive","nuetral",NA,NA
+"PWY-1622",-0.3379,0.3781,-1.078976,0.403176,-0.59292845,-0.08287155,"formaldehyde assimilation I (serine pathway)",0.288,"negative","nuetral",NA,NA
+"PWY-181",-0.3712,0.4417,-1.236932,0.494532,-0.66912665,-0.07327335,"photorespiration",0.309,"negative","nuetral",NA,NA
+"PWY-1861",2.3442,0.5825,1.2025,3.4859,1.95130375,2.73709625,"formaldehyde assimilation II (assimilatory RuMP Cycle)",0.998,"positive","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"PWY-2201",1.5411,0.7641,0.043464,3.038736,1.02571455,2.05648545,"folate transformations I",0.795,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY-2221",0.0674,0.3833,-0.683868,0.818668,-0.19113585,0.32593585,"Entner-Doudoroff pathway III (semi-phosphorylative)",0.219,"positive","nuetral",NA,NA
+"PWY-241",0.4018,0.3268,-0.238728,1.042328,0.1813734,0.6222266,"C4 photosynthetic carbon assimilation cycle, NADP-ME type",0.332,"positive","nuetral",NA,NA
+"PWY-2941",0.2451,0.2394,-0.224124,0.714324,0.0836247,0.4065753,"L-lysine biosynthesis II",0.226,"positive","nuetral",NA,NA
+"PWY-2942",-0.2546,0.3911,-1.021156,0.511956,-0.51839695,0.00919694999999998,"L-lysine biosynthesis III",0.257,"negative","nuetral",NA,NA
+"PWY-3841",0.3077,0.2009,-0.086064,0.701464,0.17219295,0.44320705,"folate transformations II (plants)",0.315,"positive","nuetral","redox maintenance","increased redox maintenance"
+"PWY-3941",-0.1292,0.3341,-0.784036,0.525636,-0.35455045,0.09615045,"&beta;-alanine biosynthesis II",0.205,"negative","nuetral",NA,NA
+"PWY-4041",0.2457,0.3643,-0.468328,0.959728,-0.0000203500000000023,0.49142035,"&gamma;-glutamyl cycle",0.248,"positive","nuetral",NA,NA
+"PWY-4361",0.1544,0.3088,-0.450848,0.759648,-0.0538856,0.3626856,"S-methyl-5-thio-&alpha;-D-ribose 1-phosphate degradation I",0.201,"positive","nuetral",NA,NA
+"PWY-4702",0.0129,0.3696,-0.711516,0.737316,-0.2363952,0.2621952,"phytate degradation I",0.21,"positive","nuetral",NA,NA
+"PWY-4722",0.1629,0.3523,-0.527608,0.853408,-0.07472635,0.40052635,"creatinine degradation II",0.22,"positive","nuetral",NA,NA
+"PWY-5004",-1.0002,0.4862,-1.953152,-0.047248,-1.3281419,-0.6722581,"superpathway of L-citrulline metabolism",0.73,"negative","temp sensitive","no group assignment",NA
+"PWY-5005",0.5403,0.6363,-0.706848,1.787448,0.11111565,0.96948435,"biotin biosynthesis II",0.397,"positive","nuetral",NA,NA
+"PWY-5022",-1.4095,0.9147,-3.202312,0.383312,-2.02646515,-0.79253485,"4-aminobutanoate degradation V",0.682,"negative","temp sensitive","no group assignment",NA
+"PWY-5028",0.0006,0.3878,-0.759488,0.760688,-0.2609711,0.2621711,"L-histidine degradation II",0.218,"positive","nuetral",NA,NA
+"PWY-5055",-0.2229,0.3612,-0.930852,0.485052,-0.4665294,0.0207294,"nicotinate degradation III",0.239,"negative","nuetral",NA,NA
+"PWY-5097",0.3402,0.1658,0.015232,0.665168,0.2283679,0.4520321,"L-lysine biosynthesis VI",0.488,"positive","nuetral",NA,NA
+"PWY-5100",0.2453,0.1819,-0.111224,0.601824,0.12260845,0.36799155,"pyruvate fermentation to acetate and lactate II",0.245,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"PWY-5101",-0.6949,0.4616,-1.599636,0.209836,-1.0062492,-0.3835508,"L-isoleucine biosynthesis II",0.491,"negative","nuetral",NA,NA
+"PWY-5103",0.4946,0.1971,0.108284,0.880916,0.36165605,0.62754395,"L-isoleucine biosynthesis III",0.753,"positive","temp sensitive","no group assignment",NA
+"PWY-5104",-0.1623,0.4061,-0.958256,0.633656,-0.43621445,0.11161445,"L-isoleucine biosynthesis IV",0.24,"negative","nuetral",NA,NA
+"PWY-5109",0.1797,0.2954,-0.399284,0.758684,-0.0195473,0.3789473,"propanoate fermentation to 2-methylbutanoate",0.203,"positive","nuetral",NA,NA
+"PWY-5121",0.2319,0.564,-0.87354,1.33734,-0.148518,0.612318,"superpathway of geranylgeranyl diphosphate biosynthesis II (via MEP)",0.306,"positive","nuetral",NA,NA
+"PWY-5136",-0.6615,0.5488,-1.737148,0.414148,-1.0316656,-0.2913344,"fatty acid &beta;-oxidation II (plant peroxisome)",0.449,"negative","nuetral","lipid catabolism and remodeling","decreased catabolism and recycling"
+"PWY-5138",-0.4817,0.7911,-2.032256,1.068856,-1.01529695,0.0518969499999999,"fatty acid &beta;-oxidation IV (unsaturated, even number)",0.407,"negative","nuetral","lipid catabolism and remodeling","decreased catabolism and recycling"
+"PWY-5154",0.3434,0.3246,-0.292816,0.979616,0.1244573,0.5623427,"L-arginine biosynthesis III (via N-acetyl-L-citrulline)",0.29,"positive","nuetral",NA,NA
+"PWY-5156",-0.3396,0.4276,-1.177696,0.498496,-0.6280162,-0.0511838000000001,"superpathway of fatty acid biosynthesis II (plant)",0.296,"negative","nuetral",NA,NA
+"PWY-5180",0.1349,0.4323,-0.712408,0.982208,-0.15668635,0.42648635,"toluene degradation I (aerobic) (via o-cresol)",0.246,"positive","nuetral",NA,NA
+"PWY-5188",0.4082,0.1627,0.089308,0.727092,0.29845885,0.51794115,"tetrapyrrole biosynthesis I (from glutamate)",0.715,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY-5209",0.0147,0.4015,-0.77224,0.80164,-0.25611175,0.28551175,"methyl-coenzyme M oxidation to CO2",0.224,"positive","nuetral",NA,NA
+"PWY-5347",0.0026,0.1367,-0.265332,0.270532,-0.08960415,0.09480415,"superpathway of L-methionine biosynthesis (transsulfuration)",0.09,"positive","nuetral",NA,NA
+"PWY-5367",1.4412,0.4754,0.509416,2.372984,1.1205427,1.7618573,"petroselinate biosynthesis",0.965,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-5384",0.3929,0.2395,-0.0765199999999999,0.86232,0.23135725,0.55444275,"sucrose degradation IV (sucrose phosphorylase)",0.396,"positive","nuetral",NA,NA
+"PWY-5415",0.1878,0.3844,-0.565624,0.941224,-0.0714778,0.4470778,"catechol degradation I (meta-cleavage pathway)",0.237,"positive","nuetral",NA,NA
+"PWY-5417",-0.8103,0.3392,-1.475132,-0.145468,-1.0390904,-0.5815096,"catechol degradation III (ortho-cleavage pathway)",0.799,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY-5419",0.382,0.3069,-0.219524,0.983524,0.17499595,0.58900405,"catechol degradation to 2-hydroxypentadienoate II",0.322,"positive","nuetral",NA,NA
+"PWY-5420",0.3027,0.3379,-0.359584,0.964984,0.07478645,0.53061355,"catechol degradation II (meta-cleavage pathway)",0.266,"positive","nuetral",NA,NA
+"PWY-5430",0.129,0.3179,-0.494084,0.752084,-0.08542355,0.34342355,"meta cleavage pathway of aromatic compounds",0.199,"positive","nuetral",NA,NA
+"PWY-5431",-0.8103,0.3392,-1.475132,-0.145468,-1.0390904,-0.5815096,"aromatic compounds degradation via &beta;-ketoadipate",0.799,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY-5464",0.1914,0.7511,-1.280756,1.663556,-0.31521695,0.69801695,"superpathway of cytosolic glycolysis (plants), pyruvate dehydrogenase and TCA cycle",0.358,"positive","nuetral",NA,NA
+"PWY-5484",0.2032,0.24,-0.2672,0.6736,0.04132,0.36508,"glycolysis II (from fructose 6-phosphate)",0.198,"positive","nuetral",NA,NA
+"PWY-5494",-0.6361,0.4429,-1.504184,0.231984,-0.93483605,-0.33736395,"pyruvate fermentation to propanoate II (acrylate pathway)",0.465,"negative","nuetral",NA,NA
+"PWY-5497",0.3203,0.5853,-0.826888,1.467488,-0.07448485,0.71508485,"purine nucleobases degradation II (anaerobic)",0.328,"positive","nuetral",NA,NA
+"PWY-5514",0.1727,0.3537,-0.520552,0.865952,-0.06587065,0.41127065,"UDP-N-acetyl-D-galactosamine biosynthesis II",0.223,"positive","nuetral",NA,NA
+"PWY-5517",0.2199,0.3709,-0.507064,0.946864,-0.03027205,0.47007205,"L-arabinose degradation III",0.241,"positive","nuetral",NA,NA
+"PWY-561",-1.3047,0.7306,-2.736676,0.127276,-1.7974897,-0.8119103,"superpathway of glyoxylate cycle and fatty acid degradation",0.713,"negative","temp sensitive","lipid catabolism and remodeling","decreased catabolism and recycling"
+"PWY-5647",0.556,0.3443,-0.118828,1.230828,0.32376965,0.78823035,"2-nitrobenzoate degradation I",0.449,"positive","nuetral",NA,NA
+"PWY-5651",-0.2854,0.3332,-0.938472,0.367672,-0.5101434,-0.0606566,"L-tryptophan degradation to 2-amino-3-carboxymuconate semialdehyde",0.256,"negative","nuetral",NA,NA
+"PWY-5654",0.5573,0.3407,-0.110472,1.225072,0.32749785,0.78710215,"2-amino-3-carboxymuconate semialdehyde degradation to 2-hydroxypentadienoate",0.454,"positive","nuetral",NA,NA
+"PWY-5656",-0.7608,0.5653,-1.868788,0.347188,-1.14209485,-0.37950515,"mannosylglycerate biosynthesis I",0.502,"negative","temp sensitive","no group assignment",NA
+"PWY-5659",0.3087,0.2192,-0.120932,0.738332,0.1608496,0.4565504,"GDP-mannose biosynthesis",0.297,"positive","nuetral",NA,NA
+"PWY-5667",0.2885,0.1537,-0.012752,0.589752,0.18482935,0.39217065,"CDP-diacylglycerol biosynthesis I",0.388,"positive","nuetral",NA,NA
+"PWY-5675",-0.8676,0.5624,-1.969904,0.234704,-1.2469388,-0.4882612,"nitrate reduction V (assimilatory)",0.57,"negative","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","decreased aerobic metabolism"
+"PWY-5676",-1.6023,0.7173,-3.008208,-0.196392,-2.08611885,-1.11848115,"acetyl-CoA fermentation to butanoate II",0.856,"negative","temp sensitive","immune regulation","decrease anti-inflammatory signals"
+"PWY-5677",-0.4956,0.5676,-1.608096,0.616896,-0.8784462,-0.1127538,"succinate fermentation to butanoate",0.375,"negative","nuetral",NA,NA
+"PWY-5686",0.3101,0.1953,-0.072688,0.692888,0.17837015,0.44182985,"UMP biosynthesis I",0.326,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-5695",0.377,0.1816,0.021064,0.732936,0.2545108,0.4994892,"inosine 5'-phosphate degradation",0.522,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"
+"PWY-5705",0.2674,0.5832,-0.875672,1.410472,-0.1259684,0.6607684,"allantoin degradation to glyoxylate III",0.317,"positive","nuetral",NA,NA
+"PWY-5723",-1.2634,0.5609,-2.362764,-0.164036,-1.64172705,-0.88507295,"Rubisco shunt",0.821,"negative","temp sensitive","no group assignment",NA
+"PWY-5733",0.0034,0.4181,-0.816076,0.822876,-0.27860845,0.28540845,"germacrene biosynthesis",0.231,"positive","nuetral",NA,NA
+"PWY-5741",-0.1847,0.3536,-0.877756,0.508356,-0.4232032,0.0538032,"ethylmalonyl-CoA pathway",0.226,"negative","nuetral",NA,NA
+"PWY-5747",0.1098,0.6647,-1.193012,1.412612,-0.33854015,0.55814015,"2-methylcitrate cycle II",0.326,"positive","nuetral",NA,NA
+"PWY-5840",-0.2423,0.8062,-1.822452,1.337852,-0.7860819,0.3014819,"superpathway of menaquinol-7 biosynthesis",0.378,"negative","nuetral",NA,NA
+"PWY-5845",-0.7878,0.8578,-2.469088,0.893488,-1.3663861,-0.2092139,"superpathway of menaquinol-9 biosynthesis",0.485,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-5850",-0.2208,0.8226,-1.833096,1.391496,-0.7756437,0.3340437,"superpathway of menaquinol-6 biosynthesis",0.38,"negative","nuetral",NA,NA
+"PWY-5855",-0.3852,0.5757,-1.513572,0.743172,-0.77350965,0.00310965000000002,"ubiquinol-7 biosynthesis (early decarboxylation)",0.341,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-5860",-0.2233,0.7761,-1.744456,1.297856,-0.74677945,0.30017945,"superpathway of demethylmenaquinol-6 biosynthesis I",0.368,"negative","nuetral",NA,NA
+"PWY-5862",-0.7496,0.8066,-2.330536,0.831336,-1.2936517,-0.2055483,"superpathway of demethylmenaquinol-9 biosynthesis",0.472,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-5870",-0.1323,0.5422,-1.195012,0.930412,-0.4980139,0.2334139,"ubiquinol-8 biosynthesis (late decarboxylation)",0.287,"negative","nuetral",NA,NA
+"PWY-5873",-0.3943,0.5994,-1.569124,0.780524,-0.7985953,0.00999530000000004,"ubiquinol-7 biosynthesis (late decarboxylation)",0.349,"negative","nuetral",NA,NA
+"PWY-5896",0.6943,0.8293,-0.931128,2.319728,0.13493715,1.25366285,"superpathway of menaquinol-10 biosynthesis",0.457,"positive","nuetral",NA,NA
+"PWY-5910",1.3998,0.6493,0.127172,2.672428,0.96184715,1.83775285,"superpathway of geranylgeranyldiphosphate biosynthesis I (via mevalonate)",0.809,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-5913",0.3194,0.2468,-0.164328,0.803128,0.1529334,0.4858666,"partial TCA cycle (obligate autotrophs)",0.291,"positive","nuetral",NA,NA
+"PWY-5918",-0.0009,0.3552,-0.697092,0.695292,-0.2404824,0.2386824,"superpathway of heme b biosynthesis from glutamate",0.203,"negative","nuetral",NA,NA
+"PWY-5941",0.3796,0.2305,-0.07218,0.83138,0.22412775,0.53507225,"glycogen degradation II",0.389,"positive","nuetral","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"PWY-5971",1.4377,0.5543,0.351272,2.524128,1.06382465,1.81157535,"palmitate biosynthesis (type II fatty acid synthase)",0.911,"positive","temp sensitive","no group assignment",NA
+"PWY-5973",0.4016,0.1596,0.088784,0.714416,0.2939498,0.5092502,"cis-vaccenate biosynthesis",0.7,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-5989",0.3054,0.1457,0.019828,0.590972,0.20712535,0.40367465,"stearate biosynthesis II (bacteria and plants)",0.477,"positive","nuetral","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-5994",0.0155,0.5087,-0.981552,1.012552,-0.32761815,0.35861815,"palmitate biosynthesis (type I fatty acid synthase)",0.268,"positive","nuetral",NA,NA
+"PWY-6060",0.1559,0.3334,-0.497564,0.809364,-0.0689783,0.3807783,"malonate degradation II (biotin-dependent)",0.21,"positive","nuetral",NA,NA
+"PWY-6084",0.0936,0.2959,-0.486364,0.673564,-0.10598455,0.29318455,"3,5-dichlorocatechol degradation",0.183,"positive","nuetral",NA,NA
+"PWY-6087",0.437,0.3517,-0.252332,1.126332,0.19977835,0.67422165,"4-chlorocatechol degradation",0.347,"positive","nuetral",NA,NA
+"PWY-6089",0.437,0.3517,-0.252332,1.126332,0.19977835,0.67422165,"3-chlorocatechol degradation I (ortho)",0.347,"positive","nuetral",NA,NA
+"PWY-6093",0.427,0.339,-0.23744,1.09144,0.1983445,0.6556555,"4,5-dichlorocatechol degradation",0.343,"positive","nuetral",NA,NA
+"PWY-6121",0.4668,0.1939,0.086756,0.846844,0.33601445,0.59758555,"5-aminoimidazole ribonucleotide biosynthesis I",0.696,"positive","temp sensitive","no group assignment",NA
+"PWY-6122",0.4156,0.1946,0.034184,0.797016,0.2843423,0.5468577,"5-aminoimidazole ribonucleotide biosynthesis II",0.566,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6123",0.2763,0.2054,-0.126284,0.678884,0.1377577,0.4148423,"inosine-5'-phosphate biosynthesis I",0.263,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6124",0.2567,0.1983,-0.131968,0.645368,0.12294665,0.39045335,"inosine-5'-phosphate biosynthesis II",0.243,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6125",0.4542,0.2372,-0.010712,0.919112,0.2942086,0.6141914,"superpathway of guanosine nucleotides de novo biosynthesis II",0.496,"positive","nuetral",NA,NA
+"PWY-6138",0.1579,0.4706,-0.764476,1.080276,-0.1595197,0.4753197,"CMP-N-acetylneuraminate biosynthesis I (eukaryotes)",0.264,"positive","nuetral",NA,NA
+"PWY-6143",1.036,0.6222,-0.183512,2.255512,0.6163261,1.4556739,"CMP-pseudaminate biosynthesis",0.622,"positive","temp sensitive","no group assignment",NA
+"PWY-6147",-0.052,0.3732,-0.783472,0.679472,-0.3037234,0.1997234,"6-hydroxymethyl-dihydropterin diphosphate biosynthesis I",0.213,"negative","nuetral",NA,NA
+"PWY-6151",0.2987,0.1832,-0.060372,0.657772,0.1751316,0.4222684,"S-adenosyl-L-methionine salvage I",0.331,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6163",0.2687,0.1943,-0.112128,0.649528,0.13764465,0.39975535,"chorismate biosynthesis from 3-dehydroquinate",0.265,"positive","nuetral",NA,NA
+"PWY-6168",-1.2275,0.8344,-2.862924,0.407924,-1.7903028,-0.6646972,"flavin biosynthesis III (fungi)",0.636,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY-6182",-0.5417,0.3139,-1.156944,0.073544,-0.75342555,-0.32997445,"superpathway of salicylate degradation",0.495,"negative","nuetral",NA,NA
+"PWY-6185",-0.4673,0.372,-1.19642,0.26182,-0.718214,-0.216386,"4-methylcatechol degradation (ortho cleavage)",0.369,"negative","nuetral",NA,NA
+"PWY-6193",0.437,0.3517,-0.252332,1.126332,0.19977835,0.67422165,"3-chlorocatechol degradation II (ortho)",0.347,"positive","nuetral",NA,NA
+"PWY-6210",0.5544,0.3403,-0.112588,1.221388,0.32486765,0.78393235,"2-aminophenol degradation",0.452,"positive","nuetral",NA,NA
+"PWY-6215",0.4177,0.3034,-0.176964,1.012364,0.2130567,0.6223433,"4-chlorobenzoate degradation",0.359,"positive","nuetral",NA,NA
+"PWY-621",0.384,0.3413,-0.284948,1.052948,0.15379315,0.61420685,"sucrose degradation III (sucrose invertase)",0.317,"positive","nuetral",NA,NA
+"PWY-622",1.5749,0.6334,0.333436,2.816364,1.1476717,2.0021283,"starch biosynthesis",0.9,"positive","temp sensitive","no group assignment",NA
+"PWY-6263",0.0706,0.363,-0.64088,0.78208,-0.1742435,0.3154435,"superpathway of menaquinol-8 biosynthesis II",0.21,"positive","nuetral",NA,NA
+"PWY-6269",-0.5717,0.6479,-1.841584,0.698184,-1.00870855,-0.13469145,"superpathway of adenosylcobalamin salvage from cobinamide II",0.408,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-6270",-0.2072,0.6157,-1.413972,0.999572,-0.62248965,0.20808965,"isoprene biosynthesis I",0.319,"negative","nuetral",NA,NA
+"PWY-6277",0.4156,0.1946,0.034184,0.797016,0.2843423,0.5468577,"superpathway of 5-aminoimidazole ribonucleotide biosynthesis",0.566,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6282",0.432,0.1506,0.136824,0.727176,0.3304203,0.5335797,"palmitoleate biosynthesis I (from (5Z)-dodec-5-enoate)",0.844,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-6284",1.4315,0.4986,0.454244,2.408756,1.0951943,1.7678057,"superpathway of unsaturated fatty acids biosynthesis (E. coli)",0.95,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-6285",1.257,0.5862,0.108048,2.405952,0.8616081,1.6523919,"superpathway of fatty acids biosynthesis (E. coli)",0.801,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-6307",-0.1131,0.3534,-0.805764,0.579564,-0.3514683,0.1252683,"L-tryptophan degradation X (mammalian, via tryptamine)",0.211,"negative","nuetral",NA,NA
+"PWY-6313",0.1511,0.3387,-0.512752,0.814952,-0.07735315,0.37955315,"serotonin degradation",0.212,"positive","nuetral",NA,NA
+"PWY-6317",0.4118,0.1702,0.078208,0.745392,0.2970001,0.5265999,"D-galactose degradation I (Leloir pathway)",0.68,"positive","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","increased anerobic metabolism"
+"PWY-6318",-0.4566,0.4291,-1.297636,0.384436,-0.74602795,-0.16717205,"L-phenylalanine degradation IV (mammalian, via side chain)",0.351,"negative","nuetral",NA,NA
+"PWY-6328",-0.3395,0.5609,-1.438864,0.759864,-0.71782705,0.0388270499999999,"L-lysine degradation X",0.326,"negative","nuetral",NA,NA
+"PWY-6344",0.1012,0.3545,-0.59362,0.79602,-0.13791025,0.34031025,"L-arginine degradation XIV (oxidative Stickland reaction)",0.21,"positive","nuetral",NA,NA
+"PWY-6353",0.5555,0.5425,-0.5078,1.6188,0.18958375,0.92141625,"purine nucleotides degradation II (aerobic)",0.397,"positive","nuetral",NA,NA
+"PWY-6383",0.6124,0.3363,-0.0467479999999999,1.271548,0.38556565,0.83923435,"mono-trans, poly-cis decaprenyl phosphate biosynthesis",0.527,"positive","temp sensitive","no group assignment",NA
+"PWY-6385",0.2418,0.1717,-0.094732,0.578332,0.12598835,0.35761165,"peptidoglycan biosynthesis III (mycobacteria)",0.25,"positive","nuetral",NA,NA
+"PWY-6386",0.2336,0.2006,-0.159576,0.626776,0.0982953,0.3689047,"UDP-N-acetylmuramoyl-pentapeptide biosynthesis II (lysine-containing)",0.222,"positive","nuetral",NA,NA
+"PWY-6387",0.2277,0.1749,-0.115104,0.570504,0.10972995,0.34567005,"UDP-N-acetylmuramoyl-pentapeptide biosynthesis I (meso-diaminopimelate containing)",0.227,"positive","nuetral",NA,NA
+"PWY-6396",0.1674,0.3683,-0.554468,0.889268,-0.08101835,0.41581835,"superpathway of 2,3-butanediol biosynthesis",0.227,"positive","nuetral",NA,NA
+"PWY-6421",0.1287,0.3181,-0.494776,0.752176,-0.08585845,0.34325845,"arsenate detoxification IV (mycothiol)",0.199,"positive","nuetral",NA,NA
+"PWY-6435",0.3892,0.5834,-0.754264,1.532664,-0.00430330000000001,0.7827033,"4-hydroxybenzoate biosynthesis III (plants)",0.344,"positive","nuetral",NA,NA
+"PWY-6467",0.2802,0.4395,-0.58122,1.14162,-0.01624275,0.57664275,"Kdo transfer to lipid IVA III (Chlamydia)",0.278,"positive","nuetral",NA,NA
+"PWY-6470",0.8268,0.8965,-0.93034,2.58394,0.22211075,1.43148925,"peptidoglycan biosynthesis V (&beta;-lactam resistance)",0.497,"positive","nuetral",NA,NA
+"PWY-6471",-0.0086,0.4921,-0.973116,0.955916,-0.34052145,0.32332145,"peptidoglycan biosynthesis IV (Enterococcus faecium)",0.261,"negative","nuetral",NA,NA
+"PWY-6486",0.4864,0.3833,-0.264868,1.237668,0.22786415,0.74493585,"D-galacturonate degradation II",0.374,"positive","nuetral",NA,NA
+"PWY-6501",0.2099,0.3568,-0.489428,0.909228,-0.0307616,0.4505616,"D-glucuronate degradation II",0.234,"positive","nuetral",NA,NA
+"PWY-6527",0.3306,0.1847,-0.031412,0.692612,0.20601985,0.45518015,"stachyose degradation",0.394,"positive","nuetral",NA,NA
+"PWY-6531",-0.3088,0.6098,-1.504008,0.886408,-0.7201101,0.1025101,"mannitol cycle",0.332,"negative","nuetral",NA,NA
+"PWY-6562",-0.4587,0.654,-1.74054,0.82314,-0.899823,-0.017577,"norspermidine biosynthesis",0.371,"negative","nuetral",NA,NA
+"PWY-6572",-0.9522,0.6767,-2.278532,0.374132,-1.40863415,-0.49576585,"chondroitin sulfate degradation I (bacterial)",0.567,"negative","temp sensitive","no group assignment",NA
+"PWY-6583",-0.8496,0.637,-2.09812,0.39892,-1.2792565,-0.4199435,"pyruvate fermentation to butanol I",0.527,"negative","temp sensitive","no group assignment",NA
+"PWY-6588",0.1892,0.3259,-0.449564,0.827964,-0.03061955,0.40901955,"pyruvate fermentation to acetone",0.216,"positive","nuetral",NA,NA
+"PWY-6594",-1.1097,0.5901,-2.266296,0.046896,-1.50772245,-0.71167755,"superpathway of Clostridium acetobutylicum solventogenic fermentation",0.709,"negative","temp sensitive","no group assignment",NA
+"PWY-6595",-0.3762,0.7038,-1.755648,1.003248,-0.8509131,0.0985131,"superpathway of guanosine nucleotides degradation (plants)",0.368,"negative","nuetral",NA,NA
+"PWY-6596",1.1418,0.5766,0.0116639999999999,2.271936,0.7528833,1.5307167,"adenosine nucleotides degradation I",0.741,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6604",-0.9879,0.5569,-2.079424,0.103624,-1.36352905,-0.61227095,"superpathway of Clostridium acetobutylicum acidogenic and solventogenic fermentation",0.651,"negative","temp sensitive","no group assignment",NA
+"PWY-6606",-0.1307,0.5519,-1.212424,0.951024,-0.50295655,0.24155655,"guanosine nucleotides degradation II",0.29,"negative","nuetral",NA,NA
+"PWY-6607",-0.1214,0.693,-1.47968,1.23688,-0.5888285,0.3460285,"guanosine nucleotides degradation I",0.336,"negative","nuetral",NA,NA
+"PWY-6609",0.4175,0.1903,0.044512,0.790488,0.28914265,0.54585735,"adenine and adenosine salvage III",0.591,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6612",-0.213,0.4835,-1.16066,0.73466,-0.53912075,0.11312075,"superpathway of tetrahydrofolate biosynthesis",0.277,"negative","nuetral",NA,NA
+"PWY-6629",0.4295,0.2459,-0.052464,0.911464,0.26364045,0.59535955,"superpathway of L-tryptophan biosynthesis",0.445,"positive","nuetral",NA,NA
+"PWY-6641",-0.2733,0.3128,-0.886388,0.339788,-0.4842836,-0.0623164,"superpathway of sulfolactate degradation",0.248,"negative","nuetral",NA,NA
+"PWY-6690",-0.8934,0.5347,-1.941412,0.154612,-1.25405515,-0.53274485,"cinnamate and 3-hydroxycinnamate degradation to 2-hydroxypentadienoate",0.606,"negative","temp sensitive","no group assignment",NA
+"PWY-6700",0.5851,0.2235,0.14704,1.02316,0.43434925,0.73585075,"queuosine biosynthesis I (de novo)",0.817,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6703",0.3308,0.2132,-0.087072,0.748672,0.1869966,0.4746034,"preQ0 biosynthesis",0.336,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-6708",-0.2465,0.6046,-1.431516,0.938516,-0.6543027,0.1613027,"ubiquinol-8 biosynthesis (early decarboxylation)",0.321,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-6731",-0.6606,0.5623,-1.762708,0.441508,-1.03987135,-0.28132865,"starch degradation III",0.446,"negative","nuetral","oxygen-driven metabolism and carbohydrate fermentation","decreased complex carbohydrate fermentation"
+"PWY-6803",-0.4919,0.3866,-1.249636,0.265836,-0.7526617,-0.2311383,"phosphatidylcholine acyl editing",0.381,"negative","nuetral",NA,NA
+"PWY-6807",-0.9247,0.6641,-2.226336,0.376936,-1.37263545,-0.47676455,"xyloglucan degradation II (exoglucanase)",0.557,"negative","temp sensitive","no group assignment",NA
+"PWY-6834",0.086,0.3485,-0.59706,0.76906,-0.14906325,0.32106325,"spermidine biosynthesis III",0.205,"positive","nuetral",NA,NA
+"PWY-6837",0.2147,0.3674,-0.505404,0.934804,-0.0331113,0.4625113,"fatty acid &beta;-oxidation V (unsaturated, odd number, di-isomerase-dependent)",0.238,"positive","nuetral",NA,NA
+"PWY-6859",0.3319,0.5683,-0.781968,1.445768,-0.0514183500000001,0.71521835,"all-trans-farnesol biosynthesis",0.326,"positive","nuetral",NA,NA
+"PWY-6873",0.0899,0.2904,-0.479284,0.659084,-0.1059748,0.2857748,"long chain fatty acid ester synthesis (engineered)",0.18,"positive","nuetral",NA,NA
+"PWY-6883",-0.2346,0.4954,-1.205584,0.736384,-0.5687473,0.0995473,"pyruvate fermentation to butanol II (engineered)",0.284,"negative","nuetral",NA,NA
+"PWY-6892",-0.5144,0.5303,-1.553788,0.524988,-0.87208735,-0.15671265,"thiazole component of thiamine diphosphate biosynthesis I",0.378,"negative","nuetral",NA,NA
+"PWY-6897",0.4051,0.3004,-0.183684,0.993884,0.2024802,0.6077198,"thiamine diphosphate salvage II",0.345,"positive","nuetral",NA,NA
+"PWY-6901",-0.3035,0.3389,-0.967744,0.360744,-0.53208805,-0.07491195,"superpathway of glucose and xylose degradation",0.266,"negative","nuetral",NA,NA
+"PWY-6902",-1.722,0.5693,-2.837828,-0.606172,-2.10599285,-1.33800715,"chitin degradation II (Vibrio)",0.97,"negative","temp sensitive","no group assignment",NA
+"PWY-6906",-1.0132,0.6827,-2.351292,0.324892,-1.47368115,-0.55271885,"chitin derivatives degradation",0.589,"negative","temp sensitive","no group assignment",NA
+"PWY-6920",-0.0076,0.3612,-0.715552,0.700352,-0.2512294,0.2360294,"6-gingerol analog biosynthesis (engineered)",0.206,"negative","nuetral",NA,NA
+"PWY-6922",-1.2221,0.6091,-2.415936,-0.0282640000000001,-1.63293795,-0.81126205,"L-N&delta;-acetylornithine biosynthesis",0.753,"negative","temp sensitive","no group assignment",NA
+"PWY-6936",0.4839,0.1337,0.221848,0.745952,0.39371935,0.57408065,"seleno-amino acid biosynthesis (plants)",0.977,"positive","temp sensitive","no group assignment",NA
+"PWY-6961",-0.4409,0.681,-1.77566,0.89386,-0.9002345,0.0184345,"L-ascorbate degradation II (bacterial, aerobic)",0.376,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-6969",0.3689,0.2624,-0.145404,0.883204,0.1919112,0.5458888,"TCA cycle V (2-oxoglutarate synthase)",0.331,"positive","nuetral",NA,NA
+"PWY-6986",-0.012,0.3848,-0.766208,0.742208,-0.2715476,0.2475476,"alginate degradation",0.217,"negative","nuetral",NA,NA
+"PWY-6992",-0.5442,0.5875,-1.6957,0.6073,-0.94046875,-0.14793125,"1,5-anhydrofructose degradation",0.388,"negative","nuetral",NA,NA
+"PWY-7000",-0.0148,0.4129,-0.824084,0.794484,-0.29330105,0.26370105,"kanamycin biosynthesis",0.229,"negative","nuetral",NA,NA
+"PWY-7009",0.4836,0.3195,-0.14262,1.10982,0.26809725,0.69910275,"2,2'-dihydroxybiphenyl degradation",0.405,"positive","nuetral",NA,NA
+"PWY-7013",0.2613,0.6948,-1.100508,1.623108,-0.2073426,0.7299426,"(S)-propane-1,2-diol degradation",0.349,"positive","nuetral",NA,NA
+"PWY-7031",0.8143,0.6067,-0.374832,2.003432,0.40508085,1.22351915,"protein N-glycosylation (bacterial)",0.508,"positive","temp sensitive","no group assignment",NA
+"PWY-7039",-0.2213,0.3951,-0.995696,0.553096,-0.48779495,0.04519495,"phosphatidate metabolism, as a signaling molecule",0.249,"negative","nuetral",NA,NA
+"PWY-7072",-0.0218,0.2982,-0.606272,0.562672,-0.2229359,0.1793359,"hopanoid biosynthesis (bacteria)",0.177,"negative","nuetral",NA,NA
+"PWY-7094",-0.8866,0.724,-2.30564,0.53244,-1.374938,-0.398262,"fatty acid salvage",0.523,"negative","temp sensitive","lipid catabolism and remodeling","decreased catabolism and recycling"
+"PWY-7098",-0.1886,0.3574,-0.889104,0.511904,-0.4296663,0.0524663,"vanillin and vanillate degradation II",0.228,"negative","nuetral",NA,NA
+"PWY-7111",0.3437,0.1539,0.042056,0.645344,0.23989445,0.44750555,"pyruvate fermentation to isobutanol (engineered)",0.554,"positive","temp sensitive","no group assignment",NA
+"PWY-7118",-0.9929,0.5918,-2.152828,0.167028,-1.3920691,-0.5937309,"chitin deacetylation",0.631,"negative","temp sensitive","no group assignment",NA
+"PWY-7124",-0.229,0.5386,-1.284656,0.826656,-0.5922857,0.1342857,"ethene biosynthesis V (engineered)",0.297,"negative","nuetral",NA,NA
+"PWY-7159",-0.9426,0.4437,-1.812252,-0.072948,-1.24187565,-0.64332435,"3,8-divinyl-chlorophyllide a biosynthesis III (aerobic, light independent)",0.743,"negative","temp sensitive","no group assignment",NA
+"PWY-7184",0.0427,0.2751,-0.496496,0.581896,-0.14285495,0.22825495,"pyrimidine deoxyribonucleotides de novo biosynthesis I",0.167,"positive","nuetral",NA,NA
+"PWY-7187",0.4169,0.7176,-0.989596,1.823396,-0.0671212,0.9009212,"pyrimidine deoxyribonucleotides de novo biosynthesis II",0.379,"positive","nuetral",NA,NA
+"PWY-7199",0.2379,0.2153,-0.184088,0.659888,0.09268015,0.38311985,"pyrimidine deoxyribonucleosides salvage",0.222,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-7200",-1.2905,0.5106,-2.291276,-0.289724,-1.6348997,-0.9461003,"superpathway of pyrimidine deoxyribonucleoside salvage",0.892,"negative","temp sensitive","no group assignment",NA
+"PWY-7204",-0.7864,0.7658,-2.287368,0.714568,-1.3029321,-0.2698679,"pyridoxal 5'-phosphate salvage II (plants)",0.483,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-7209",-0.5656,0.4375,-1.4231,0.2919,-0.86069375,-0.27050625,"superpathway of pyrimidine ribonucleosides degradation",0.419,"negative","nuetral",NA,NA
+"PWY-7220",0.5137,0.2407,0.0419280000000001,0.985472,0.35134785,0.67605215,"adenosine deoxyribonucleotides de novo biosynthesis II",0.597,"positive","temp sensitive","no group assignment",NA
+"PWY-7221",0.3344,0.1843,-0.026828,0.695628,0.21008965,0.45871035,"guanosine ribonucleotides de novo biosynthesis",0.403,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-7222",0.5137,0.2407,0.0419280000000001,0.985472,0.35134785,0.67605215,"guanosine deoxyribonucleotides de novo biosynthesis II",0.597,"positive","temp sensitive","no group assignment",NA
+"PWY-722",0.1836,0.3298,-0.462808,0.830008,-0.0388501,0.4060501,"nicotinate degradation I",0.217,"positive","nuetral",NA,NA
+"PWY-7234",0.4015,0.2214,-0.032444,0.835444,0.2521657,0.5508343,"inosine-5'-phosphate biosynthesis III",0.448,"positive","nuetral",NA,NA
+"PWY-7237",1.8879,0.8307,0.259728,3.516072,1.32759285,2.44820715,"myo-, chiro- and scyllo-inositol degradation",0.867,"positive","temp sensitive","no group assignment",NA
+"PWY-7242",0.8511,0.3881,0.090424,1.611776,0.58932655,1.11287345,"D-fructuronate degradation",0.72,"positive","temp sensitive","no group assignment",NA
+"PWY-7245",-0.2435,0.3804,-0.989084,0.502084,-0.5000798,0.0130798,"superpathway of NAD/NADP - NADH/NADPH interconversion (yeast)",0.25,"negative","nuetral",NA,NA
+"PWY-7268",-0.1943,0.4366,-1.050036,0.661436,-0.4887867,0.1001867,"cytosolic NADPH production (yeast)",0.257,"negative","nuetral",NA,NA
+"PWY-7269",-0.4344,0.7408,-1.886368,1.017568,-0.9340696,0.0652696,"mitochondrial NADPH production (yeast)",0.388,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-7279",-0.6005,0.7223,-2.016208,0.815208,-1.08769135,-0.11330865,"aerobic respiration II (cytochrome c) (yeast)",0.424,"negative","nuetral",NA,NA
+"PWY-7282",0.2778,0.3185,-0.34646,0.90206,0.06297175,0.49262825,"4-amino-2-methyl-5-diphosphomethylpyrimidine biosynthesis II",0.25,"positive","nuetral",NA,NA
+"PWY-7295",-0.2227,0.4107,-1.027672,0.582272,-0.49971715,0.05431715,"L-arabinose degradation IV",0.254,"negative","nuetral",NA,NA
+"PWY-7312",-0.2237,0.366,-0.94106,0.49366,-0.470567,0.023167,"dTDP-&beta;-D-fucofuranose biosynthesis",0.241,"negative","nuetral",NA,NA
+"PWY-7316",-2.2112,0.6442,-3.473832,-0.948568,-2.6457129,-1.7766871,"dTDP-N-acetylviosamine biosynthesis",0.991,"negative","temp sensitive","no group assignment",NA
+"PWY-7317",-0.3637,0.4329,-1.212184,0.484784,-0.65569105,-0.07170895,"superpathway of dTDP-glucose-derived O-antigen building blocks biosynthesis",0.306,"negative","nuetral",NA,NA
+"PWY-7328",0.3061,0.3111,-0.303656,0.915856,0.09626305,0.51593695,"superpathway of UDP-glucose-derived O-antigen building blocks biosynthesis",0.263,"positive","nuetral",NA,NA
+"PWY-7332",-0.2946,0.4014,-1.081344,0.492144,-0.5653443,-0.0238557,"superpathway of UDP-N-acetylglucosamine-derived O-antigen building blocks biosynthesis",0.274,"negative","nuetral",NA,NA
+"PWY-7345",-0.0619,0.4206,-0.886276,0.762476,-0.3455947,0.2217947,"superpathway of anaerobic sucrose degradation",0.234,"negative","nuetral",NA,NA
+"PWY-7347",0.1619,0.4058,-0.633468,0.957268,-0.1118121,0.4356121,"sucrose biosynthesis III",0.24,"positive","nuetral",NA,NA
+"PWY-7356",1.5674,0.6316,0.329464,2.805336,1.1413858,1.9934142,"thiamine diphosphate salvage IV (yeast)",0.9,"positive","temp sensitive","no group assignment",NA
+"PWY-7357",0.4972,0.2947,-0.080412,1.074812,0.29842485,0.69597515,"thiamine phosphate formation from pyrithiamine and oxythiamine (yeast)",0.464,"positive","nuetral",NA,NA
+"PWY-7371",0.8241,0.608,-0.36758,2.01578,0.414004,1.234196,"1,4-dihydroxy-6-naphthoate biosynthesis II",0.506,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY-7373",-1.0888,0.5284,-2.124464,-0.0531360000000001,-1.4452058,-0.7323942,"superpathway of demethylmenaquinol-6 biosynthesis II",0.755,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY-7374",0.0296,0.3397,-0.636212,0.695412,-0.19952765,0.25872765,"1,4-dihydroxy-6-naphthoate biosynthesis I",0.197,"positive","nuetral",NA,NA
+"PWY-7377",-0.4808,0.4969,-1.454724,0.493124,-0.81595905,-0.14564095,"cob(II)yrinate a,c-diamide biosynthesis I (early cobalt insertion)",0.363,"negative","nuetral",NA,NA
+"PWY-7383",-0.2309,0.7128,-1.627988,1.166188,-0.7116836,0.2498836,"anaerobic energy metabolism (invertebrates, cytosol)",0.351,"negative","nuetral",NA,NA
+"PWY-7384",0.4322,0.6384,-0.819064,1.683464,0.00159920000000002,0.8628008,"anaerobic energy metabolism (invertebrates, mitochondrial)",0.365,"positive","nuetral",NA,NA
+"PWY-7385",-0.1498,0.6751,-1.472996,1.173396,-0.60515495,0.30555495,"1,3-propanediol biosynthesis (engineered)",0.332,"negative","nuetral",NA,NA
+"PWY-7388",-0.2396,0.6672,-1.547312,1.068112,-0.6896264,0.2104264,"octanoyl-[acyl-carrier protein] biosynthesis (mitochondria, yeast)",0.338,"negative","nuetral",NA,NA
+"PWY-7391",0.7539,0.6198,-0.460908,1.968708,0.3358449,1.1719551,"isoprene biosynthesis II (engineered)",0.472,"positive","nuetral",NA,NA
+"PWY-7392",1.583,0.7083,0.194732,2.971268,1.10525165,2.06074835,"taxadiene biosynthesis (engineered)",0.854,"positive","temp sensitive","no group assignment",NA
+"PWY-7396",-0.045,0.5019,-1.028724,0.938724,-0.38353155,0.29353155,"butanol and isobutanol biosynthesis (engineered)",0.266,"negative","nuetral",NA,NA
+"PWY-7399",0.2219,0.3435,-0.45136,0.89516,-0.00979075000000001,0.45359075,"methylphosphonate degradation II",0.233,"positive","nuetral",NA,NA
+"PWY-7400",0.4656,0.3024,-0.127104,1.058304,0.2616312,0.6695688,"L-arginine biosynthesis IV (archaebacteria)",0.415,"positive","nuetral",NA,NA
+"PWY-7409",-0.2404,0.549,-1.31644,0.83564,-0.6107005,0.1299005,"phospholipid remodeling (phosphatidylethanolamine, yeast)",0.303,"negative","nuetral",NA,NA
+"PWY-7411",0.5279,0.4205,-0.29628,1.35208,0.24427275,0.81152725,"phosphatidate biosynthesis (yeast)",0.391,"positive","nuetral",NA,NA
+"PWY-7413",0.429,0.3681,-0.292476,1.150476,0.18071655,0.67728345,"dTDP-6-deoxy-&alpha;-D-allose biosynthesis",0.337,"positive","nuetral",NA,NA
+"PWY-7431",0.1507,0.3382,-0.512172,0.813572,-0.0774159,0.3788159,"aromatic biogenic amine degradation (bacteria)",0.212,"positive","nuetral",NA,NA
+"PWY-7434",-0.0101,0.3004,-0.598884,0.578684,-0.2127198,0.1925198,"terminal O-glycans residues modification (via type 2 precursor disaccharide)",0.178,"negative","nuetral",NA,NA
+"PWY-7446",-1.0721,0.6561,-2.358056,0.213856,-1.51463945,-0.62956055,"sulfoquinovose degradation I",0.639,"negative","temp sensitive","no group assignment",NA
+"PWY-7456",-0.5008,0.7434,-1.957864,0.956264,-1.0022233,0.000623299999999882,"&beta;-(1,4)-mannan degradation",0.402,"negative","nuetral",NA,NA
+"PWY-7480",0.5559,0.3164,-0.0642440000000001,1.176044,0.3424882,0.7693118,"2,3-dihydroxybenzoate degradation",0.485,"positive","nuetral",NA,NA
+"PWY-7511",-0.2216,0.4086,-1.022456,0.579256,-0.4972007,0.0540007,"protein ubiquitination",0.253,"negative","nuetral",NA,NA
+"PWY-7527",0.1044,0.3388,-0.559648,0.768448,-0.1241206,0.3329206,"L-methionine salvage cycle III",0.204,"positive","nuetral",NA,NA
+"PWY-7560",0.3137,0.2051,-0.088296,0.715696,0.17536005,0.45203995,"methylerythritol phosphate pathway II",0.321,"positive","nuetral",NA,NA
+"PWY-7616",-1.0039,0.4506,-1.887076,-0.120724,-1.3078297,-0.6999703,"methanol oxidation to carbon dioxide",0.787,"negative","temp sensitive","oxygen-driven metabolism and carbohydrate fermentation","decreased aerobic metabolism"
+"PWY-7663",0.3857,0.1493,0.093072,0.678328,0.28499715,0.48640285,"gondoate biosynthesis (anaerobic)",0.728,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-7664",0.4197,0.1509,0.123936,0.715464,0.31791795,0.52148205,"oleate biosynthesis IV (anaerobic)",0.815,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-7698",0.0162,0.3447,-0.659412,0.691812,-0.21630015,0.24870015,"2,5-xylenol and 3,5-xylenol degradation",0.199,"positive","nuetral",NA,NA
+"PWY-7723",-0.2803,0.3729,-1.011184,0.450584,-0.53182105,-0.02877895,"bacterial bioluminescence",0.263,"negative","nuetral",NA,NA
+"PWY-7731",-0.1798,0.8471,-1.840116,1.480516,-0.75116895,0.39156895,"superpathway of photosynthetic hydrogen production",0.384,"negative","nuetral",NA,NA
+"PWY-7761",-0.2518,0.4911,-1.214356,0.710756,-0.58304695,0.07944695,"NAD salvage pathway II (PNC IV cycle)",0.287,"negative","nuetral",NA,NA
+"PWY-7783",0.0529,0.3954,-0.722084,0.827884,-0.2137973,0.3195973,"plasmalogen degradation",0.223,"positive","nuetral",NA,NA
+"PWY-7790",0.3696,0.1954,-0.013384,0.752584,0.2378027,0.5013973,"UMP biosynthesis II",0.447,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-7791",0.3675,0.2017,-0.027832,0.762832,0.23145335,0.50354665,"UMP biosynthesis III",0.423,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY-7805",-0.852,0.6661,-2.157556,0.453556,-1.30128445,-0.40271555,"(aminomethyl)phosphonate degradation",0.521,"negative","temp sensitive","no group assignment",NA
+"PWY-7807",-1.0949,0.6626,-2.393596,0.203796,-1.5418237,-0.6479763,"glyphosate degradation III",0.648,"negative","temp sensitive","no group assignment",NA
+"PWY-7820",-0.1896,0.3551,-0.885596,0.506396,-0.42911495,0.04991495,"teichuronic acid biosynthesis (B. subtilis 168)",0.227,"negative","nuetral",NA,NA
+"PWY-7822",0.3326,0.4302,-0.510592,1.175792,0.0424301,0.6227699,"chitin degradation III (Serratia)",0.293,"positive","nuetral",NA,NA
+"PWY-7831",-0.117,0.3305,-0.76478,0.53078,-0.33992225,0.10592225,"ABH and Lewis epitopes biosynthesis from type 2 precursor disaccharide",0.202,"negative","nuetral",NA,NA
+"PWY-7851",0.3074,0.2224,-0.128504,0.743304,0.1573912,0.4574088,"coenzyme A biosynthesis II (eukaryotic)",0.294,"positive","nuetral",NA,NA
+"PWY-7854",-0.3672,0.418,-1.18648,0.45208,-0.649141,-0.085259,"crotonyl-CoA/ethylmalonyl-CoA/hydroxybutyryl-CoA cycle (engineered)",0.307,"negative","nuetral",NA,NA
+"PWY-7858",0.176,0.4323,-0.671308,1.023308,-0.11558635,0.46758635,"(5Z)-dodecenoate biosynthesis II",0.253,"positive","nuetral",NA,NA
+"PWY-7873",1.337,0.591,0.17864,2.49536,0.9383705,1.7356295,"D-erythronate degradation II",0.834,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY-7874",1.0463,0.6735,-0.27376,2.36636,0.59202425,1.50057575,"L-threonate degradation",0.609,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY-7883",-1.1001,0.6835,-2.43976,0.23956,-1.56112075,-0.63907925,"anhydromuropeptides recycling II",0.634,"negative","temp sensitive","no group assignment",NA
+"PWY-7902",0.1543,0.3608,-0.552868,0.861468,-0.0890596,0.3976596,"glucosylglycerol biosynthesis",0.221,"positive","nuetral",NA,NA
+"PWY-7942",0.0698,0.6703,-1.243988,1.383588,-0.38231735,0.52191735,"5-oxo-L-proline metabolism",0.326,"positive","nuetral",NA,NA
+"PWY-7953",0.0875,0.1929,-0.290584,0.465584,-0.04261105,0.21761105,"UDP-N-acetylmuramoyl-pentapeptide biosynthesis III (meso-diaminopimelate containing)",0.133,"positive","nuetral",NA,NA
+"PWY-7977",-0.5528,0.2403,-1.023788,-0.0818119999999999,-0.71488235,-0.39071765,"L-methionine biosynthesis IV",0.695,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY-7992",0.7854,0.6754,-0.538384,2.109184,0.3298427,1.2409573,"superpathway of menaquinol-8 biosynthesis III",0.476,"positive","nuetral","redox maintenance","reduced redox maintenance"
+"PWY-8004",-0.1611,0.3015,-0.75204,0.42984,-0.36446175,0.04226175,"Entner-Doudoroff pathway I",0.199,"negative","nuetral",NA,NA
+"PWY-8011",-0.1215,0.3291,-0.766536,0.523536,-0.34347795,0.10047795,"L-serine biosynthesis II",0.202,"negative","nuetral",NA,NA
+"PWY-8020",0.0992,0.3551,-0.596796,0.795196,-0.14031495,0.33871495,"D-xylose degradation V",0.21,"positive","nuetral",NA,NA
+"PWY-8073",0.2208,0.2107,-0.192172,0.633772,0.07868285,0.36291715,"lipid IVA biosynthesis (P. putida)",0.207,"positive","nuetral",NA,NA
+"PWY-8131",-1.6641,0.6404,-2.919284,-0.408916,-2.0960498,-1.2321502,"5'-deoxyadenosine degradation II",0.92,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY-8173",0.7482,0.5951,-0.418196,1.914596,0.34680505,1.14959495,"anteiso-branched-chain fatty acid biosynthesis",0.476,"positive","nuetral",NA,NA
+"PWY-8174",0.7482,0.5951,-0.418196,1.914596,0.34680505,1.14959495,"odd iso-branched-chain fatty acid biosynthesis",0.476,"positive","nuetral",NA,NA
+"PWY-8175",0.7482,0.5951,-0.418196,1.914596,0.34680505,1.14959495,"even iso-branched-chain fatty acid biosynthesis",0.476,"positive","nuetral",NA,NA
+"PWY-8178",0.3796,0.1768,0.033072,0.726128,0.2603484,0.4988516,"pentose phosphate pathway (non-oxidative branch) II",0.55,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY-8181",0.0069,0.3674,-0.713204,0.727004,-0.2409113,0.2547113,"2-methyl-branched fatty acid &beta;-oxidation",0.209,"positive","nuetral",NA,NA
+"PWY-8187",-0.7769,0.5493,-1.853528,0.299728,-1.14740285,-0.40639715,"L-arginine degradation XIII (reductive Stickland reaction)",0.518,"negative","temp sensitive","immune regulation","decrease anti-inflammatory signals"
+"PWY-8188",-0.8473,0.524,-1.87434,0.17974,-1.200738,-0.493862,"L-alanine degradation VI (reductive Stickland reaction)",0.574,"negative","temp sensitive","no group assignment",NA
+"PWY-8189",-0.8473,0.524,-1.87434,0.17974,-1.200738,-0.493862,"L-alanine degradation V (oxidative Stickland reaction)",0.574,"negative","temp sensitive","no group assignment",NA
+"PWY-8190",-0.9913,0.5525,-2.0742,0.0916,-1.36396125,-0.61863875,"L-glutamate degradation XI (reductive Stickland reaction)",0.642,"negative","temp sensitive","immune regulation","decrease anti-inflammatory signals"
+"PWY-821",-1.2163,0.719,-2.62554,0.19294,-1.7012655,-0.7313345,"superpathway of sulfur amino acid biosynthesis (Saccharomyces cerevisiae)",0.682,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY-822",-0.3941,0.481,-1.33686,0.54866,-0.7185345,-0.0696655,"fructan biosynthesis",0.324,"negative","nuetral",NA,NA
+"PWY-922",1.3941,0.6505,0.11912,2.66908,0.95533775,1.83286225,"mevalonate pathway I (eukaryotes and bacteria)",0.811,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY-I9",0.3392,0.1507,0.043828,0.634572,0.23755285,0.44084715,"L-cysteine biosynthesis VI (from L-methionine)",0.563,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY0-1061",0.589,0.2908,0.0190319999999999,1.158968,0.3928554,0.7851446,"superpathway of L-alanine biosynthesis",0.598,"positive","temp sensitive","no group assignment",NA
+"PWY0-1221",-0.3037,0.4825,-1.2494,0.642,-0.62914625,0.02174625,"putrescine degradation II",0.298,"negative","nuetral",NA,NA
+"PWY0-1241",0.0469,0.3361,-0.611856,0.705656,-0.17979945,0.27359945,"ADP-L-glycero-&beta;-D-manno-heptose biosynthesis",0.196,"positive","nuetral",NA,NA
+"PWY0-1261",0.0019,0.5837,-1.142152,1.145952,-0.39180565,0.39560565,"anhydromuropeptides recycling I",0.296,"positive","nuetral",NA,NA
+"PWY0-1277",-0.7273,0.5082,-1.723372,0.268772,-1.0700809,-0.3845191,"3-phenylpropanoate and 3-(3-hydroxyphenyl)propanoate degradation",0.504,"negative","temp sensitive","no group assignment",NA
+"PWY0-1296",0.4597,0.1798,0.107292,0.812108,0.3384249,0.5809751,"purine ribonucleosides degradation",0.75,"positive","temp sensitive","nucleotide mobilization","increased synthesis and salvage"
+"PWY0-1319",0.2887,0.1536,-0.012356,0.589756,0.1850968,0.3923032,"CDP-diacylglycerol biosynthesis II",0.388,"positive","nuetral",NA,NA
+"PWY0-1337",-0.8208,0.7236,-2.239056,0.597456,-1.3088682,-0.3327318,"oleate &beta;-oxidation",0.496,"negative","nuetral","immune regulation","decrease anti-inflammatory signals"
+"PWY0-1338",-0.7887,0.6748,-2.111308,0.533908,-1.2438526,-0.3335474,"polymyxin resistance",0.49,"negative","nuetral",NA,NA
+"PWY0-1415",0.5401,0.6018,-0.639428,1.719628,0.1341859,0.9460141,"superpathway of heme b biosynthesis from uroporphyrinogen-III",0.388,"positive","nuetral",NA,NA
+"PWY0-1479",0.3928,0.2613,-0.119348,0.904948,0.21655315,0.56904685,"tRNA processing",0.367,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"PWY0-1533",-0.9579,0.6237,-2.180352,0.264552,-1.37858565,-0.53721435,"methylphosphonate degradation I",0.591,"negative","temp sensitive","no group assignment",NA
+"PWY0-1586",-0.0862,0.1733,-0.425868,0.253468,-0.20309085,0.03069085,"peptidoglycan maturation (meso-diaminopimelate containing)",0.123,"negative","nuetral",NA,NA
+"PWY0-166",-0.2987,0.4057,-1.093872,0.496472,-0.57234465,-0.02505535,"superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis (E. coli)",0.275,"negative","nuetral",NA,NA
+"PWY0-301",1.0212,0.4637,0.112348,1.930052,0.70843435,1.33396565,"L-ascorbate degradation I (bacterial, anaerobic)",0.783,"positive","temp sensitive","redox maintenance","increased redox maintenance"
+"PWY0-42",0.0125,0.6657,-1.292272,1.317272,-0.43651465,0.46151465,"2-methylcitrate cycle I",0.324,"positive","nuetral",NA,NA
+"PWY0-461",-0.5956,0.5868,-1.745728,0.554528,-0.9913966,-0.1998034,"L-lysine degradation I",0.413,"negative","nuetral",NA,NA
+"PWY0-781",0.9934,0.4247,0.160988,1.825812,0.70693985,1.27986015,"aspartate superpathway",0.816,"positive","temp sensitive","no group assignment",NA
+"PWY0-862",0.4256,0.1521,0.127484,0.723716,0.32300855,0.52819145,"(5Z)-dodecenoate biosynthesis I",0.822,"positive","temp sensitive","immune regulation","increased anti-inflammatory signals"
+"PWY1G-0",-1.0555,0.5142,-2.063332,-0.047668,-1.4023279,-0.7086721,"mycothiol biosynthesis",0.742,"negative","temp sensitive","no group assignment",NA
+"PWY1ZNC-1",-1.3022,0.6314,-2.539744,-0.064656,-1.7280793,-0.8763207,"assimilatory sulfate reduction IV",0.787,"negative","temp sensitive","redox maintenance","reduced redox maintenance"
+"PWY490-3",-0.2455,0.3822,-0.994612,0.503612,-0.5032939,0.0122939,"nitrate reduction VI (assimilatory)",0.252,"negative","nuetral",NA,NA
+"PWY4FS-7",0.079,0.1642,-0.242832,0.400832,-0.0317529,0.1897529,"phosphatidylglycerol biosynthesis I (plastidic)",0.117,"positive","nuetral",NA,NA
+"PWY4FS-8",0.0788,0.1642,-0.243032,0.400632,-0.0319529,0.1895529,"phosphatidylglycerol biosynthesis II (non-plastidic)",0.117,"positive","nuetral",NA,NA
+"PWY4LZ-257",-0.3028,0.3488,-0.986448,0.380848,-0.5380656,-0.0675344,"superpathway of fermentation (Chlamydomonas reinhardtii)",0.268,"negative","nuetral",NA,NA
+"PWY5F9-12",-0.1798,0.3156,-0.798376,0.438776,-0.3926722,0.0330722,"biphenyl degradation",0.211,"negative","nuetral",NA,NA
+"PWY66-388",1.2293,0.6472,-0.0392119999999998,2.497812,0.7927636,1.6658364,"ceramide degradation by &alpha;-oxidation",0.735,"positive","temp sensitive","no group assignment",NA
+"PWY66-398",-1.0217,0.8381,-2.664376,0.620976,-1.58699845,-0.45640155,"TCA cycle III (animals)",0.559,"negative","temp sensitive","no group assignment",NA
+"PWY66-399",-0.423,0.7673,-1.926908,1.080908,-0.94054385,0.09454385,"gluconeogenesis III",0.391,"negative","nuetral",NA,NA
+"PWY66-429",0.4211,0.2083,0.012832,0.829368,0.28060165,0.56159835,"fatty acid biosynthesis initiation (mitochondria)",0.522,"positive","temp sensitive","lipid catabolism and remodeling","increased synthesis and remodeling"
+"PWY66-430",0.4021,0.6923,-0.954808,1.759008,-0.06485635,0.86905635,"myristate biosynthesis (mitochondria)",0.369,"positive","nuetral",NA,NA
+"PYRIDNUCSYN-PWY",0.4042,0.3454,-0.272784,1.081184,0.1712277,0.6371723,"NAD de novo biosynthesis I (from aspartate)",0.329,"positive","nuetral","redox maintenance","increased redox maintenance"
+"REDCITCYC",0.2046,0.3737,-0.527852,0.937052,-0.04746065,0.45666065,"TCA cycle VI (Helicobacter)",0.237,"positive","nuetral",NA,NA
+"RIBOSYN2-PWY",0.4559,0.3566,-0.243036,1.154836,0.2153733,0.6964267,"flavin biosynthesis I (bacteria and plants)",0.363,"positive","nuetral",NA,NA
+"RUMP-PWY",-1.1576,0.4935,-2.12486,-0.19034,-1.49046575,-0.82473425,"formaldehyde oxidation I",0.81,"negative","temp sensitive","no group assignment",NA
+"SALVADEHYPOX-PWY",0.5656,0.5322,-0.477512,1.608712,0.2066311,0.9245689,"adenosine nucleotides degradation II",0.402,"positive","nuetral",NA,NA
+"SUCSYN-PWY",0.1884,0.427,-0.64852,1.02532,-0.0996115,0.4764115,"sucrose biosynthesis I (from photosynthesis)",0.253,"positive","nuetral",NA,NA
+"TCA-GLYOX-BYPASS",-0.8156,0.7367,-2.259532,0.628332,-1.31250415,-0.31869585,"superpathway of glyoxylate bypass and TCA",0.495,"negative","nuetral",NA,NA
+"THREOCAT-PWY",-0.5722,0.7039,-1.951844,0.807444,-1.04698055,-0.0974194500000001,"superpathway of L-threonine metabolism",0.413,"negative","nuetral",NA,NA
+"TRNA-CHARGING-PWY",0.3642,0.1803,0.010812,0.717588,0.24258765,0.48581235,"tRNA charging",0.493,"positive","nuetral","nucleotide mobilization","increased synthesis and salvage"
+"TRPSYN-PWY",0.4786,0.2065,0.07386,0.88334,0.33931575,0.61788425,"L-tryptophan biosynthesis",0.673,"positive","temp sensitive","immune regulation","increased anti-inflammatory signals"
+"TYRFUMCAT-PWY",-0.403,0.3308,-1.051368,0.245368,-0.6261246,-0.1798754,"L-tyrosine degradation I",0.332,"negative","nuetral",NA,NA
+"UBISYN-PWY",-0.299,0.5914,-1.458144,0.860144,-0.6978993,0.0998993,"superpathway of ubiquinol-8 biosynthesis (early decarboxylation)",0.326,"negative","nuetral","redox maintenance","reduced redox maintenance"
+"UDPNACETYLGALSYN-PWY",0.1701,0.3577,-0.530992,0.871192,-0.07116865,0.41136865,"UDP-N-acetyl-D-glucosamine biosynthesis II",0.224,"positive","nuetral",NA,NA
+"URSIN-PWY",-1.2583,0.5306,-2.298276,-0.218324,-1.6161897,-0.9004103,"ureide biosynthesis",0.853,"negative","temp sensitive","no group assignment",NA
+"VALDEG-PWY",-0.1972,0.3349,-0.853604,0.459204,-0.42309005,0.02869005,"L-valine degradation I",0.222,"negative","nuetral",NA,NA
+"VALSYN-PWY",0.4979,0.1708,0.163132,0.832668,0.3826954,0.6131046,"L-valine biosynthesis",0.878,"positive","temp sensitive","no group assignment",NA
